@@ -291,17 +291,35 @@ function(add_precompiled_header _target _input)
     export_all_flags("${_pch_flags_file}.in")
     set(_compiler_FLAGS "@${_pch_flags_file}")
 
+    set(CXXFLAGS ${CMAKE_CXX_FLAGS})
+
     if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-        set(CXXFLAGS "${CMAKE_CXX_FLAGS}")
         string(APPEND CXXFLAGS " ${CMAKE_CXX_FLAGS_DEBUG}")
     else()
-        set(CXXFLAGS "${CMAKE_CXX_FLAGS}")
         string(APPEND CXXFLAGS " ${CMAKE_CXX_FLAGS_RELEASE}")
     endif()
-    separate_arguments(CXXFLAGS)
+
+    # Special case for Andrid
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND CMAKE_CROSSCOMPILING)
+        # Append "--target=xx --gcc-toolchain=yy --sysroot=zz"
+        string(APPEND CXXFLAGS " ${CMAKE_CXX_COMPILE_OPTIONS_TARGET}${CMAKE_CXX_COMPILER_TARGET}")
+        string(APPEND CXXFLAGS " ${CMAKE_CXX_COMPILE_OPTIONS_EXTERNAL_TOOLCHAIN}${CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN}")
+        string(APPEND CXXFLAGS " ${CMAKE_CXX_COMPILE_OPTIONS_SYSROOT}${CMAKE_SYSROOT}")
+        string(APPEND CXXFLAGS " -DANDROID")
+
+        # Append toolchain include directories
+        foreach(_include_dir IN LISTS CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES)
+            # Don't use -isystem as this lead to crazy errors due to "wrong" c / c++ header include orders
+            # see https://github.com/jeaye/color_coded/pull/146 for a better explanation
+            string(APPEND CXXFLAGS " -I ${_include_dir}")
+        endforeach(_include_dir)
+    endif()
 
     # hopelessly these guys don't manage to get passed by the global CMake switch, add them manually
-    list(APPEND CXXFLAGS "-std=gnu++11" "-fPIC")
+    string(APPEND CXXFLAGS " -std=gnu++11")
+    string(APPEND CXXFLAGS " -fPIC")
+
+    separate_arguments(CXXFLAGS)
 
     # Hacky custom command to remove the custom defines that would prevent from sharing the pch
     # and they should be useless anyway
