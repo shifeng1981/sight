@@ -105,9 +105,7 @@ if(ADDITIONAL_PROJECTS)
 endif()
 
 
-if(ANDROID)
-    set(BUNDLE_PREFIX "/data/data/com.fw4spl.${PROJECTS_TO_INSTALL}/Bundles")
-elseif(DEBIAN_INSTALL)
+if(DEBIAN_INSTALL)
     #To make a debian package we should install our bundle in /usr/share/...
     set(BUNDLE_PREFIX "share/Bundles")
 else()
