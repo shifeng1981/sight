@@ -35,6 +35,8 @@ fwServicesRegisterMacro( ::io::IReader, ::ioVTK::SMeshReader, ::fwData::Mesh );
 
 static const ::fwCom::Signals::SignalKeyType JOB_CREATED_SIGNAL = "jobCreated";
 
+static const std::string s_MESH_KEY = "output";
+
 //------------------------------------------------------------------------------
 
 ::io::IOPathType SMeshReader::getIOPathType() const
@@ -148,8 +150,9 @@ void SMeshReader::updating() throw(::fwTools::Failed)
 
     if( this->hasLocationDefined() )
     {
+
         // Retrieve dataStruct associated with this service
-        ::fwData::Mesh::sptr pMesh = this->getObject< ::fwData::Mesh >();
+        ::fwData::Mesh::sptr pMesh = this->getInOut< ::fwData::Mesh >(s_MESH_KEY);
         SLM_ASSERT("pMesh not instanced", pMesh);
 
         ::fwGui::Cursor cursor;
@@ -167,7 +170,7 @@ void SMeshReader::updating() throw(::fwTools::Failed)
 void SMeshReader::notificationOfUpdate()
 {
     SLM_TRACE_FUNC();
-    ::fwData::Mesh::sptr pMesh = this->getObject< ::fwData::Mesh >();
+    ::fwData::Mesh::sptr pMesh = this->getInOut< ::fwData::Mesh >(s_MESH_KEY);
     SLM_ASSERT("pMesh not instanced", pMesh);
 
     ::fwData::Object::ModifiedSignalType::sptr sig;
