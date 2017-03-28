@@ -139,7 +139,8 @@ Connection Signal< R( A ... ) >::connect( SlotBase::sptr slot )
     unsigned int sigArity = ::boost::function_types::function_arity< SignatureType >::value;
     if ( sigArity == slot->arity() )
     {
-        SlotSptr slotToConnect = std::dynamic_pointer_cast< SlotRunType >(slot);
+        SlotSptr slotToConnect = std::static_pointer_cast< SlotRunType >(slot);
+
         if(slotToConnect)
         {
             ::fwCore::mt::WriteLock lock(m_connectionsMutex);
@@ -160,7 +161,7 @@ Connection Signal< R( A ... ) >::connect( SlotBase::sptr slot )
     {
 
         typedef SlotRun< FROM_F > WrappedSlotRunType;
-        typename SPTR(WrappedSlotRunType) wrappedSlot = std::dynamic_pointer_cast< WrappedSlotRunType >(slot);
+        typename SPTR(WrappedSlotRunType) wrappedSlot = std::static_pointer_cast< WrappedSlotRunType >(slot);
 
         if(wrappedSlot)
         {
