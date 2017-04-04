@@ -239,17 +239,17 @@ std::string Type::ToolBase::toString(const void *value) const
 template <>
 void Type::setType<char>()
 {
-    this->setType<signed char>();
+    this->setTypeImpl<signed char>();
 }
 
 //-----------------------------------------------------------------------------
 
-#if (defined(linux) || defined(__linux)) && !defined(ANDROID)
+#if (defined(linux) || defined(__linux) || defined(ANDROID))
 
 template <>
 void Type::setType<boost::int64_t>()
 {
-    this->setType<long long>();
+    this->setTypeImpl<long long>();
 }
 
 //-----------------------------------------------------------------------------
@@ -257,7 +257,7 @@ void Type::setType<boost::int64_t>()
 template <>
 void Type::setType<boost::uint64_t>()
 {
-    this->setType<unsigned long long>();
+    this->setTypeImpl<unsigned long long>();
 }
 
 #endif

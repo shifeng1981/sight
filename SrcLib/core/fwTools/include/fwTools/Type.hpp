@@ -146,6 +146,11 @@ protected:
 
     FWTOOLS_API static const TypeMapType s_TYPEMAP;
 
+private:
+
+    template< class TYPE>
+    void setTypeImpl();
+
 public:
 
     FWTOOLS_API static const Type s_UNSPECIFIED_TYPE;
@@ -241,6 +246,15 @@ bool Type::isOfType() const
 template <typename T>
 void Type::setType()
 {
+    this->setTypeImpl<T>();
+}
+
+
+//-----------------------------------------------------------------------------
+
+template <typename T>
+void Type::setTypeImpl()
+{
     m_name = Type::traitsToString< sizeof(T), ::boost::is_signed<T>::value, ::boost::is_integral<T>::value >();
 
     m_sizeof           = sizeof(T);
@@ -275,7 +289,7 @@ FWTOOLS_API void Type::setType< char >();
 
 //-----------------------------------------------------------------------------
 
-#ifdef linux
+#if (defined(linux) || defined(__linux) || defined(ANDROID))
 
 template <>
 FWTOOLS_API void Type::setType< ::boost::int64_t >();
