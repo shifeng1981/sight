@@ -8,6 +8,7 @@
 #define __FWDATA_MATERIAL_HPP__
 
 #include "fwData/Color.hpp"
+#include "fwData/DiffuseTexture.hpp"
 #include "fwData/factory/new.hpp"
 #include "fwData/Image.hpp"
 #include "fwData/Object.hpp"
@@ -71,14 +72,14 @@ public:
     /**
      * @brief returns editable diffuse texture
      */
-    FWDATA_API Image::sptr getDiffuseTexture() const;
+    FWDATA_API Image::sptr getDiffuseTexture(std::string name = "diffuse") const;
 
     /**
      * @brief Setter for diffuse texture
      *
      * @param diffuseTexture texture
      */
-    FWDATA_API void setDiffuseTexture(const Image::sptr& diffuseTexture);
+    FWDATA_API void setDiffuseTexture(const Image::sptr& diffuseTexture, std::string name = "diffuse");
 
     /**
      * @brief Options
@@ -112,23 +113,8 @@ public:
         EDGE      = 5, //SURFACE|WIREFRAME -> 101
     } RepresentationType;
 
-    /**
-     * @brief Texture filtering types
-     */
-    typedef enum
-    {
-        NEAREST,
-        LINEAR,
-    } FilteringType;
-
-    /**
-     * @brief Texture wrapping types
-     */
-    typedef enum
-    {
-        CLAMP,
-        REPEAT,
-    } WrappingType;
+    FWDATA_API std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator getDiffuseTextureIteratorBegin();
+    FWDATA_API std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator getDiffuseTextureIteratorEnd();
 
     /** @{
      *  @brief get/set the shading models(flat, gouraud, phong)
@@ -160,19 +146,27 @@ public:
     /** @{
      *  @brief get/set the texture filtering
      */
-    const FilteringType getDiffuseTextureFiltering() const;
-    FilteringType& getRefDiffuseTextureFiltering();
-    const FilteringType& getCRefDiffuseTextureFiltering() const;
-    void setDiffuseTextureFiltering(FilteringType _diffuseTextureFiltering);
+    const ::fwData::DiffuseTexture::FilteringType getDiffuseTextureFiltering(std::string name = "diffuse") const;
+    ::fwData::DiffuseTexture::FilteringType& getRefDiffuseTextureFiltering(std::string name = "diffuse");
+    void setDiffuseTextureFiltering(::fwData::DiffuseTexture::FilteringType _diffuseTextureFiltering,
+                                    std::string name = "diffuse");
     /// @}
 
     /** @{
      *  @brief get/set the texture wrapping
      */
-    const WrappingType  getDiffuseTextureWrapping () const;
-    WrappingType& getRefDiffuseTextureWrapping ();
-    const WrappingType& getCRefDiffuseTextureWrapping () const;
-    void setDiffuseTextureWrapping (WrappingType _diffuseTextureWrapping);
+    const ::fwData::DiffuseTexture::WrappingType  getDiffuseTextureWrapping (std::string name = "diffuse") const;
+    ::fwData::DiffuseTexture::WrappingType & getRefDiffuseTextureWrapping(std::string name = "diffuse");
+    void setDiffuseTextureWrapping (::fwData::DiffuseTexture::WrappingType _diffuseTextureWrapping,
+                                    std::string name = "diffuse");
+    /// @}
+
+    /** @{
+     *  @brief get/set the texture blending
+     */
+    const ::fwData::DiffuseTexture::BlendingType getDiffuseTextureBlending(std::string name = "diffuse") const;
+    void setDiffuseTextureBlending (::fwData::DiffuseTexture::BlendingType _diffuseTextureBlending,
+                                    std::string name = "diffuse");
     /// @}
 
     /**
@@ -208,13 +202,7 @@ protected:
     Color::sptr m_diffuse;
 
     /// Diffuse texture
-    Image::sptr m_diffuseTexture;
-
-    /// Filtering for diffuse texture
-    FilteringType m_diffuseTextureFiltering;
-
-    /// Wrapping for diffuse texture
-    WrappingType m_diffuseTextureWrapping;
+    std::map<std::string, ::fwData::DiffuseTexture::sptr> m_diffuseTexture;
 };
 
 //-----------------------------------------------------------------------------
@@ -303,58 +291,132 @@ inline void Material::setOptionsMode (OptionsType _optionsMode)
 
 //-----------------------------------------------------------------------------
 
-inline const Material::FilteringType Material::getDiffuseTextureFiltering() const
+inline const ::fwData::DiffuseTexture::BlendingType Material::getDiffuseTextureBlending(std::string name) const
 {
-    return m_diffuseTextureFiltering;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        return m_diffuseTexture.at(name)->getBlending();
+    }
+    else
+    {
+        return ::fwData::DiffuseTexture::NONE;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-inline Material::FilteringType& Material::getRefDiffuseTextureFiltering()
+inline void Material::setDiffuseTextureBlending(::fwData::DiffuseTexture::BlendingType _diffuseTextureBlending,
+                                                std::string name)
 {
-    return this->m_diffuseTextureFiltering;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        m_diffuseTexture[name]->setBlending(_diffuseTextureBlending);
+    }
+    else
+    {
+        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
+        t->setBlending(_diffuseTextureBlending);
+
+        m_diffuseTexture[name] = t;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-inline const Material::FilteringType& Material::getCRefDiffuseTextureFiltering() const
+inline const ::fwData::DiffuseTexture::FilteringType Material::getDiffuseTextureFiltering(std::string name) const
 {
-    return this->m_diffuseTextureFiltering;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        return m_diffuseTexture.at(name)->getFiltering();
+    }
+    else
+    {
+        return ::fwData::DiffuseTexture::NEAREST;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-inline void Material::setDiffuseTextureFiltering(FilteringType _diffuseTextureFiltering)
+inline ::fwData::DiffuseTexture::FilteringType& Material::getRefDiffuseTextureFiltering(std::string name)
 {
-    this->m_diffuseTextureFiltering = _diffuseTextureFiltering;
+    // If the texture does not exist, we first create it as we want a ref to the parameter
+    if(m_diffuseTexture.find(name) == m_diffuseTexture.end())
+    {
+        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
+        m_diffuseTexture[name]           = t;
+    }
+
+    return m_diffuseTexture.at(name)->getRefFiltering();
 }
 
 //-----------------------------------------------------------------------------
 
-inline const Material::WrappingType Material::getDiffuseTextureWrapping () const
+inline void Material::setDiffuseTextureFiltering(::fwData::DiffuseTexture::FilteringType _diffuseTextureFiltering,
+                                                 std::string name)
 {
-    return m_diffuseTextureWrapping;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        m_diffuseTexture[name]->setFiltering(_diffuseTextureFiltering);
+    }
+    else
+    {
+        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
+        t->setFiltering(_diffuseTextureFiltering);
+
+        m_diffuseTexture[name] = t;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-inline Material::WrappingType& Material::getRefDiffuseTextureWrapping ()
+inline const ::fwData::DiffuseTexture::WrappingType Material::getDiffuseTextureWrapping (std::string name) const
 {
-    return this->m_diffuseTextureWrapping;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        return m_diffuseTexture.at(name)->getWrapping();
+    }
+    else
+    {
+        return ::fwData::DiffuseTexture::CLAMP;
+    }
 }
 
 //-----------------------------------------------------------------------------
 
-inline const Material::WrappingType& Material::getCRefDiffuseTextureWrapping () const
+inline ::fwData::DiffuseTexture::WrappingType& Material::getRefDiffuseTextureWrapping(std::string name)
 {
-    return this->m_diffuseTextureWrapping;
+    // If the texture does not exist, we first create it as we want a ref to the parameter
+    if(m_diffuseTexture.find(name) == m_diffuseTexture.end())
+    {
+        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
+        m_diffuseTexture[name]           = t;
+    }
+
+    return m_diffuseTexture.at(name)->getRefWrapping();
 }
 
 //-----------------------------------------------------------------------------
 
-inline void Material::setDiffuseTextureWrapping (WrappingType _diffuseTextureWrapping)
+inline void Material::setDiffuseTextureWrapping (::fwData::DiffuseTexture::WrappingType _diffuseTextureWrapping,
+                                                 std::string name)
 {
-    this->m_diffuseTextureWrapping = _diffuseTextureWrapping;
+    // An exception will be thrown by at() when the material does not exist
+    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    {
+        m_diffuseTexture[name]->setWrapping(_diffuseTextureWrapping);
+    }
+    else
+    {
+        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
+        t->setWrapping(_diffuseTextureWrapping);
+
+        m_diffuseTexture[name] = t;
+    }
 }
 
 //-----------------------------------------------------------------------------

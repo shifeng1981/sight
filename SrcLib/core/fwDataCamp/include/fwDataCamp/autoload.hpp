@@ -7,6 +7,7 @@
 #ifndef __FWDATACAMP_AUTOLOAD_HPP__
 #define __FWDATACAMP_AUTOLOAD_HPP__
 
+#include "fwDataCamp/DiffuseTexture.hpp"
 #include "fwDataCamp/Material.hpp"
 #include "fwDataCamp/StructureTraits.hpp"
 #include "fwDataCamp/TransferFunction.hpp"
@@ -17,6 +18,7 @@
 #include <fwData/Boolean.hpp>
 #include <fwData/Color.hpp>
 #include <fwData/Composite.hpp>
+#include <fwData/DiffuseTexture.hpp>
 #include <fwData/Edge.hpp>
 #include <fwData/Float.hpp>
 #include <fwData/Graph.hpp>
@@ -65,11 +67,13 @@ struct runner
         localDeclarefwDataArray();
         localDeclarefwDataImage();
         localDeclarefwDataMesh();
+        localDeclarefwDataDiffuseTextureFilteringType();
+        localDeclarefwDataDiffuseTextureWrappingType();
+        localDeclarefwDataDiffuseTextureBlendingType();
+        localDeclarefwDataDiffuseTexture();
         localDeclarefwDataMaterialOptionsType();
         localDeclarefwDataMaterialRepresentationType();
         localDeclarefwDataMaterialShadingType();
-        localDeclarefwDataMaterialFilteringType();
-        localDeclarefwDataMaterialWrappingType();
         localDeclarefwDataMaterial();
         localDeclarefwDataReconstruction();
         localDeclarefwDataComposite();

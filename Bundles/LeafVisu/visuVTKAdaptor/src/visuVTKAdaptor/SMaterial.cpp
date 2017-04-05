@@ -131,25 +131,32 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
     m_property->SetSpecularPower(100.); //Shininess
 
     // set texture
-    ::fwData::Image::sptr diffTex = material->getDiffuseTexture();
-
-    if(diffTex != NULL)
+    for(auto it = material->getDiffuseTextureIteratorBegin(); it != material->getDiffuseTextureIteratorEnd(); ++it)
     {
-        ::fwData::mt::ObjectReadLock lock(diffTex);
+        ::fwData::Image::sptr diffTex = material->getDiffuseTexture(it->first);
 
-        if (diffTex->getSizeInBytes() != 0)
+        if(diffTex != NULL)
         {
-            vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
-            ::fwVtkIO::toVTKImage( diffTex, vtkImage );
+            ::fwData::mt::ObjectReadLock lock(diffTex);
 
-            vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
-            vtkTex->SetInputData(vtkImage);
+            if (diffTex->getSizeInBytes() != 0)
+            {
+                vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
+                ::fwVtkIO::toVTKImage( diffTex, vtkImage );
 
-            ::fwData::Material::WrappingType wrapping = material->getDiffuseTextureWrapping();
-            vtkTex->SetRepeat( wrapping == ::fwData::Material::REPEAT );
-            vtkTex->SetEdgeClamp( wrapping == ::fwData::Material::CLAMP );
-            m_property->RemoveTexture("diffuse");
-            m_property->SetTexture("diffuse", vtkTex);
+                vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
+                vtkTex->SetInputData(vtkImage);
+
+                ::fwData::DiffuseTexture::FilteringType filtering = material->getDiffuseTextureFiltering(it->first);
+                vtkTex->SetInterpolate( filtering == ::fwData::DiffuseTexture::LINEAR );
+                ::fwData::DiffuseTexture::WrappingType wrapping = material->getDiffuseTextureWrapping(it->first);
+                vtkTex->SetRepeat( wrapping == ::fwData::DiffuseTexture::REPEAT );
+                vtkTex->SetEdgeClamp( wrapping == ::fwData::DiffuseTexture::CLAMP );
+                ::fwData::DiffuseTexture::BlendingType blending = material->getDiffuseTextureBlending(it->first);
+                vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
+                m_property->RemoveTexture(it->first.c_str());
+                m_property->SetTexture(it->first.c_str(), vtkTex);
+            }
         }
     }
 

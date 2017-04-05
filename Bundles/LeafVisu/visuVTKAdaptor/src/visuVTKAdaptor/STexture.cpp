@@ -12,6 +12,10 @@
 
 #include <fwData/Image.hpp>
 #include <fwData/Material.hpp>
+<<<<<<< variant A
+>>>>>>> variant B
+#include <fwData/Mesh.hpp>
+======= end
 #include <fwData/mt/ObjectReadLock.hpp>
 #include <fwData/mt/ObjectWriteLock.hpp>
 #include <fwData/Reconstruction.hpp>
@@ -39,6 +43,7 @@ static const ::fwServices::IService::KeyType s_TEXTURE_INOUT = "texture";
 STexture::STexture() noexcept :
     m_filtering("linear"),
     m_wrapping("repeat"),
+    m_blending("none"),
     m_lighting(true)
 {
     newSlot(s_APPLY_TEXTURE_SLOT, &STexture::applyTexture, this );
@@ -61,6 +66,8 @@ void STexture::configuring()
     m_filtering = config.get<std::string>("filtering", "linear");
 
     m_wrapping = config.get<std::string>("wrapping", "repeat");
+
+    m_blending = config.get<std::string>("blending", "none");
 
     m_lighting = (config.get<std::string>("lighting", "yes") == "yes");
 }
@@ -102,6 +109,8 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
 
     ::fwData::mt::ObjectWriteLock matLock(_material);
 
+    _material->setDiffuseTexture(image, m_name);
+
     {
         ::fwData::mt::ObjectReadLock imLock(image);
 
@@ -117,36 +126,71 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
         }
     }
 
-    ::fwData::Material::FilteringType filtering = ::fwData::Material::LINEAR;
-    ::fwData::Material::WrappingType wrapping   = ::fwData::Material::REPEAT;
+    ::fwData::DiffuseTexture::FilteringType filtering = ::fwData::DiffuseTexture::LINEAR;
+    ::fwData::DiffuseTexture::WrappingType wrapping   = ::fwData::DiffuseTexture::REPEAT;
+    ::fwData::DiffuseTexture::BlendingType blending   = ::fwData::DiffuseTexture::NONE;
 
     if(m_filtering == "nearest")
     {
-        filtering = ::fwData::Material::NEAREST;
+        filtering = ::fwData::DiffuseTexture::NEAREST;
     }
     else if(m_filtering == "linear")
     {
-        filtering = ::fwData::Material::LINEAR;
+        filtering = ::fwData::DiffuseTexture::LINEAR;
     }
     else
     {
         OSLM_WARN("STexture filtering type unknown or not supported : " << m_filtering);
     }
-    _material->setDiffuseTextureFiltering(filtering);
+    _material->setDiffuseTextureFiltering(filtering, m_name);
 
     if(m_wrapping == "repeat")
     {
-        wrapping = ::fwData::Material::REPEAT;
+        wrapping = ::fwData::DiffuseTexture::REPEAT;
     }
     else if(m_wrapping == "clamp")
     {
-        wrapping = ::fwData::Material::CLAMP;
+        wrapping = ::fwData::DiffuseTexture::CLAMP;
     }
     else
     {
         OSLM_WARN("STexture wrapping type unknown or not supported : " << m_wrapping);
     }
-    _material->setDiffuseTextureWrapping(wrapping);
+    _material->setDiffuseTextureWrapping(wrapping, m_name);
+
+    if(m_blending == "none")
+    {
+        blending = ::fwData::DiffuseTexture::NONE;
+    }
+    else if(m_blending == "replace")
+    {
+        blending = ::fwData::DiffuseTexture::REPLACE;
+    }
+    else if(m_blending == "modulate")
+    {
+        blending = ::fwData::DiffuseTexture::MODULATE;
+    }
+    else if(m_blending == "add")
+    {
+        blending = ::fwData::DiffuseTexture::ADD;
+    }
+    else if(m_blending == "add_signed")
+    {
+        blending = ::fwData::DiffuseTexture::ADD_SIGNED;
+    }
+    else if(m_blending == "interpolate")
+    {
+        blending = ::fwData::DiffuseTexture::INTERPOLATE;
+    }
+    else if(m_blending == "subtract")
+    {
+        blending = ::fwData::DiffuseTexture::SUBTRACT;
+    }
+    else
+    {
+        OSLM_WARN("Texture blending mode unknown or not supported : " << m_wrapping);
+    }
+    _material->setDiffuseTextureBlending(blending, m_name);
 
     ::fwData::Object::ModifiedSignalType::sptr sig;
     sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
