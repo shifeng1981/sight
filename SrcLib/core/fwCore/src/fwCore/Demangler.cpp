@@ -1,9 +1,8 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2015.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2017.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
-
 
 #include <string>
 #include <vector>
@@ -16,28 +15,32 @@
 
 #include "fwCore/Demangler.hpp"
 
-
 namespace fwCore
 {
 
 #define COLONS std::string("::")
 #define LT std::string("<")
 
-
-Demangler::Demangler(const std::type_info &t) : m_name(t.name())
+Demangler::Demangler(const std::type_info& t) :
+//Workaround the a bug in the demangling function of NDK r14b (see: https://github.com/android-ndk/ndk/issues/355)
+#ifdef ANDROID
+    m_name(strcmp(t.name(), "_Z") == 0 || strcmp(t.name(), "__Z") == 0 ? t.name() : std::string("_Z") + t.name())
+#else
+    m_name(t.name())
+#endif
 {
 }
 
-
-Demangler::Demangler(const std::string &s) : m_name(s)
+Demangler::Demangler(const std::string& s) :
+    m_name(s)
 {
 }
-
 
 Demangler::~Demangler()
 {
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::getLeafClassname() const
 {
@@ -47,15 +50,17 @@ std::string Demangler::getLeafClassname() const
     size_t colons_pos = demangled.rfind(COLONS, lt_pos);
 
     colons_pos = (colons_pos == std::string::npos) ? 0 : colons_pos+COLONS.size();
-    return demangled.replace(0,colons_pos,"");
+    return demangled.replace(0, colons_pos, "");
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::getClassname() const
 {
     return getRootedClassname();
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::getFullClassname() const
 {
@@ -63,6 +68,7 @@ std::string Demangler::getFullClassname() const
     return demangled;
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::getRootedClassname() const
 {
@@ -70,7 +76,7 @@ std::string Demangler::getRootedClassname() const
     return COLONS + demangled;
 }
 
-
+//------------------------------------------------------------------------------
 
 std::string Demangler::getFullNamespace() const
 {
@@ -83,21 +89,26 @@ std::string Demangler::getFullNamespace() const
     {
         return "";
     }
-    return demangled.replace(colons_pos, std::string::npos,"");
+    return demangled.replace(colons_pos, std::string::npos, "");
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::getRootedNamespace() const
 {
     return COLONS + getFullNamespace();
 }
 
+//------------------------------------------------------------------------------
 
 std::string Demangler::demangle(  ) const
 {
-    const char * mangled = m_name.c_str();
+    const char* mangled = m_name.c_str();
 #ifndef _WIN32
-    char * c_demangled = abi::__cxa_demangle( mangled, 0, 0, 0);
+    char* c_demangled;
+    int status = 0;
+    c_demangled = abi::__cxa_demangle( mangled, nullptr, nullptr, &status);
+
     std::string res;
     if (c_demangled)
     {
