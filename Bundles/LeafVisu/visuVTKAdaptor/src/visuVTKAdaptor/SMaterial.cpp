@@ -154,6 +154,7 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
                 vtkTex->SetEdgeClamp( wrapping == ::fwData::DiffuseTexture::CLAMP );
                 ::fwData::DiffuseTexture::BlendingType blending = material->getDiffuseTextureBlending(it->first);
                 vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
+
                 m_property->RemoveTexture(it->first.c_str());
                 m_property->SetTexture(it->first.c_str(), vtkTex);
             }

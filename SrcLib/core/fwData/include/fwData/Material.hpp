@@ -293,10 +293,11 @@ inline void Material::setOptionsMode (OptionsType _optionsMode)
 
 inline const ::fwData::DiffuseTexture::BlendingType Material::getDiffuseTextureBlending(std::string name) const
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        return m_diffuseTexture.at(name)->getBlending();
+        return it->second->getBlending();
     }
     else
     {
@@ -309,10 +310,11 @@ inline const ::fwData::DiffuseTexture::BlendingType Material::getDiffuseTextureB
 inline void Material::setDiffuseTextureBlending(::fwData::DiffuseTexture::BlendingType _diffuseTextureBlending,
                                                 std::string name)
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        m_diffuseTexture[name]->setBlending(_diffuseTextureBlending);
+        it->second->setBlending(_diffuseTextureBlending);
     }
     else
     {
@@ -327,10 +329,11 @@ inline void Material::setDiffuseTextureBlending(::fwData::DiffuseTexture::Blendi
 
 inline const ::fwData::DiffuseTexture::FilteringType Material::getDiffuseTextureFiltering(std::string name) const
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        return m_diffuseTexture.at(name)->getFiltering();
+        return it->second->getFiltering();
     }
     else
     {
@@ -342,14 +345,15 @@ inline const ::fwData::DiffuseTexture::FilteringType Material::getDiffuseTexture
 
 inline ::fwData::DiffuseTexture::FilteringType& Material::getRefDiffuseTextureFiltering(std::string name)
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // If the texture does not exist, we first create it as we want a ref to the parameter
-    if(m_diffuseTexture.find(name) == m_diffuseTexture.end())
+    if(it == m_diffuseTexture.end())
     {
         ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
         m_diffuseTexture[name]           = t;
     }
 
-    return m_diffuseTexture.at(name)->getRefFiltering();
+    return it->second->getRefFiltering();
 }
 
 //-----------------------------------------------------------------------------
@@ -357,10 +361,11 @@ inline ::fwData::DiffuseTexture::FilteringType& Material::getRefDiffuseTextureFi
 inline void Material::setDiffuseTextureFiltering(::fwData::DiffuseTexture::FilteringType _diffuseTextureFiltering,
                                                  std::string name)
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        m_diffuseTexture[name]->setFiltering(_diffuseTextureFiltering);
+        it->second->setFiltering(_diffuseTextureFiltering);
     }
     else
     {
@@ -375,10 +380,11 @@ inline void Material::setDiffuseTextureFiltering(::fwData::DiffuseTexture::Filte
 
 inline const ::fwData::DiffuseTexture::WrappingType Material::getDiffuseTextureWrapping (std::string name) const
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        return m_diffuseTexture.at(name)->getWrapping();
+        return it->second->getWrapping();
     }
     else
     {
@@ -390,8 +396,9 @@ inline const ::fwData::DiffuseTexture::WrappingType Material::getDiffuseTextureW
 
 inline ::fwData::DiffuseTexture::WrappingType& Material::getRefDiffuseTextureWrapping(std::string name)
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // If the texture does not exist, we first create it as we want a ref to the parameter
-    if(m_diffuseTexture.find(name) == m_diffuseTexture.end())
+    if(it == m_diffuseTexture.end())
     {
         ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
         m_diffuseTexture[name]           = t;
@@ -405,10 +412,11 @@ inline ::fwData::DiffuseTexture::WrappingType& Material::getRefDiffuseTextureWra
 inline void Material::setDiffuseTextureWrapping (::fwData::DiffuseTexture::WrappingType _diffuseTextureWrapping,
                                                  std::string name)
 {
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
     // An exception will be thrown by at() when the material does not exist
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    if(it != m_diffuseTexture.end())
     {
-        m_diffuseTexture[name]->setWrapping(_diffuseTextureWrapping);
+        it->second->setWrapping(_diffuseTextureWrapping);
     }
     else
     {

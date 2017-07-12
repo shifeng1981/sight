@@ -95,11 +95,12 @@ Color::sptr Material::diffuse() const
 
 //------------------------------------------------------------------------------
 
-Image::sptr Material::getDiffuseTexture(std::string name) const
+Image::sptr Material::getDiffuseTexture(const std::string name) const
 {
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
+    if(it != m_diffuseTexture.end())
     {
-        return m_diffuseTexture.at(name)->getImage();
+        return it->second->getImage();
     }
 
     return nullptr;
@@ -121,11 +122,12 @@ void Material::setDiffuse(const Color::sptr& diffuse)
 
 //------------------------------------------------------------------------------
 
-void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, std::string name)
+void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, const std::string name)
 {
-    if(m_diffuseTexture.find(name) != m_diffuseTexture.end())
+    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
+    if(it != m_diffuseTexture.end())
     {
-        m_diffuseTexture.at(name)->setImage(diffuseTexture);
+        it->second->setImage(diffuseTexture);
     }
     else
     {
