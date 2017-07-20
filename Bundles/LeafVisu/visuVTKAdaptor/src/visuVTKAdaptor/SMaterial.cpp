@@ -135,7 +135,7 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
     {
         ::fwData::Image::sptr diffTex = material->getDiffuseTexture(it->first);
 
-        if(diffTex != NULL)
+        if(diffTex != nullptr)
         {
             ::fwData::mt::ObjectReadLock lock(diffTex);
 

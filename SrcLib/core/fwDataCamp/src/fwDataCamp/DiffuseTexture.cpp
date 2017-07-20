@@ -4,7 +4,7 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "fwDataCamp/Material.hpp"
+#include "fwDataCamp/DiffuseTexture.hpp"
 
 #include <fwCamp/UserObject.hpp>
 
@@ -14,6 +14,10 @@ fwCampImplementDataMacro((fwData)(DiffuseTexture))
     .tag("object_version", "1")
     .tag("lib_name", "fwData")
     .base< ::fwData::Object>()
+    .property("image", &::fwData::DiffuseTexture::m_image)
+    .property("filtering", &::fwData::DiffuseTexture::m_filtering)
+    .property("wrapping", &::fwData::DiffuseTexture::m_wrapping)
+    .property("blending", &::fwData::DiffuseTexture::m_blending)
     ;
 }
 

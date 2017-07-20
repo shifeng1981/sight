@@ -72,7 +72,7 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
 
     m_ambient = ::fwData::Object::copy( other->m_ambient, cache );
     m_diffuse = ::fwData::Object::copy( other->m_diffuse, cache );
-    // m_diffuseTexture = ::fwData::Object::copy( other->m_diffuseTexture, cache );
+    m_diffuseTexture = other->m_diffuseTexture;
 
     m_shadingMode        = other->m_shadingMode;
     m_representationMode = other->m_representationMode;

@@ -11,7 +11,7 @@
 fwCampImplementDataMacro((fwData)(Material))
 {
     builder
-    .tag("object_version", "4")
+    .tag("object_version", "5")
     .tag("lib_name", "fwData")
     .base< ::fwData::Object>()
     .property("shading_mode", &::fwData::Material::m_shadingMode)
@@ -19,9 +19,7 @@ fwCampImplementDataMacro((fwData)(Material))
     .property("options_mode", &::fwData::Material::m_optionsMode)
     .property("ambient", &::fwData::Material::m_ambient)
     .property("diffuse", &::fwData::Material::m_diffuse)
-    // .property("diffuse_texture", &::fwData::Material::m_diffuseTexture)
-    // .property("diffuse_texture_filtering", &::fwData::Material::m_diffuseTextureFiltering)
-    // .property("diffuse_texture_wrapping", &::fwData::Material::m_diffuseTextureWrapping)
+    .property("diffuse_texture", &::fwData::Material::m_diffuseTexture)
     ;
 }
 
