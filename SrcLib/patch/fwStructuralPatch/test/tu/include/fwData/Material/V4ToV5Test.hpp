@@ -4,8 +4,8 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V3TOV4TEST_HPP__
-#define __FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V3TOV4TEST_HPP__
+#ifndef __FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V4TOV5TEST_HPP__
+#define __FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V4TOV5TEST_HPP__
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -19,11 +19,11 @@ namespace Material
 {
 
 /**
- * @brief Test patch to convert fwData::Material from version 3 to version 4.
+ * @brief Test patch to convert fwData::Material from version 4 to version 5.
  */
-class V3ToV4Test : public CPPUNIT_NS::TestFixture
+class V4ToV5Test : public CPPUNIT_NS::TestFixture
 {
-CPPUNIT_TEST_SUITE( V3ToV4Test );
+CPPUNIT_TEST_SUITE( V4ToV5Test );
 CPPUNIT_TEST( applyPatchTest );
 CPPUNIT_TEST_SUITE_END();
 
@@ -40,4 +40,4 @@ public:
 } //namespace ut
 } //namespace fwStructuralPatch
 
-#endif //__FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V3TOV4TEST_HPP__
+#endif //__FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V4TOV5TEST_HPP__

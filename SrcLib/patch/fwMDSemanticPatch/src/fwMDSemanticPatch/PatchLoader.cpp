@@ -27,7 +27,7 @@ void PatchLoader::loadPatches()
 
 std::string PatchLoader::getCurrentVersion()
 {
-    return "V10";
+    return "V11";
 }
 
 //------------------------------------------------------------------------------

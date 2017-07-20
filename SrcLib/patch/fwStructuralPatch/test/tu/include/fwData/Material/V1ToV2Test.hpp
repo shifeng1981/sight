@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2015.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2017.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -8,7 +8,6 @@
 #define __FWSTRUCTURALPATCH_UT_FWDATA_MATERIAL_V1TOV2TEST_HPP__
 
 #include <cppunit/extensions/HelperMacros.h>
-
 
 namespace fwStructuralPatch
 {
@@ -20,7 +19,7 @@ namespace Material
 {
 
 /**
- * @brief Test patch to convert fwData::Reconstruction from version 1 to version 2.
+ * @brief Test patch to convert fwData::Material from version 1 to version 2.
  */
 class V1ToV2Test : public CPPUNIT_NS::TestFixture
 {
