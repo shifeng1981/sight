@@ -4,8 +4,8 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V4TOV5_HPP__
-#define __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V4TOV5_HPP__
+#ifndef __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V5TOV4_HPP__
+#define __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V5TOV4_HPP__
 
 #include "fwStructuralPatch/config.hpp"
 
@@ -20,21 +20,21 @@ namespace fwData
 namespace Material
 {
 
-/// Structural patch to convert a fwData::Material from version '4' to version '5'.
-class FWSTRUCTURALPATCH_CLASS_API V4ToV5 : public ::fwAtomsPatch::IStructuralPatch
+/// Structural patch to convert a fwData::Material from version '5' to version '4'.
+class FWSTRUCTURALPATCH_CLASS_API V5ToV4 : public ::fwAtomsPatch::IStructuralPatch
 {
 public:
     fwCoreClassDefinitionsWithFactoryMacro(
-        (V4ToV5)(::fwStructuralPatch::fwData::Material::V4ToV5), (()), new V4ToV5);
+        (V5ToV4)(::fwStructuralPatch::fwData::Material::V5ToV4), (()), new V5ToV4);
 
     /// Constructor
-    FWSTRUCTURALPATCH_API V4ToV5();
+    FWSTRUCTURALPATCH_API V5ToV4();
 
     /// Destructor
-    FWSTRUCTURALPATCH_API ~V4ToV5();
+    FWSTRUCTURALPATCH_API ~V5ToV4();
 
     /// Copy constructor
-    FWSTRUCTURALPATCH_API V4ToV5( const V4ToV5& cpy );
+    FWSTRUCTURALPATCH_API V5ToV4( const V5ToV4& cpy );
 
     /**
      * @brief Applies patch
@@ -54,4 +54,4 @@ public:
 
 } // namespace fwStructuralPatch
 
-#endif /* __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V4TOV5_HPP__ */
+#endif /* __FWSTRUCTURALPATCH_FWDATA_MATERIAL_V5TOV4_HPP__ */

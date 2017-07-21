@@ -4,7 +4,7 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "fwStructuralPatch/fwData/Material/V4ToV5.hpp"
+#include "fwStructuralPatch/fwData/Material/V5ToV4.hpp"
 
 #include <fwAtoms/Boolean.hpp>
 #include <fwAtoms/Map.hpp>
@@ -26,31 +26,31 @@ namespace fwData
 namespace Material
 {
 
-V4ToV5::V4ToV5() :
+V5ToV4::V5ToV4() :
     ::fwAtomsPatch::IStructuralPatch()
 {
     m_originClassname = "::fwData::Material";
     m_targetClassname = "::fwData::Material";
-    m_originVersion   = "4";
-    m_targetVersion   = "5";
+    m_originVersion   = "5";
+    m_targetVersion   = "4";
 }
 
 // ----------------------------------------------------------------------------
 
-V4ToV5::~V4ToV5()
+V5ToV4::~V5ToV4()
 {
 }
 
 // ----------------------------------------------------------------------------
 
-V4ToV5::V4ToV5( const V4ToV5& cpy ) :
+V5ToV4::V5ToV4( const V5ToV4& cpy ) :
     ::fwAtomsPatch::IStructuralPatch(cpy)
 {
 }
 
 // ----------------------------------------------------------------------------
 
-void V4ToV5::apply( const ::fwAtoms::Object::sptr& previous,
+void V5ToV4::apply( const ::fwAtoms::Object::sptr& previous,
                     const ::fwAtoms::Object::sptr& current,
                     ::fwAtomsPatch::IPatch::NewVersionsType& newVersions)
 {
@@ -59,29 +59,28 @@ void V4ToV5::apply( const ::fwAtoms::Object::sptr& previous,
     // Update object version
     this->updateVersion(current);
 
-    // Get Previous attributes
-    ::fwAtoms::Object::sptr image     = previous->getAttribute< ::fwAtoms::Object>("diffuse_texture");
-    ::fwAtoms::String::sptr filtering = previous->getAttribute< ::fwAtoms::String>("diffuse_texture_filtering");
-    ::fwAtoms::String::sptr wrapping  = previous->getAttribute< ::fwAtoms::String>("diffuse_texture_wrapping");
-
     ::fwAtomsPatch::helper::Object helper(current);
 
-    helper.removeAttribute("diffuse_texture_filtering");
-    helper.removeAttribute("diffuse_texture_wrapping");
+    ::fwAtoms::Map::sptr dtm = previous->getAttribute< ::fwAtoms::Map>("diffuse_texture");
+    if(dtm->size() > 1)
+    {
+        // Get the first available texture and put it the material
+        ::fwAtoms::Object::sptr dt = ::fwAtoms::Object::dynamicCast(dtm->begin()->second);
 
-    ::fwAtomsPatch::StructuralCreatorDB::sptr creators = ::fwAtomsPatch::StructuralCreatorDB::getDefault();
-    ::fwAtoms::Object::sptr dt1                        = creators->create( "::fwData::DiffuseTexture", "1");
-    ::fwAtomsPatch::helper::Object helperDT1(dt1);
+        ::fwAtoms::Object::sptr image     = previous->getAttribute< ::fwAtoms::Object>("diffuse_texture");
+        ::fwAtoms::String::sptr filtering = previous->getAttribute< ::fwAtoms::String>("diffuse_texture_filtering");
+        ::fwAtoms::String::sptr wrapping  = previous->getAttribute< ::fwAtoms::String>("diffuse_texture_wrapping");
 
-    helperDT1.replaceAttribute("image", image);
-    helperDT1.replaceAttribute("filtering", filtering);
-    helperDT1.replaceAttribute("wrapping", wrapping);
-
-    ::fwAtoms::Map::sptr dmap = ::fwAtoms::Map::New();
-    dmap->insert("diffuse", dt1);
-
-    // Switch diffuse and ambient
-    helper.replaceAttribute("diffuse_texture", dmap);
+        helper.replaceAttribute("diffuse_texture", image);
+        helper.addAttribute("diffuse_texture_filtering", filtering);
+        helper.addAttribute("diffuse_texture_wrapping", wrapping);
+    }
+    else
+    {
+        helper.replaceAttribute("diffuse_texture", ::fwAtoms::Object::New());
+        helper.addAttribute("diffuse_texture_filtering", ::fwAtoms::String::New("NEAREST"));
+        helper.addAttribute("diffuse_texture_wrapping", ::fwAtoms::String::New("CLAMP"));
+    }
 }
 
 } // namespace Material
