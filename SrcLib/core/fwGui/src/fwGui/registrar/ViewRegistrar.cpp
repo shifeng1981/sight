@@ -6,10 +6,10 @@
 
 #include "fwGui/registrar/ViewRegistrar.hpp"
 
-#include "fwGui/GuiRegistry.hpp"
 #include "fwGui/container/fwContainer.hpp"
 #include "fwGui/container/fwMenuBar.hpp"
 #include "fwGui/container/fwToolBar.hpp"
+#include "fwGui/GuiRegistry.hpp"
 
 #include <fwServices/macros.hpp>
 #include <fwServices/op/Get.hpp>
@@ -49,7 +49,8 @@ ViewRegistrar::~ViewRegistrar()
     else
     {
         parentContainer = ::fwGui::GuiRegistry::getSIDContainer(m_sid);
-        OSLM_ASSERT("No fwContainer with the sid '"<< m_sid <<"' exists in the SID container map.", parentContainer );
+        OSLM_ERROR_IF("No fwContainer with the sid '"<< m_sid <<"' exists in the SID container map.",
+                      !parentContainer );
     }
     return parentContainer;
 }

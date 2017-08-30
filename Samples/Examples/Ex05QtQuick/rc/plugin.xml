@@ -1,0 +1,88 @@
+<plugin id="Ex05QtQuick" version="@DASH_VERSION@" >
+
+    <requirement id="dataReg" />
+    <requirement id="servicesReg" />
+    <requirement id="visuVTKQuick" />
+
+    <extension implements="::fwServices::registry::AppConfig2">
+        <id>Ex05QtQuickConfig</id>
+        <config>
+        <object uid="imageUID" type="::fwData::Image" />
+        <object uid="meshUID" type="::fwData::Mesh" />
+        <object uid="TFSelectionUID" type="::fwData::Composite">
+            <item key="SelectedTF">
+                <object uid="SelectedTFUID" type="::fwData::TransferFunction">
+                    <colors>
+                        <step color="#00000000" value="-1000" />
+                        <step color="#00000000" value="50" />
+                        <step color="#80000000" value="80" />
+                        <step color="#ff5a4626" value="100" />
+                        <step color="#c6ffff33" value="170" />
+                        <step color="#e2bf7f8c" value="220" />
+                        <step color="#ff8000a6" value="280" />
+                        <step color="#ffffc4e6" value="330" />
+                        <step color="#ffffffff" value="400" />
+                    </colors>
+                </object>
+            </item>
+        </object>
+
+
+            <service uid="frame" type="::guiQtQuick::frame::QuickFrame" autoConnect="no">
+                <frame>
+                    <qml>@BUNDLE_PREFIX@/Ex05QtQuick_0-1/frame.qml</qml>
+                </frame>
+            </service>
+
+            <service uid="renderingMesh" type="::fwRenderVTK::SRender" autoConnect="yes">
+                <in key="image" uid="imageUID" />
+                <in key="mesh" uid="meshUID"/>
+                <inout key="TFSlection" uid="TFSelectionUID"/>
+                <scene autoRender="true" quickMode="true">`
+                    <picker id="myPicker" vtkclass="fwVtkCellPicker" />
+                    <renderer id="default" layer="0" background="#000000"/>
+
+                <adaptor id="meshAdaptor" uid="meshAdaptorUid" class="::visuVTKAdaptor::Mesh" objectId="mesh">
+                    <config renderer="default" picker="" />
+                </adaptor>
+
+                <adaptor id="volumeAdaptor" uid="volumeAdaptorUID" class="::visuVTKVRAdaptor::Volume" objectId="image">
+                    <config renderer="default" selectedTFKey="SelectedTF" tfSelectionFwID="TFSlection" />
+                </adaptor>
+
+                <adaptor id="Interactor1" class="::visuVTKAdaptor::InteractorStyle" objectId="self">
+                    <config renderer="default" style="InteractorStyle3DForNegato" />
+                </adaptor>
+
+                </scene>
+            </service>
+
+            <service uid="openMesh"  type="::guiQtQuick::action::SStarter" autoConnect="no">
+                <start uid="meshReader" />
+            </service>
+
+            <service uid="openImage"  type="::guiQtQuick::action::SStarter" autoConnect="no">
+                <start uid="imageReader" />
+            </service>
+
+            <service uid="imageReader" type="::uiIO::editor::SIOSelector">
+                <in key="image" uid="imageUID" />
+                <type mode="reader" />
+            </service>
+
+
+
+            <service uid="meshReader" type="::uiIO::editor::SIOSelector">
+                <in key="mesh" uid="meshUID" />
+                <type mode="reader" />
+            </service>
+
+
+            <start uid="frame" />
+            <start uid="renderingMesh" />
+            <start uid="openMesh" />
+            <start uid="openImage" />
+
+        </config>
+    </extension>
+</plugin>

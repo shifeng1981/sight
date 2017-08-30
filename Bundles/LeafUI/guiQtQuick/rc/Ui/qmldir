@@ -1,0 +1,7 @@
+module Ui
+Header 1.0 header.qml
+Button 1.0 button.qml
+Icon 1.0 icon.qml
+Label 1.0 label.qml
+TagLabel 1.0 taglabel.qml
+NavigationDrawer 1.0 navigationDrawer.qml

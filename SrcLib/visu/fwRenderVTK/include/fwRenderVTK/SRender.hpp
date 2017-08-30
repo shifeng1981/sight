@@ -212,6 +212,7 @@ private:
     /// Otherwise it is updated periodically (default 30Hz)
     RenderMode m_renderMode;
 
+    bool m_quickMode; ///< if true, scene is render with QtQuick
     unsigned int m_width; ///< width for off screen render
     unsigned int m_height; ///< height for off screen render
     bool m_offScreen; ///< if true, scene is render in off screen

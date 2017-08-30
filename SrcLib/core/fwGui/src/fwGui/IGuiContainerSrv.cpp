@@ -112,7 +112,7 @@ void IGuiContainerSrv::create()
 {
     SLM_ASSERT("ViewRegistrar must be initialized.", m_viewRegistrar);
     ::fwGui::container::fwContainer::sptr parent = m_viewRegistrar->getParent();
-    SLM_ASSERT("Parent container is unknown.", parent);
+    //SLM_ASSERT("Parent container is unknown.", parent);
 
     ::fwServices::registry::ActiveWorkers::getDefaultWorker()->postTask< void >([this, &parent]
         {

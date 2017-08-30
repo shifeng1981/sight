@@ -250,7 +250,10 @@ void SRender::configuring()
 
     m_sceneConf = srvConf.get_child("scene");
 
-    const std::string renderMode = m_sceneConf.get("<xmlattr>.renderMode", "auto");
+    const std::string quickModeAttribute = m_sceneConf.get("<xmlattr>.quickMode");
+    m_quickMode = (quickModeAttribute == "true");
+
+    const std::string& renderMode = m_sceneConf.get("<xmlattr>.renderMode", "auto");
 
     if (renderMode == "auto")
     {
@@ -449,6 +452,12 @@ void SRender::startContext()
     if (!m_offScreen)
     {
         m_interactorManager = ::fwRenderVTK::IVtkRenderWindowInteractorManager::createManager();
+
+        if(m_quickMode)
+        {
+            m_interactorManager->setServiceID(this->getID());
+        }
+
         m_interactorManager->installInteractor( this->getContainer() );
     }
     else

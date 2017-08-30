@@ -317,7 +317,7 @@ macro(createResourcesTarget TARGET RES_DIR TARGET_DIR)
     set(CREATED_RESOURCES_LIST)
     foreach(RESOURCE_FILE ${RESOURCES_FILES})
         file(RELATIVE_PATH REL_PATH "${RES_DIR}" "${RESOURCE_FILE}")
-        if ("${TARGET_DIR}/${REL_PATH}" MATCHES "^.*\\.(txt|xml|cfg)$")
+        if ("${TARGET_DIR}/${REL_PATH}" MATCHES "^.*\\.(txt|xml|qml|cfg)$")
             set(COPY_COMMAND ${CMAKE_COMMAND}
                              -DIN_FILE="${RES_DIR}/${REL_PATH}"
                              -DOUT_FILE="${TARGET_DIR}/${REL_PATH}"
