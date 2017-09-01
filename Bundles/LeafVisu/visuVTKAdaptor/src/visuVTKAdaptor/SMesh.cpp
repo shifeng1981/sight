@@ -29,8 +29,6 @@
 #include <fwVtkIO/helper/Mesh.hpp>
 #include <fwVtkIO/vtk.hpp>
 
-#include <boost/tokenizer.hpp>
-
 #include <vtkActor.h>
 #include <vtkCamera.h>
 #include <vtkCommand.h>

@@ -87,7 +87,7 @@ public:
     /** @{
      *  @brief get/set the texture filtering
      */
-    FWDATA_API const ::fwData::DiffuseTexture::FilteringType getFiltering();
+    FWDATA_API const ::fwData::DiffuseTexture::FilteringType getFiltering() const;
     FWDATA_API ::fwData::DiffuseTexture::FilteringType& getRefFiltering();
     FWDATA_API const ::fwData::DiffuseTexture::FilteringType& getCRefFiltering() const;
     FWDATA_API void setFiltering(::fwData::DiffuseTexture::FilteringType);
@@ -96,7 +96,7 @@ public:
     /** @{
      *  @brief get/set the texture wrapping
      */
-    FWDATA_API const ::fwData::DiffuseTexture::WrappingType getWrapping();
+    FWDATA_API const ::fwData::DiffuseTexture::WrappingType getWrapping() const;
     FWDATA_API ::fwData::DiffuseTexture::WrappingType& getRefWrapping();
     FWDATA_API const ::fwData::DiffuseTexture::WrappingType& getCRefWrapping() const;
     FWDATA_API void setWrapping(::fwData::DiffuseTexture::WrappingType);
@@ -105,7 +105,7 @@ public:
     /** @{
      *  @brief get/set the texture blending
      */
-    FWDATA_API ::fwData::DiffuseTexture::BlendingType getBlending();
+    FWDATA_API ::fwData::DiffuseTexture::BlendingType getBlending() const;
     FWDATA_API void setBlending(::fwData::DiffuseTexture::BlendingType);
     /// @}
 

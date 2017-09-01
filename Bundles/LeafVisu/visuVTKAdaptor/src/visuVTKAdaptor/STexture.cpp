@@ -60,7 +60,7 @@ void STexture::configuring()
     this->configureParams();
 
     /* Get texture name */
-    m_name = this->getObject()->getID();
+    m_name = this->getInOut< ::fwData::Image >(s_TEXTURE_INOUT)->getID();
 
     const ConfigType config = this->getConfigTree().get_child("service.config.<xmlattr>");
 

@@ -97,7 +97,7 @@ Color::sptr Material::diffuse() const
 
 Image::sptr Material::getDiffuseTexture(const std::string& name) const
 {
-    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
+    DiffuseTextureMap::const_iterator it = m_diffuseTexture.find(name);
     if(it != m_diffuseTexture.end())
     {
         return it->second->getImage();
@@ -124,7 +124,7 @@ void Material::setDiffuse(const Color::sptr& diffuse)
 
 void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, const std::string& name)
 {
-    std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator it = m_diffuseTexture.find(name);
+    DiffuseTextureMap::const_iterator it = m_diffuseTexture.find(name);
     if(it != m_diffuseTexture.end())
     {
         it->second->setImage(diffuseTexture);
@@ -140,14 +140,14 @@ void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, const std::s
 
 //------------------------------------------------------------------------------
 
-std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator Material::getDiffuseTextureIteratorBegin() const
+Material::DiffuseTextureMap::const_iterator Material::getDiffuseTextureIteratorBegin() const
 {
     return m_diffuseTexture.begin();
 }
 
 //------------------------------------------------------------------------------
 
-std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator Material::getDiffuseTextureIteratorEnd() const
+Material::DiffuseTextureMap::const_iterator Material::getDiffuseTextureIteratorEnd() const
 {
     return m_diffuseTexture.end();
 }

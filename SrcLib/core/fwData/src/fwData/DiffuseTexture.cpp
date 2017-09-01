@@ -33,12 +33,32 @@ DiffuseTexture::~DiffuseTexture()
 
 void DiffuseTexture::shallowCopy(const Object::csptr& _source )
 {
+    DiffuseTexture::csptr other = DiffuseTexture::dynamicConstCast(_source);
+    FW_RAISE_EXCEPTION_IF( ::fwData::Exception(
+                               "Unable to copy" + (_source ? _source->getClassname() : std::string("<NULL>"))
+                               + " to " + this->getClassname()), !bool(other) );
+    this->fieldShallowCopy( _source );
+
+    m_image     = other->m_image;
+    m_filtering = other->m_filtering;
+    m_wrapping  = other->m_wrapping;
+    m_blending  = other->m_blending;
 }
 
 //------------------------------------------------------------------------------
 
 void DiffuseTexture::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& cache)
 {
+    DiffuseTexture::csptr other = DiffuseTexture::dynamicConstCast(_source);
+    FW_RAISE_EXCEPTION_IF( ::fwData::Exception(
+                               "Unable to copy" + (_source ? _source->getClassname() : std::string("<NULL>"))
+                               + " to " + this->getClassname()), !bool(other) );
+    this->fieldDeepCopy( _source );
+
+    m_image     = ::fwData::Object::copy( other->m_image, cache );
+    m_filtering = other->m_filtering;
+    m_wrapping  = other->m_wrapping;
+    m_blending  = other->m_blending;
 }
 
 //------------------------------------------------------------------------------
@@ -57,7 +77,7 @@ void DiffuseTexture::setImage(const Image::sptr& diffuseTexture)
 
 //------------------------------------------------------------------------------
 
-const ::fwData::DiffuseTexture::FilteringType DiffuseTexture::getFiltering()
+const ::fwData::DiffuseTexture::FilteringType DiffuseTexture::getFiltering() const
 {
     return m_filtering;
 }
@@ -85,7 +105,7 @@ void DiffuseTexture::setFiltering(::fwData::DiffuseTexture::FilteringType filter
 
 //------------------------------------------------------------------------------
 
-const ::fwData::DiffuseTexture::WrappingType DiffuseTexture::getWrapping()
+const ::fwData::DiffuseTexture::WrappingType DiffuseTexture::getWrapping() const
 {
     return m_wrapping;
 }
@@ -113,7 +133,7 @@ void DiffuseTexture::setWrapping(::fwData::DiffuseTexture::WrappingType wrapping
 
 //------------------------------------------------------------------------------
 
-::fwData::DiffuseTexture::BlendingType DiffuseTexture::getBlending()
+::fwData::DiffuseTexture::BlendingType DiffuseTexture::getBlending() const
 {
     return m_blending;
 }

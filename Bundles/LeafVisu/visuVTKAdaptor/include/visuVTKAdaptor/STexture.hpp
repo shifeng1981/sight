@@ -43,7 +43,7 @@ namespace visuVTKAdaptor
  * @code{.xml}
     <service type="::visuVTKAdaptor::STexture" autoConnect="yes">
        <inout key="texture" uid="..." />
-       <config texture="texture" filtering="linear" wrapping="repeat" />
+       <config texture="texture" filtering="linear" wrapping="repeat" blending="none" />
    </service>
    @endcode
  *
@@ -54,6 +54,8 @@ namespace visuVTKAdaptor
  * - \b config(mandatory) : contains the adaptor configuration
  *    - \b filtering (optional) : filtering of the texture, "nearest" or "linear"
  *    - \b wrapping (optional) : wrapping of the texture, "clamp" or "repeat"
+ *    - \b blending (optional) : blending mode for the texture, "none", "replace", "modulate", "add", "add_signed",
+ *"interpolate" or "subtract"
  *    - \b lighting (optional) : enable the lighting, "yes" or "no" default yes
  */
 class VISUVTKADAPTOR_CLASS_API STexture : public ::fwRenderVTK::IAdaptor
@@ -104,7 +106,7 @@ protected:
     /// How to wrap the texture
     std::string m_wrapping;
 
-    /// How to wrap the texture
+    /// How to blend the texture
     std::string m_blending;
 
     /// enable or not the lighting (default true)
