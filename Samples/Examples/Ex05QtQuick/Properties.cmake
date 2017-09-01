@@ -5,7 +5,7 @@ set( TYPE APP )
 set( DEPENDENCIES
 )
 set( REQUIREMENTS 
-    appXml2
+    appXml
     dataReg
     servicesReg
     
@@ -26,4 +26,4 @@ set( REQUIREMENTS
     guiQtQuick
 )
 
-bundleParam(appXml2 PARAM_LIST config PARAM_VALUES Ex05QtQuickConfig)
+bundleParam(appXml PARAM_LIST config PARAM_VALUES Ex05QtQuickConfig)

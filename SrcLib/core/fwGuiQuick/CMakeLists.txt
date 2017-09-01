@@ -1,8 +1,14 @@
 fwLoadProperties()
 
+if(WIN32)
+    set(FW_QT5_PLUGINS_PATH "bin/qt5/plugins")
+else()
+    set(FW_QT5_PLUGINS_PATH "lib/qt5/plugins")
+endif()
+
 configure_file("${CMAKE_CURRENT_LIST_DIR}/bin/qt.conf" "${CMAKE_BINARY_DIR}/bin/qt.conf")
 
-add_definitions("-DQT_NO_KEYWORDS")
+target_compile_definitions(${FWPROJECT_NAME} PUBLIC "-DQT_NO_KEYWORDS")
 
 find_package(Qt5 COMPONENTS Core Gui Widgets Concurrent REQUIRED)
 
@@ -20,13 +26,4 @@ fwLink(
     ${Qt5Concurrent_LIBRARIES}
 )
 
-if(ANDROID)
-    fwForwardInclude(
-        ${EXTERNAL_LIBRARIES}/include/QtGui/5.5.1/QtGui
-    )
-    
-    fwLink(
-        android
-    )
-endif()
 set_target_properties(${FWPROJECT_NAME} PROPERTIES AUTOMOC TRUE)
