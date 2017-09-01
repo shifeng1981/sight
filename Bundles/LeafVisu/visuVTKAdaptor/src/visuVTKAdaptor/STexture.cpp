@@ -12,10 +12,7 @@
 
 #include <fwData/Image.hpp>
 #include <fwData/Material.hpp>
-<<<<<<< variant A
->>>>>>> variant B
-#include <fwData/Mesh.hpp>
-======= end
+//#include <fwData/Mesh.hpp>
 #include <fwData/mt/ObjectReadLock.hpp>
 #include <fwData/mt/ObjectWriteLock.hpp>
 #include <fwData/Reconstruction.hpp>
@@ -44,7 +41,8 @@ STexture::STexture() noexcept :
     m_filtering("linear"),
     m_wrapping("repeat"),
     m_blending("none"),
-    m_lighting(true)
+    m_lighting(true),
+    m_name("diffuse")
 {
     newSlot(s_APPLY_TEXTURE_SLOT, &STexture::applyTexture, this );
 }
@@ -61,7 +59,10 @@ void STexture::configuring()
 {
     this->configureParams();
 
-    const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
+    /* Get texture name */
+    m_name = this->getObject()->getID();
+
+    const ConfigType config = this->getConfigTree().get_child("service.config.<xmlattr>");
 
     m_filtering = config.get<std::string>("filtering", "linear");
 
@@ -109,8 +110,6 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
 
     ::fwData::mt::ObjectWriteLock matLock(_material);
 
-    _material->setDiffuseTexture(image, m_name);
-
     {
         ::fwData::mt::ObjectReadLock imLock(image);
 
@@ -119,7 +118,7 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
             return;
         }
 
-        _material->setDiffuseTexture(image);
+        _material->setDiffuseTexture(image, m_name);
         if(m_lighting == false)
         {
             _material->setShadingMode(::fwData::Material::AMBIENT);

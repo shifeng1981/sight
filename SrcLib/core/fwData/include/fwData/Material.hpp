@@ -113,8 +113,10 @@ public:
         EDGE      = 5, //SURFACE|WIREFRAME -> 101
     } RepresentationType;
 
-    FWDATA_API std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator getDiffuseTextureIteratorBegin();
-    FWDATA_API std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator getDiffuseTextureIteratorEnd();
+    FWDATA_API std::map<std::string,
+                        ::fwData::DiffuseTexture::sptr>::const_iterator getDiffuseTextureIteratorBegin() const;
+    FWDATA_API std::map<std::string,
+                        ::fwData::DiffuseTexture::sptr>::const_iterator getDiffuseTextureIteratorEnd() const;
 
     /** @{
      *  @brief get/set the shading models(flat, gouraud, phong)

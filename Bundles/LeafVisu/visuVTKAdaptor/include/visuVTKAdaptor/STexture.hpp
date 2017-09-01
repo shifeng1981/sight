@@ -104,8 +104,14 @@ protected:
     /// How to wrap the texture
     std::string m_wrapping;
 
+    /// How to wrap the texture
+    std::string m_blending;
+
     /// enable or not the lighting (default true)
     bool m_lighting;
+
+    /// Texture name
+    std::string m_name;
 };
 
 } //namespace visuVTKAdaptor

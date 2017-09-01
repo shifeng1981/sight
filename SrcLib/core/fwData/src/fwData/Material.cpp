@@ -70,8 +70,8 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
                                + " to " + this->getClassname()), !bool(other) );
     this->fieldDeepCopy( _source, cache );
 
-    m_ambient = ::fwData::Object::copy( other->m_ambient, cache );
-    m_diffuse = ::fwData::Object::copy( other->m_diffuse, cache );
+    m_ambient        = ::fwData::Object::copy( other->m_ambient, cache );
+    m_diffuse        = ::fwData::Object::copy( other->m_diffuse, cache );
     m_diffuseTexture = other->m_diffuseTexture;
 
     m_shadingMode        = other->m_shadingMode;
@@ -140,14 +140,14 @@ void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, const std::s
 
 //------------------------------------------------------------------------------
 
-std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator Material::getDiffuseTextureIteratorBegin()
+std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator Material::getDiffuseTextureIteratorBegin() const
 {
     return m_diffuseTexture.begin();
 }
 
 //------------------------------------------------------------------------------
 
-std::map<std::string, ::fwData::DiffuseTexture::sptr>::iterator Material::getDiffuseTextureIteratorEnd()
+std::map<std::string, ::fwData::DiffuseTexture::sptr>::const_iterator Material::getDiffuseTextureIteratorEnd() const
 {
     return m_diffuseTexture.end();
 }

@@ -6,8 +6,6 @@ set( REQUIREMENTS
     appXml2
     fwlauncher
 
-    echoSimulation
-
     media
 
     guiQt

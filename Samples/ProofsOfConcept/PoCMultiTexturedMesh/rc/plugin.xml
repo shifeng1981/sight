@@ -106,55 +106,79 @@
                     </layout>
                 </gui>
                 <registry>
-                    <view sid="genericScene" />
+                    <view sid="genericScene" start="yes" />
                 </registry>
             </service>
 
-            <service uid="pngReader1" type="::echoSimulation::SRasterImageReader" worker="w_pngReader">
+            <service uid="pngReader1" type="::ioVTK::SImageReader" worker="w_pngReader">
                 <inout key="frame" uid="pngMarker1" />
             </service>
-            <service uid="pngReader2" type="::echoSimulation::SRasterImageReader" worker="w_pngReader">
+            <service uid="pngReader2" type="::ioVTK::SImageReader" worker="w_pngReader">
                 <inout key="frame" uid="pngMarker2" />
             </service>
-            <service uid="pngReader3" type="::echoSimulation::SRasterImageReader" worker="w_pngReader">
+            <service uid="pngReader3" type="::ioVTK::SImageReader" worker="w_pngReader">
                 <inout key="frame" uid="pngMarker3" />
             </service>
 
             <service uid="genericScene" type="::fwRenderVTK::SRender" autoConnect="yes">
-                <inout key="meshID" uid="mesh" />
-                <inout key="framePNGID1" uid="pngMarker1" />
-                <inout key="framePNGID2" uid="pngMarker2" />
-                <inout key="framePNGID3" uid="pngMarker3" />
-
                 <scene>
                     <renderer id="default" background="#052833" />
 
-                    <adaptor id="cubeAdaptor" class="::visuVTKAdaptor::Mesh" objectId="meshID" >
-                        <config renderer="default" uvgen="plane" texture="pngTextureAdaptor1,pngTextureAdaptor2,pngTextureAdaptor3" />
-                    </adaptor>
+                    <adaptor uid="cubeAdaptor" />
 
-                    <adaptor id="pngTextureAdaptor1" class="::visuVTKAdaptor::Texture" objectId="framePNGID1" >
-                        <config renderer="default" wrapping="clamp" filtering="linear" blending="none" />
-                    </adaptor>
-
-                    <adaptor id="pngTextureAdaptor2" class="::visuVTKAdaptor::Texture" objectId="framePNGID2" >
-                        <config renderer="default" wrapping="clamp" filtering="linear" blending="add" />
-                    </adaptor>
-
-                    <adaptor id="pngTextureAdaptor3" class="::visuVTKAdaptor::Texture" objectId="framePNGID3" >
-                        <config renderer="default" wrapping="clamp" filtering="linear" blending="add" />
-                    </adaptor>
+                    <adaptor uid="pngTextureAdaptor1" />
+                    <adaptor uid="pngTextureAdaptor2" />
+                    <adaptor uid="pngTextureAdaptor3" />
                 </scene>
             </service>
+
+            <service uid="cubeAdaptor" type="::visuVTKAdaptor::SMesh" autoConnect="yes">
+                <in key="mesh" uid="mesh" />
+                <config renderer="default" uvgen="plane" />
+            </service>
+
+            <service uid="pngTextureAdaptor1" type="::visuVTKAdaptor::STexture" autoConnect="yes">
+                <inout key="texture" uid="pngMarker1" />
+                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+            </service>
+
+            <service uid="pngTextureAdaptor2" type="::visuVTKAdaptor::STexture" autoConnect="yes">
+                <inout key="texture" uid="pngMarker2" />
+                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+            </service>
+
+            <service uid="pngTextureAdaptor3" type="::visuVTKAdaptor::STexture" autoConnect="yes">
+                <inout key="texture" uid="pngMarker3" />
+                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+            </service>
+
+            <connect>
+                <signal>cubeAdaptor/textureApplied</signal>
+                <slot>pngTextureAdaptor1/applyTexture</slot>
+            </connect>
+
+            <connect>
+                <signal>cubeAdaptor/textureApplied</signal>
+                <slot>pngTextureAdaptor2/applyTexture</slot>
+            </connect>
+
+            <connect>
+                <signal>cubeAdaptor/textureApplied</signal>
+                <slot>pngTextureAdaptor3/applyTexture</slot>
+            </connect>
+
+            <start uid="mainFrame" />
 
             <start uid="pngReader1" />
             <start uid="pngReader2" />
             <start uid="pngReader3" />
 
-            <start uid="meshReader" />
+            <start uid="pngTextureAdaptor1" />
+            <start uid="pngTextureAdaptor2" />
+            <start uid="pngTextureAdaptor3" />
 
-            <start uid="mainFrame" />
-            <start uid="genericScene" />
+            <start uid="meshReader" />
+            <start uid="cubeAdaptor" />
 
             <update uid="pngReader1" />
             <update uid="pngReader2" />
