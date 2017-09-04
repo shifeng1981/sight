@@ -2,7 +2,7 @@
 
     <requirement id="visuVTKQt" />
 
-    <extension implements="::fwServices::registry::AppConfig2">
+    <extension implements="::fwServices::registry::AppConfig">
         <id>PoCMultiTexturedMeshConfig</id>
         <config>
             <object uid="mesh" type="::fwData::Mesh" />

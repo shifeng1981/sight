@@ -3,7 +3,7 @@ set( VERSION 0.1 )
 set( TYPE APP )
 set( DEPENDENCIES  )
 set( REQUIREMENTS
-    appXml2
+    appXml
     fwlauncher
 
     media
@@ -19,4 +19,4 @@ set( REQUIREMENTS
     visuVTKAdaptor
 )
 
-bundleParam(appXml2 PARAM_LIST config PARAM_VALUES PoCMultiTexturedMeshConfig)
+bundleParam(appXml PARAM_LIST config PARAM_VALUES PoCMultiTexturedMeshConfig)
