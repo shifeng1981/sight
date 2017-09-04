@@ -12,7 +12,6 @@
 
 #include <fwData/Image.hpp>
 #include <fwData/Material.hpp>
-//#include <fwData/Mesh.hpp>
 #include <fwData/mt/ObjectReadLock.hpp>
 #include <fwData/mt/ObjectWriteLock.hpp>
 #include <fwData/Reconstruction.hpp>
@@ -59,9 +58,6 @@ void STexture::configuring()
 {
     this->configureParams();
 
-    /* Get texture name */
-    m_name = this->getInOut< ::fwData::Image >(s_TEXTURE_INOUT)->getID();
-
     const ConfigType config = this->getConfigTree().get_child("service.config.<xmlattr>");
 
     m_filtering = config.get<std::string>("filtering", "linear");
@@ -78,6 +74,9 @@ void STexture::configuring()
 void STexture::starting()
 {
     this->initialize();
+
+    /* Get texture name */
+    m_name = this->getInOut< ::fwData::Image >(s_TEXTURE_INOUT)->getID();
 }
 
 //------------------------------------------------------------------------------

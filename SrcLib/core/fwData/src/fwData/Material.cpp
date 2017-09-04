@@ -70,9 +70,16 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
                                + " to " + this->getClassname()), !bool(other) );
     this->fieldDeepCopy( _source, cache );
 
-    m_ambient        = ::fwData::Object::copy( other->m_ambient, cache );
-    m_diffuse        = ::fwData::Object::copy( other->m_diffuse, cache );
-    m_diffuseTexture = other->m_diffuseTexture;
+    m_ambient = ::fwData::Object::copy( other->m_ambient, cache );
+    m_diffuse = ::fwData::Object::copy( other->m_diffuse, cache );
+
+    DiffuseTextureMap::const_iterator it = other->getDiffuseTextureIteratorBegin();
+    for(; it != other->getDiffuseTextureIteratorEnd(); it++)
+    {
+        ::fwData::DiffuseTexture::sptr dt = ::fwData::DiffuseTexture::New();
+        dt->deepCopy(it->second);
+        m_diffuseTexture[it->first] = dt;
+    }
 
     m_shadingMode        = other->m_shadingMode;
     m_representationMode = other->m_representationMode;
