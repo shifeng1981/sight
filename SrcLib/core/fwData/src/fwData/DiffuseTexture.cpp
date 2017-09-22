@@ -9,9 +9,6 @@
 #include "fwData/Exception.hpp"
 #include "fwData/registry/macros.hpp"
 
-#include <fwCom/Signal.hpp>
-#include <fwCom/Signal.hxx>
-
 fwDataRegisterMacro( ::fwData::DiffuseTexture );
 
 namespace fwData
@@ -84,20 +81,6 @@ const ::fwData::DiffuseTexture::FilteringType DiffuseTexture::getFiltering() con
 
 //------------------------------------------------------------------------------
 
-::fwData::DiffuseTexture::FilteringType& DiffuseTexture::getRefFiltering()
-{
-    return m_filtering;
-}
-
-//------------------------------------------------------------------------------
-
-const ::fwData::DiffuseTexture::FilteringType& DiffuseTexture::getCRefFiltering() const
-{
-    return m_filtering;
-}
-
-//------------------------------------------------------------------------------
-
 void DiffuseTexture::setFiltering(::fwData::DiffuseTexture::FilteringType filtering)
 {
     m_filtering = filtering;
@@ -106,20 +89,6 @@ void DiffuseTexture::setFiltering(::fwData::DiffuseTexture::FilteringType filter
 //------------------------------------------------------------------------------
 
 const ::fwData::DiffuseTexture::WrappingType DiffuseTexture::getWrapping() const
-{
-    return m_wrapping;
-}
-
-//------------------------------------------------------------------------------
-
-::fwData::DiffuseTexture::WrappingType & DiffuseTexture::getRefWrapping()
-{
-    return m_wrapping;
-}
-
-//------------------------------------------------------------------------------
-
-const ::fwData::DiffuseTexture::WrappingType& DiffuseTexture::getCRefWrapping() const
 {
     return m_wrapping;
 }

@@ -7,7 +7,6 @@
 #ifndef __FWDATA_DIFFUSETEXTURE_HPP__
 #define __FWDATA_DIFFUSETEXTURE_HPP__
 
-#include "fwData/Color.hpp"
 #include "fwData/factory/new.hpp"
 #include "fwData/Image.hpp"
 #include "fwData/Object.hpp"
@@ -17,6 +16,9 @@ fwCampAutoDeclareDataMacro((fwData)(DiffuseTexture), FWDATA_API);
 namespace fwData
 {
 
+/**
+ * @brief This class manages the parameters and image associated to a single texture.
+ */
 class FWDATA_CLASS_API DiffuseTexture : public Object
 {
 public:
@@ -42,25 +44,25 @@ public:
     /**
      * @brief Texture filtering types
      */
-    typedef enum
+    enum FilteringType : unsigned char
     {
         NEAREST,
-        LINEAR,
-    } FilteringType;
+        LINEAR
+    };
 
     /**
      * @brief Texture wrapping types
      */
-    typedef enum
+    enum WrappingType : unsigned char
     {
         CLAMP,
-        REPEAT,
-    } WrappingType;
+        REPEAT
+    };
 
     /**
      * @brief Texture blending mode
      */
-    typedef enum
+    enum BlendingType : unsigned char
     {
         NONE = 0,
         REPLACE,
@@ -69,7 +71,7 @@ public:
         ADD_SIGNED,
         INTERPOLATE,
         SUBTRACT
-    } BlendingType;
+    };
 
     /// Getter/Setters
     /**
@@ -88,8 +90,6 @@ public:
      *  @brief get/set the texture filtering
      */
     FWDATA_API const ::fwData::DiffuseTexture::FilteringType getFiltering() const;
-    FWDATA_API ::fwData::DiffuseTexture::FilteringType& getRefFiltering();
-    FWDATA_API const ::fwData::DiffuseTexture::FilteringType& getCRefFiltering() const;
     FWDATA_API void setFiltering(::fwData::DiffuseTexture::FilteringType);
     /// @}
 
@@ -97,8 +97,6 @@ public:
      *  @brief get/set the texture wrapping
      */
     FWDATA_API const ::fwData::DiffuseTexture::WrappingType getWrapping() const;
-    FWDATA_API ::fwData::DiffuseTexture::WrappingType& getRefWrapping();
-    FWDATA_API const ::fwData::DiffuseTexture::WrappingType& getCRefWrapping() const;
     FWDATA_API void setWrapping(::fwData::DiffuseTexture::WrappingType);
     /// @}
 

@@ -18,7 +18,7 @@ class DiffuseTextureTest : public CPPUNIT_NS::TestFixture
 {
 private:
     CPPUNIT_TEST_SUITE( DiffuseTextureTest );
-    CPPUNIT_TEST( method1 );
+    CPPUNIT_TEST( textureSetupTest );
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -26,7 +26,7 @@ public:
     void setUp();
     void tearDown();
 
-    void method1();
+    void textureSetupTest();
 };
 } //namespace ut
 } //namespace fwData

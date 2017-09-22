@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2015.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2017.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -18,7 +18,8 @@ class MaterialTest : public CPPUNIT_NS::TestFixture
 {
 private:
     CPPUNIT_TEST_SUITE( MaterialTest );
-    CPPUNIT_TEST( methode1 );
+    CPPUNIT_TEST( materialSetupTest );
+    CPPUNIT_TEST( materialCopyTest );
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -26,7 +27,8 @@ public:
     void setUp();
     void tearDown();
 
-    void methode1();
+    void materialSetupTest();
+    void materialCopyTest();
 };
 } //namespace ut
 } //namespace fwData

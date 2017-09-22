@@ -33,7 +33,6 @@ struct runner
         creators->registerCreator(::fwStructuralPatch::creator::fwMedData::ModelSeries1::New());
         creators->registerCreator(::fwStructuralPatch::creator::fwMedData::ImageSeries1::New());
         creators->registerCreator(::fwStructuralPatch::creator::fwMedData::ActivitySeries1::New());
-        creators->registerCreator(::fwStructuralPatch::creator::fwMedData::ActivitySeries1::New());
         creators->registerCreator(::fwStructuralPatch::creator::fwData::DiffuseTexture1::New());
         creators->registerCreator(::fwStructuralPatch::creator::fwData::Landmarks1::New());
         creators->registerCreator(::fwStructuralPatch::creator::fwData::PointList1::New());

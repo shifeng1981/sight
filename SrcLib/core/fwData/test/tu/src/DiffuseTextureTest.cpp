@@ -6,15 +6,8 @@
 
 #include "DiffuseTextureTest.hpp"
 
-#include <fwData/Color.hpp>
 #include <fwData/DiffuseTexture.hpp>
 
-#include <boost/date_time/posix_time/posix_time.hpp>
-
-#include <exception>
-#include <iostream>
-#include <map>
-#include <ostream>
 #include <vector>
 
 // Registers the fixture into the 'registry'
@@ -41,7 +34,7 @@ void DiffuseTextureTest::tearDown()
 
 //------------------------------------------------------------------------------
 
-void DiffuseTextureTest::method1()
+void DiffuseTextureTest::textureSetupTest()
 {
     //-----------test values
     ::fwData::Image::sptr img = ::fwData::Image::New();
@@ -68,17 +61,57 @@ void DiffuseTextureTest::method1()
 
     diffuseTexture->setImage(img);
 
-    CPPUNIT_ASSERT_EQUAL(diffuseTexture->getFiltering(), ::fwData::DiffuseTexture::FilteringType::LINEAR);
-    CPPUNIT_ASSERT_EQUAL(diffuseTexture->getWrapping(), ::fwData::DiffuseTexture::WrappingType::REPEAT);
-    CPPUNIT_ASSERT_EQUAL(diffuseTexture->getBlending(), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+    // Check texture parameters
+    {
+        CPPUNIT_ASSERT_EQUAL(diffuseTexture->getFiltering(), ::fwData::DiffuseTexture::FilteringType::LINEAR);
+        CPPUNIT_ASSERT_EQUAL(diffuseTexture->getWrapping(), ::fwData::DiffuseTexture::WrappingType::REPEAT);
+        CPPUNIT_ASSERT_EQUAL(diffuseTexture->getBlending(), ::fwData::DiffuseTexture::BlendingType::MODULATE);
 
-    CPPUNIT_ASSERT(diffuseTexture->getImage() != nullptr);
+        CPPUNIT_ASSERT(diffuseTexture->getImage() != nullptr);
 
-    CPPUNIT_ASSERT_EQUAL(diffuseTexture->getImage()->getNumberOfDimensions(), nDim);
-    CPPUNIT_ASSERT(diffuseTexture->getImage()->getType() == type);
-    CPPUNIT_ASSERT(diffuseTexture->getImage()->getSpacing() == vectorSpacing);
-    CPPUNIT_ASSERT(diffuseTexture->getImage()->getOrigin() == vectorOrigin);
-    CPPUNIT_ASSERT(diffuseTexture->getImage()->getSize() == vectorSize);
+        CPPUNIT_ASSERT_EQUAL(diffuseTexture->getImage()->getNumberOfDimensions(), nDim);
+        CPPUNIT_ASSERT(diffuseTexture->getImage()->getType() == type);
+        CPPUNIT_ASSERT(diffuseTexture->getImage()->getSpacing() == vectorSpacing);
+        CPPUNIT_ASSERT(diffuseTexture->getImage()->getOrigin() == vectorOrigin);
+        CPPUNIT_ASSERT(diffuseTexture->getImage()->getSize() == vectorSize);
+    }
+
+    {
+        // Check deep copy
+        ::fwData::DiffuseTexture::csptr diffuseTextureCopy = ::fwData::Object::copy(diffuseTexture);
+        CPPUNIT_ASSERT(diffuseTextureCopy);
+
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getFiltering(), ::fwData::DiffuseTexture::FilteringType::LINEAR);
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getWrapping(), ::fwData::DiffuseTexture::WrappingType::REPEAT);
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getBlending(), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage() != nullptr);
+
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getImage()->getNumberOfDimensions(), nDim);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getType() == type);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getSpacing() == vectorSpacing);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getOrigin() == vectorOrigin);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getSize() == vectorSize);
+    }
+
+    {
+        // Check shallow copy
+        ::fwData::DiffuseTexture::sptr diffuseTextureCopy = ::fwData::DiffuseTexture::New();
+        diffuseTextureCopy->shallowCopy(diffuseTexture);
+        CPPUNIT_ASSERT(diffuseTextureCopy);
+
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getFiltering(), ::fwData::DiffuseTexture::FilteringType::LINEAR);
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getWrapping(), ::fwData::DiffuseTexture::WrappingType::REPEAT);
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getBlending(), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage() != nullptr);
+
+        CPPUNIT_ASSERT_EQUAL(diffuseTextureCopy->getImage()->getNumberOfDimensions(), nDim);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getType() == type);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getSpacing() == vectorSpacing);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getOrigin() == vectorOrigin);
+        CPPUNIT_ASSERT(diffuseTextureCopy->getImage()->getSize() == vectorSize);
+    }
 }
 
 } //namespace ut
