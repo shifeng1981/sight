@@ -1,4 +1,4 @@
-<plugin id="PoCMultiTexturedMesh" version="@DASH_VERSION@">
+<plugin id="PoCMultiTexturedMesh" version="@PROJECT_VERSION@">
 
     <requirement id="visuVTKQt" />
 
@@ -40,11 +40,11 @@
             <service uid="toolBar" type="::gui::aspect::SDefaultToolBar">
                 <gui>
                     <layout>
-                        <menuItem name="Load Mesh ..." icon="@BUNDLE_PREFIX@/media_0-1/icons/Import.svg" />
+                        <menuItem name="Load Mesh ..." icon="media-0.1/icons/Import.svg" />
                         <separator />
-                        <menuItem name="Load Texture 1 ..." icon="@BUNDLE_PREFIX@/media_0-1/icons/Load-landmark.png" />
-                        <menuItem name="Load Texture 2 ..." icon="@BUNDLE_PREFIX@/media_0-1/icons/Load-landmark.png" />
-                        <menuItem name="Load Texture 3 ..." icon="@BUNDLE_PREFIX@/media_0-1/icons/Load-landmark.png" />
+                        <menuItem name="Load Texture 1 ..." icon="media-0.1/icons/Load-landmark.png" />
+                        <menuItem name="Load Texture 2 ..." icon="media-0.1/icons/Load-landmark.png" />
+                        <menuItem name="Load Texture 3 ..." icon="media-0.1/icons/Load-landmark.png" />
                     </layout>
                 </gui>
                 <registry>
