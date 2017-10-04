@@ -51,9 +51,9 @@ void Material::shallowCopy(const Object::csptr& _source )
                                + " to " + this->getClassname()), !bool(other) );
     this->fieldShallowCopy( _source );
 
-    m_ambient        = other->m_ambient;
-    m_diffuse        = other->m_diffuse;
-    m_diffuseTexture = other->m_diffuseTexture;
+    m_ambient = other->m_ambient;
+    m_diffuse = other->m_diffuse;
+    m_texture = other->m_texture;
 
     m_shadingMode        = other->m_shadingMode;
     m_representationMode = other->m_representationMode;
@@ -73,12 +73,12 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
     m_ambient = ::fwData::Object::copy( other->m_ambient, cache );
     m_diffuse = ::fwData::Object::copy( other->m_diffuse, cache );
 
-    DiffuseTextureMap::const_iterator it = other->getDiffuseTextureIteratorBegin();
-    for(; it != other->getDiffuseTextureIteratorEnd(); it++)
+    TextureMap::const_iterator it = other->getTextureIteratorBegin();
+    for(; it != other->getTextureIteratorEnd(); it++)
     {
-        ::fwData::DiffuseTexture::sptr dt = ::fwData::DiffuseTexture::New();
+        ::fwData::Texture::sptr dt = ::fwData::Texture::New();
         dt->deepCopy(it->second);
-        m_diffuseTexture[it->first] = dt;
+        m_texture[it->first] = dt;
     }
 
     m_shadingMode        = other->m_shadingMode;
@@ -102,10 +102,10 @@ Color::sptr Material::diffuse() const
 
 //------------------------------------------------------------------------------
 
-Image::sptr Material::getDiffuseTexture(const std::string& name) const
+Image::sptr Material::getTexture(const std::string& name) const
 {
-    DiffuseTextureMap::const_iterator it = m_diffuseTexture.find(name);
-    if(it != m_diffuseTexture.end())
+    TextureMap::const_iterator it = m_texture.find(name);
+    if(it != m_texture.end())
     {
         return it->second->getImage();
     }
@@ -129,34 +129,34 @@ void Material::setDiffuse(const Color::sptr& diffuse)
 
 //------------------------------------------------------------------------------
 
-void Material::setDiffuseTexture(const Image::sptr& diffuseTexture, const std::string& name)
+void Material::setTexture(const Image::sptr& texture, const std::string& name)
 {
-    DiffuseTextureMap::const_iterator it = m_diffuseTexture.find(name);
-    if(it != m_diffuseTexture.end())
+    TextureMap::const_iterator it = m_texture.find(name);
+    if(it != m_texture.end())
     {
-        it->second->setImage(diffuseTexture);
+        it->second->setImage(texture);
     }
     else
     {
-        ::fwData::DiffuseTexture::sptr t = ::fwData::DiffuseTexture::New();
-        t->setImage(diffuseTexture);
+        ::fwData::Texture::sptr t = ::fwData::Texture::New();
+        t->setImage(texture);
 
-        m_diffuseTexture[name] = t;
+        m_texture[name] = t;
     }
 }
 
 //------------------------------------------------------------------------------
 
-Material::DiffuseTextureMap::const_iterator Material::getDiffuseTextureIteratorBegin() const
+Material::TextureMap::const_iterator Material::getTextureIteratorBegin() const
 {
-    return m_diffuseTexture.begin();
+    return m_texture.begin();
 }
 
 //------------------------------------------------------------------------------
 
-Material::DiffuseTextureMap::const_iterator Material::getDiffuseTextureIteratorEnd() const
+Material::TextureMap::const_iterator Material::getTextureIteratorEnd() const
 {
-    return m_diffuseTexture.end();
+    return m_texture.end();
 }
 
 //------------------------------------------------------------------------------

@@ -19,7 +19,7 @@ fwCampImplementDataMacro((fwData)(Material))
     .property("options_mode", &::fwData::Material::m_optionsMode)
     .property("ambient", &::fwData::Material::m_ambient)
     .property("diffuse", &::fwData::Material::m_diffuse)
-    .property("diffuse_texture", &::fwData::Material::m_diffuseTexture)
+    .property("diffuse_texture", &::fwData::Material::m_texture)
     ;
 }
 

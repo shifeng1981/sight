@@ -83,10 +83,10 @@ void MaterialTest::materialSetupTest()
 
         oss.str("");
         oss << "test" << i << std::endl;
-        material->setDiffuseTexture(img, oss.str());
-        material->setDiffuseTextureFiltering(::fwData::DiffuseTexture::FilteringType::LINEAR, oss.str());
-        material->setDiffuseTextureWrapping(::fwData::DiffuseTexture::WrappingType::REPEAT, oss.str());
-        material->setDiffuseTextureBlending(::fwData::DiffuseTexture::BlendingType::MODULATE, oss.str());
+        material->setTexture(img, oss.str());
+        material->setTextureFiltering(::fwData::Texture::FilteringType::LINEAR, oss.str());
+        material->setTextureWrapping(::fwData::Texture::WrappingType::REPEAT, oss.str());
+        material->setTextureBlending(::fwData::Texture::BlendingType::MODULATE, oss.str());
     }
 
     // Test if everything is OK
@@ -98,14 +98,14 @@ void MaterialTest::materialSetupTest()
         oss.str("");
         oss << "test" << i << std::endl;
 
-        CPPUNIT_ASSERT_EQUAL(material->getDiffuseTextureFiltering(
-                                 oss.str()), ::fwData::DiffuseTexture::FilteringType::LINEAR);
-        CPPUNIT_ASSERT_EQUAL(material->getDiffuseTextureWrapping(
-                                 oss.str()), ::fwData::DiffuseTexture::WrappingType::REPEAT);
-        CPPUNIT_ASSERT_EQUAL(material->getDiffuseTextureBlending(
-                                 oss.str()), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+        CPPUNIT_ASSERT_EQUAL(material->getTextureFiltering(
+                                 oss.str()), ::fwData::Texture::FilteringType::LINEAR);
+        CPPUNIT_ASSERT_EQUAL(material->getTextureWrapping(
+                                 oss.str()), ::fwData::Texture::WrappingType::REPEAT);
+        CPPUNIT_ASSERT_EQUAL(material->getTextureBlending(
+                                 oss.str()), ::fwData::Texture::BlendingType::MODULATE);
 
-        img = material->getDiffuseTexture(oss.str());
+        img = material->getTexture(oss.str());
         CPPUNIT_ASSERT(img != nullptr);
         CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
         CPPUNIT_ASSERT(img->getType() == type);
@@ -159,10 +159,10 @@ void MaterialTest::materialCopyTest()
 
         oss.str("");
         oss << "test" << i << std::endl;
-        material->setDiffuseTexture(img, oss.str());
-        material->setDiffuseTextureFiltering(::fwData::DiffuseTexture::FilteringType::LINEAR, oss.str());
-        material->setDiffuseTextureWrapping(::fwData::DiffuseTexture::WrappingType::REPEAT, oss.str());
-        material->setDiffuseTextureBlending(::fwData::DiffuseTexture::BlendingType::MODULATE, oss.str());
+        material->setTexture(img, oss.str());
+        material->setTextureFiltering(::fwData::Texture::FilteringType::LINEAR, oss.str());
+        material->setTextureWrapping(::fwData::Texture::WrappingType::REPEAT, oss.str());
+        material->setTextureBlending(::fwData::Texture::BlendingType::MODULATE, oss.str());
     }
 
     {
@@ -179,14 +179,14 @@ void MaterialTest::materialCopyTest()
             oss.str("");
             oss << "test" << i << std::endl;
 
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureFiltering(
-                                     oss.str()), ::fwData::DiffuseTexture::FilteringType::LINEAR);
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureWrapping(
-                                     oss.str()), ::fwData::DiffuseTexture::WrappingType::REPEAT);
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureBlending(
-                                     oss.str()), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureFiltering(
+                                     oss.str()), ::fwData::Texture::FilteringType::LINEAR);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureWrapping(
+                                     oss.str()), ::fwData::Texture::WrappingType::REPEAT);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureBlending(
+                                     oss.str()), ::fwData::Texture::BlendingType::MODULATE);
 
-            img = materialCopy->getDiffuseTexture(oss.str());
+            img = materialCopy->getTexture(oss.str());
             CPPUNIT_ASSERT(img != nullptr);
             CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
             CPPUNIT_ASSERT(img->getType() == type);
@@ -211,14 +211,14 @@ void MaterialTest::materialCopyTest()
             oss.str("");
             oss << "test" << i << std::endl;
 
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureFiltering(
-                                     oss.str()), ::fwData::DiffuseTexture::FilteringType::LINEAR);
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureWrapping(
-                                     oss.str()), ::fwData::DiffuseTexture::WrappingType::REPEAT);
-            CPPUNIT_ASSERT_EQUAL(materialCopy->getDiffuseTextureBlending(
-                                     oss.str()), ::fwData::DiffuseTexture::BlendingType::MODULATE);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureFiltering(
+                                     oss.str()), ::fwData::Texture::FilteringType::LINEAR);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureWrapping(
+                                     oss.str()), ::fwData::Texture::WrappingType::REPEAT);
+            CPPUNIT_ASSERT_EQUAL(materialCopy->getTextureBlending(
+                                     oss.str()), ::fwData::Texture::BlendingType::MODULATE);
 
-            img = materialCopy->getDiffuseTexture(oss.str());
+            img = materialCopy->getTexture(oss.str());
             CPPUNIT_ASSERT(img != nullptr);
             CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
             CPPUNIT_ASSERT(img->getType() == type);

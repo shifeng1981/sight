@@ -131,9 +131,9 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
     m_property->SetSpecularPower(100.); //Shininess
 
     // set texture
-    for(auto it = material->getDiffuseTextureIteratorBegin(); it != material->getDiffuseTextureIteratorEnd(); ++it)
+    for(auto it = material->getTextureIteratorBegin(); it != material->getTextureIteratorEnd(); ++it)
     {
-        ::fwData::Image::sptr diffTex = material->getDiffuseTexture(it->first);
+        ::fwData::Image::sptr diffTex = material->getTexture(it->first);
 
         if(diffTex != nullptr)
         {
@@ -147,12 +147,12 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
                 vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
                 vtkTex->SetInputData(vtkImage);
 
-                ::fwData::DiffuseTexture::FilteringType filtering = material->getDiffuseTextureFiltering(it->first);
-                vtkTex->SetInterpolate( filtering == ::fwData::DiffuseTexture::LINEAR );
-                ::fwData::DiffuseTexture::WrappingType wrapping = material->getDiffuseTextureWrapping(it->first);
-                vtkTex->SetRepeat( wrapping == ::fwData::DiffuseTexture::REPEAT );
-                vtkTex->SetEdgeClamp( wrapping == ::fwData::DiffuseTexture::CLAMP );
-                ::fwData::DiffuseTexture::BlendingType blending = material->getDiffuseTextureBlending(it->first);
+                ::fwData::Texture::FilteringType filtering = material->getTextureFiltering(it->first);
+                vtkTex->SetInterpolate( filtering == ::fwData::Texture::LINEAR );
+                ::fwData::Texture::WrappingType wrapping = material->getTextureWrapping(it->first);
+                vtkTex->SetRepeat( wrapping == ::fwData::Texture::REPEAT );
+                vtkTex->SetEdgeClamp( wrapping == ::fwData::Texture::CLAMP );
+                ::fwData::Texture::BlendingType blending = material->getTextureBlending(it->first);
                 vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
 
                 m_property->RemoveTexture(it->first.c_str());

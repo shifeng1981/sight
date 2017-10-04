@@ -4,7 +4,7 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "fwStructuralPatch/creator/fwData/DiffuseTexture1.hpp"
+#include "fwStructuralPatch/creator/fwData/Texture1.hpp"
 
 #include <fwAtoms/Object.hpp>
 #include <fwAtoms/String.hpp>
@@ -20,28 +20,28 @@ namespace fwData
 
 // ----------------------------------------------------------------------------
 
-DiffuseTexture1::DiffuseTexture1()
+Texture1::Texture1()
 {
-    m_classname = "::fwData::DiffuseTexture";
+    m_classname = "::fwData::Texture";
     m_version   = "1";
 }
 
 // ----------------------------------------------------------------------------
 
-DiffuseTexture1::~DiffuseTexture1()
+Texture1::~Texture1()
 {
 }
 
 // ----------------------------------------------------------------------------
 
-DiffuseTexture1::DiffuseTexture1( const DiffuseTexture1& cpy ) :
+Texture1::Texture1( const Texture1& cpy ) :
     ::fwAtomsPatch::IStructuralCreator(cpy)
 {
 }
 
 // ----------------------------------------------------------------------------
 
-::fwAtoms::Object::sptr DiffuseTexture1::create()
+::fwAtoms::Object::sptr Texture1::create()
 {
     ::fwAtoms::Object::sptr pl = this->createObjBase();
     ::fwAtomsPatch::helper::Object helper(pl);

@@ -4,8 +4,8 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWDATA_UT_DIFFUSETEXTURETEST_HPP__
-#define __FWDATA_UT_DIFFUSETEXTURETEST_HPP__
+#ifndef __FWDATA_UT_TEXTURETEST_HPP__
+#define __FWDATA_UT_TEXTURETEST_HPP__
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -14,10 +14,10 @@ namespace fwData
 namespace ut
 {
 
-class DiffuseTextureTest : public CPPUNIT_NS::TestFixture
+class TextureTest : public CPPUNIT_NS::TestFixture
 {
 private:
-    CPPUNIT_TEST_SUITE( DiffuseTextureTest );
+    CPPUNIT_TEST_SUITE( TextureTest );
     CPPUNIT_TEST( textureSetupTest );
     CPPUNIT_TEST_SUITE_END();
 
@@ -30,4 +30,4 @@ public:
 };
 } //namespace ut
 } //namespace fwData
-#endif //__FWDATA_UT_DIFFUSETEXTURETEST_HPP__
+#endif //__FWDATA_UT_TEXTURETEST_HPP__

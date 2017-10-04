@@ -17,7 +17,7 @@ fwCampAutoDeclareEnumMacro((fwData)(Material)(ShadingType));
 fwCampAutoDeclareEnumMacro((fwData)(Material)(RepresentationType));
 fwCampAutoDeclareEnumMacro((fwData)(Material)(OptionsType));
 
-fwCampDeclareAccessor((fwData)(Material), (fwData)(DiffuseTexture));
+fwCampDeclareAccessor((fwData)(Material), (fwData)(Texture));
 fwCampDeclareAccessor((fwData)(Material), (fwData)(Color));
 fwCampDeclareAccessor((fwData)(Material), (fwData)(Image));
 

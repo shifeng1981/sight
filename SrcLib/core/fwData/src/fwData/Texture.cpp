@@ -4,33 +4,33 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "fwData/DiffuseTexture.hpp"
+#include "fwData/Texture.hpp"
 
 #include "fwData/Exception.hpp"
 #include "fwData/registry/macros.hpp"
 
-fwDataRegisterMacro( ::fwData::DiffuseTexture );
+fwDataRegisterMacro( ::fwData::Texture );
 
 namespace fwData
 {
 
-DiffuseTexture::DiffuseTexture(::fwData::Object::Key key) :
+Texture::Texture(::fwData::Object::Key key) :
     m_image(nullptr),
-    m_filtering(::fwData::DiffuseTexture::NEAREST),
-    m_wrapping(::fwData::DiffuseTexture::CLAMP),
-    m_blending(::fwData::DiffuseTexture::ADD)
+    m_filtering(::fwData::Texture::NEAREST),
+    m_wrapping(::fwData::Texture::CLAMP),
+    m_blending(::fwData::Texture::ADD)
 {
 }
 
-DiffuseTexture::~DiffuseTexture()
+Texture::~Texture()
 {
 }
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::shallowCopy(const Object::csptr& _source )
+void Texture::shallowCopy(const Object::csptr& _source )
 {
-    DiffuseTexture::csptr other = DiffuseTexture::dynamicConstCast(_source);
+    Texture::csptr other = Texture::dynamicConstCast(_source);
     FW_RAISE_EXCEPTION_IF( ::fwData::Exception(
                                "Unable to copy" + (_source ? _source->getClassname() : std::string("<NULL>"))
                                + " to " + this->getClassname()), !bool(other) );
@@ -44,9 +44,9 @@ void DiffuseTexture::shallowCopy(const Object::csptr& _source )
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& cache)
+void Texture::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& cache)
 {
-    DiffuseTexture::csptr other = DiffuseTexture::dynamicConstCast(_source);
+    Texture::csptr other = Texture::dynamicConstCast(_source);
     FW_RAISE_EXCEPTION_IF( ::fwData::Exception(
                                "Unable to copy" + (_source ? _source->getClassname() : std::string("<NULL>"))
                                + " to " + this->getClassname()), !bool(other) );
@@ -60,56 +60,56 @@ void DiffuseTexture::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheT
 
 //------------------------------------------------------------------------------
 
-Image::sptr DiffuseTexture::getImage() const
+Image::sptr Texture::getImage() const
 {
     return m_image;
 }
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::setImage(const Image::sptr& diffuseTexture)
+void Texture::setImage(const Image::sptr& texture)
 {
-    m_image = diffuseTexture;
+    m_image = texture;
 }
 
 //------------------------------------------------------------------------------
 
-const ::fwData::DiffuseTexture::FilteringType DiffuseTexture::getFiltering() const
+const ::fwData::Texture::FilteringType Texture::getFiltering() const
 {
     return m_filtering;
 }
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::setFiltering(::fwData::DiffuseTexture::FilteringType filtering)
+void Texture::setFiltering(::fwData::Texture::FilteringType filtering)
 {
     m_filtering = filtering;
 }
 
 //------------------------------------------------------------------------------
 
-const ::fwData::DiffuseTexture::WrappingType DiffuseTexture::getWrapping() const
+const ::fwData::Texture::WrappingType Texture::getWrapping() const
 {
     return m_wrapping;
 }
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::setWrapping(::fwData::DiffuseTexture::WrappingType wrapping)
+void Texture::setWrapping(::fwData::Texture::WrappingType wrapping)
 {
     m_wrapping = wrapping;
 }
 
 //------------------------------------------------------------------------------
 
-::fwData::DiffuseTexture::BlendingType DiffuseTexture::getBlending() const
+::fwData::Texture::BlendingType Texture::getBlending() const
 {
     return m_blending;
 }
 
 //------------------------------------------------------------------------------
 
-void DiffuseTexture::setBlending(::fwData::DiffuseTexture::BlendingType blending)
+void Texture::setBlending(::fwData::Texture::BlendingType blending)
 {
     m_blending = blending;
 }

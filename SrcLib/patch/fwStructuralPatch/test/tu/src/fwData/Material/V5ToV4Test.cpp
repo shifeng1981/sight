@@ -96,7 +96,7 @@ void V5ToV4Test::applyPatchTest()
     helper.addAttribute("diffuse_texture", dtm);
 
     // Check that when converting a V5 Material object to a V4 Material object
-    // We move from a single image member to a map of DiffuseTexture objects
+    // We move from a single image member to a map of Texture objects
     {
         // Create an object and apply the patch
         matObjV4 = ::fwAtoms::Object::dynamicCast(matObjV5->clone());

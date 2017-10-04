@@ -4,14 +4,14 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWDATA_DIFFUSETEXTURE_HPP__
-#define __FWDATA_DIFFUSETEXTURE_HPP__
+#ifndef __FWDATA_TEXTURE_HPP__
+#define __FWDATA_TEXTURE_HPP__
 
 #include "fwData/factory/new.hpp"
 #include "fwData/Image.hpp"
 #include "fwData/Object.hpp"
 
-fwCampAutoDeclareDataMacro((fwData)(DiffuseTexture), FWDATA_API);
+fwCampAutoDeclareDataMacro((fwData)(Texture), FWDATA_API);
 
 namespace fwData
 {
@@ -19,21 +19,21 @@ namespace fwData
 /**
  * @brief This class manages the parameters and image associated to a single texture.
  */
-class FWDATA_CLASS_API DiffuseTexture : public Object
+class FWDATA_CLASS_API Texture : public Object
 {
 public:
-    fwCoreClassDefinitionsWithFactoryMacro( (DiffuseTexture)(::fwData::Object), (()),
-                                            ::fwData::factory::New< DiffuseTexture >);
-    fwCampMakeFriendDataMacro((fwData)(DiffuseTexture));
+    fwCoreClassDefinitionsWithFactoryMacro( (Texture)(::fwData::Object), (()),
+                                            ::fwData::factory::New< Texture >);
+    fwCampMakeFriendDataMacro((fwData)(Texture));
 
     /**
      * @brief Constructor
      * @param key Private construction key
      */
-    FWDATA_API DiffuseTexture(::fwData::Object::Key key);
+    FWDATA_API Texture(::fwData::Object::Key key);
 
     /// Destructor
-    FWDATA_API virtual ~DiffuseTexture();
+    FWDATA_API virtual ~Texture();
 
     /// Defines shallow copy
     FWDATA_API void shallowCopy( const Object::csptr& _source );
@@ -82,29 +82,29 @@ public:
     /**
      * @brief Setter for diffuse texture
      *
-     * @param diffuseTexture texture
+     * @param texture texture
      */
-    FWDATA_API void setImage(const Image::sptr& diffuseTexture);
+    FWDATA_API void setImage(const Image::sptr& texture);
 
     /** @{
      *  @brief get/set the texture filtering
      */
-    FWDATA_API const ::fwData::DiffuseTexture::FilteringType getFiltering() const;
-    FWDATA_API void setFiltering(::fwData::DiffuseTexture::FilteringType);
+    FWDATA_API const ::fwData::Texture::FilteringType getFiltering() const;
+    FWDATA_API void setFiltering(::fwData::Texture::FilteringType);
     /// @}
 
     /** @{
      *  @brief get/set the texture wrapping
      */
-    FWDATA_API const ::fwData::DiffuseTexture::WrappingType getWrapping() const;
-    FWDATA_API void setWrapping(::fwData::DiffuseTexture::WrappingType);
+    FWDATA_API const ::fwData::Texture::WrappingType getWrapping() const;
+    FWDATA_API void setWrapping(::fwData::Texture::WrappingType);
     /// @}
 
     /** @{
      *  @brief get/set the texture blending
      */
-    FWDATA_API ::fwData::DiffuseTexture::BlendingType getBlending() const;
-    FWDATA_API void setBlending(::fwData::DiffuseTexture::BlendingType);
+    FWDATA_API ::fwData::Texture::BlendingType getBlending() const;
+    FWDATA_API void setBlending(::fwData::Texture::BlendingType);
     /// @}
 
 private:
@@ -124,5 +124,5 @@ private:
 
 } //namespace fwData
 
-#endif /* __FWDATA_DIFFUSETEXTURE_HPP__ */
+#endif /* __FWDATA_TEXTURE_HPP__ */
 

@@ -117,78 +117,78 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
             return;
         }
 
-        _material->setDiffuseTexture(image, m_name);
+        _material->setTexture(image, m_name);
         if(m_lighting == false)
         {
             _material->setShadingMode(::fwData::Material::AMBIENT);
         }
     }
 
-    ::fwData::DiffuseTexture::FilteringType filtering = ::fwData::DiffuseTexture::LINEAR;
-    ::fwData::DiffuseTexture::WrappingType wrapping   = ::fwData::DiffuseTexture::REPEAT;
-    ::fwData::DiffuseTexture::BlendingType blending   = ::fwData::DiffuseTexture::NONE;
+    ::fwData::Texture::FilteringType filtering = ::fwData::Texture::LINEAR;
+    ::fwData::Texture::WrappingType wrapping   = ::fwData::Texture::REPEAT;
+    ::fwData::Texture::BlendingType blending   = ::fwData::Texture::NONE;
 
     if(m_filtering == "nearest")
     {
-        filtering = ::fwData::DiffuseTexture::NEAREST;
+        filtering = ::fwData::Texture::NEAREST;
     }
     else if(m_filtering == "linear")
     {
-        filtering = ::fwData::DiffuseTexture::LINEAR;
+        filtering = ::fwData::Texture::LINEAR;
     }
     else
     {
         OSLM_WARN("STexture filtering type unknown or not supported : " << m_filtering);
     }
-    _material->setDiffuseTextureFiltering(filtering, m_name);
+    _material->setTextureFiltering(filtering, m_name);
 
     if(m_wrapping == "repeat")
     {
-        wrapping = ::fwData::DiffuseTexture::REPEAT;
+        wrapping = ::fwData::Texture::REPEAT;
     }
     else if(m_wrapping == "clamp")
     {
-        wrapping = ::fwData::DiffuseTexture::CLAMP;
+        wrapping = ::fwData::Texture::CLAMP;
     }
     else
     {
         OSLM_WARN("STexture wrapping type unknown or not supported : " << m_wrapping);
     }
-    _material->setDiffuseTextureWrapping(wrapping, m_name);
+    _material->setTextureWrapping(wrapping, m_name);
 
     if(m_blending == "none")
     {
-        blending = ::fwData::DiffuseTexture::NONE;
+        blending = ::fwData::Texture::NONE;
     }
     else if(m_blending == "replace")
     {
-        blending = ::fwData::DiffuseTexture::REPLACE;
+        blending = ::fwData::Texture::REPLACE;
     }
     else if(m_blending == "modulate")
     {
-        blending = ::fwData::DiffuseTexture::MODULATE;
+        blending = ::fwData::Texture::MODULATE;
     }
     else if(m_blending == "add")
     {
-        blending = ::fwData::DiffuseTexture::ADD;
+        blending = ::fwData::Texture::ADD;
     }
     else if(m_blending == "add_signed")
     {
-        blending = ::fwData::DiffuseTexture::ADD_SIGNED;
+        blending = ::fwData::Texture::ADD_SIGNED;
     }
     else if(m_blending == "interpolate")
     {
-        blending = ::fwData::DiffuseTexture::INTERPOLATE;
+        blending = ::fwData::Texture::INTERPOLATE;
     }
     else if(m_blending == "subtract")
     {
-        blending = ::fwData::DiffuseTexture::SUBTRACT;
+        blending = ::fwData::Texture::SUBTRACT;
     }
     else
     {
         OSLM_WARN("Texture blending mode unknown or not supported : " << m_wrapping);
     }
-    _material->setDiffuseTextureBlending(blending, m_name);
+    _material->setTextureBlending(blending, m_name);
 
     ::fwData::Object::ModifiedSignalType::sptr sig;
     sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);

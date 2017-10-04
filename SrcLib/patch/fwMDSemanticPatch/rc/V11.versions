@@ -6,7 +6,7 @@
         "::fwData::Boolean": "1",
         "::fwData::Color": "1",
         "::fwData::Composite": "1",
-        "::fwData::DiffuseTexture": "1",
+        "::fwData::Texture": "1",
         "::fwData::Edge": "1",
         "::fwData::Float": "1",
         "::fwData::Graph": "1",

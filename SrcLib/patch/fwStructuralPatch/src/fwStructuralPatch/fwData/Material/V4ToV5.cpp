@@ -70,7 +70,7 @@ void V4ToV5::apply( const ::fwAtoms::Object::sptr& previous,
     helper.removeAttribute("diffuse_texture_wrapping");
 
     ::fwAtomsPatch::StructuralCreatorDB::sptr creators = ::fwAtomsPatch::StructuralCreatorDB::getDefault();
-    ::fwAtoms::Object::sptr dt1                        = creators->create( "::fwData::DiffuseTexture", "1");
+    ::fwAtoms::Object::sptr dt1                        = creators->create( "::fwData::Texture", "1");
     ::fwAtomsPatch::helper::Object helperDT1(dt1);
 
     helperDT1.replaceAttribute("image", image);
