@@ -30,7 +30,7 @@ public:
     fwCoreClassDefinitionsWithFactoryMacro( (Material)(::fwData::Object), (()), ::fwData::factory::New< Material >);
     fwCampMakeFriendDataMacro((fwData)(Material));
 
-    typedef std::map<std::string, ::fwData::Texture::sptr> TextureMap;
+    typedef std::vector< ::fwData::Texture::sptr > TextureMap;
 
     /**
      * @brief Constructor
@@ -72,16 +72,33 @@ public:
     FWDATA_API void setDiffuse(const Color::sptr& diffuse);
 
     /**
-     * @brief returns editable diffuse texture
+     * @brief initializes and returns the texture object at a specifix index
+     *
+     * @param id order for multi-texturing
      */
-    FWDATA_API Image::sptr getTexture(const std::string& name = "diffuse") const;
+    FWDATA_API ::fwData::Texture::sptr initTexture(const size_t id = 0) const;
 
     /**
-     * @brief Setter for diffuse texture
+     * @brief returns the texture object at a specifix index
+     *
+     * @param id order for multi-texturing
+     */
+    FWDATA_API ::fwData::Texture::sptr getTexture(const size_t id = 0) const;
+
+    /**
+     * @brief returns editable texture image
+     *
+     * @param id order for multi-texturing
+     */
+    FWDATA_API Image::sptr getTextureImage(const size_t id = 0) const;
+
+    /**
+     * @brief Setter for texture image
      *
      * @param texture texture
+     * @param id order for multi-texturing
      */
-    FWDATA_API void setTexture(const Image::sptr& texture, const std::string& name = "diffuse");
+    FWDATA_API void setTextureImage(const Image::sptr& texture, const size_t id = 0);
 
     /**
      * @brief Options
@@ -115,8 +132,7 @@ public:
         EDGE      = 5, //SURFACE|WIREFRAME -> 101
     } RepresentationType;
 
-    FWDATA_API TextureMap::const_iterator getTextureIteratorBegin() const;
-    FWDATA_API TextureMap::const_iterator getTextureIteratorEnd() const;
+    FWDATA_API size_t getTextureContainerSize() const;
 
     /** @{
      *  @brief get/set the shading models(flat, gouraud, phong)
@@ -143,30 +159,6 @@ public:
     OptionsType& getRefOptionsMode ();
     const OptionsType& getCRefOptionsMode () const;
     void setOptionsMode (OptionsType _optionsMode);
-    /// @}
-
-    /** @{
-     *  @brief get/set the texture filtering
-     */
-    const ::fwData::Texture::FilteringType getTextureFiltering(const std::string& name = "diffuse") const;
-    void setTextureFiltering(::fwData::Texture::FilteringType _textureFiltering,
-                             const std::string& name = "diffuse");
-    /// @}
-
-    /** @{
-     *  @brief get/set the texture wrapping
-     */
-    const ::fwData::Texture::WrappingType  getTextureWrapping(const std::string& name = "diffuse") const;
-    void setTextureWrapping (::fwData::Texture::WrappingType _textureWrapping,
-                             const std::string& name = "diffuse");
-    /// @}
-
-    /** @{
-     *  @brief get/set the texture blending
-     */
-    const ::fwData::Texture::BlendingType getTextureBlending(const std::string& name = "diffuse") const;
-    void setTextureBlending(::fwData::Texture::BlendingType _textureBlending,
-                            const std::string& name = "diffuse");
     /// @}
 
     /**
@@ -202,7 +194,15 @@ protected:
     Color::sptr m_diffuse;
 
     /// Diffuse texture
-    TextureMap m_texture;
+    mutable TextureMap m_texture;
+
+    /// Number of available texture units
+    /// Note:
+    /// As we use a vtkProperty object, only 8 texturing units are available as of now
+    /// One could think to get the number of available texture units via the TextureUnitManager
+    /// But it makes the use of multi-texturing not working
+    const size_t m_numberOfTextureUnits = 8;
+
 };
 
 //-----------------------------------------------------------------------------
@@ -287,108 +287,6 @@ inline const Material::OptionsType& Material::getCRefOptionsMode() const
 inline void Material::setOptionsMode (OptionsType _optionsMode)
 {
     this->m_optionsMode = _optionsMode;
-}
-
-//-----------------------------------------------------------------------------
-
-inline const ::fwData::Texture::BlendingType Material::getTextureBlending(const std::string& name) const
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        return it->second->getBlending();
-    }
-    else
-    {
-        return ::fwData::Texture::NONE;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-inline void Material::setTextureBlending(::fwData::Texture::BlendingType _textureBlending,
-                                         const std::string& name)
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        it->second->setBlending(_textureBlending);
-    }
-    else
-    {
-        ::fwData::Texture::sptr t = ::fwData::Texture::New();
-        t->setBlending(_textureBlending);
-
-        m_texture[name] = t;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-inline const ::fwData::Texture::FilteringType Material::getTextureFiltering(const std::string& name) const
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        return it->second->getFiltering();
-    }
-    else
-    {
-        return ::fwData::Texture::NEAREST;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-inline void Material::setTextureFiltering(::fwData::Texture::FilteringType _textureFiltering,
-                                          const std::string& name)
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        it->second->setFiltering(_textureFiltering);
-    }
-    else
-    {
-        ::fwData::Texture::sptr t = ::fwData::Texture::New();
-        t->setFiltering(_textureFiltering);
-
-        m_texture[name] = t;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-inline const ::fwData::Texture::WrappingType Material::getTextureWrapping(const std::string& name) const
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        return it->second->getWrapping();
-    }
-    else
-    {
-        return ::fwData::Texture::CLAMP;
-    }
-}
-
-//-----------------------------------------------------------------------------
-
-inline void Material::setTextureWrapping (::fwData::Texture::WrappingType _textureWrapping,
-                                          const std::string& name)
-{
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        it->second->setWrapping(_textureWrapping);
-    }
-    else
-    {
-        ::fwData::Texture::sptr t = ::fwData::Texture::New();
-        t->setWrapping(_textureWrapping);
-
-        m_texture[name] = t;
-    }
 }
 
 //-----------------------------------------------------------------------------

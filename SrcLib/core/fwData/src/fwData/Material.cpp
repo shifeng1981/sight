@@ -33,6 +33,12 @@ Material::Material(::fwData::Object::Key key) :
 {
     newSignal< AddedTextureSignalType >(s_ADDED_TEXTURE_SIG);
     newSignal< RemovedTextureSignalType >(s_REMOVED_TEXTURE_SIG);
+
+    // Fill the texture vector with nullptr
+    for(int i = 0; i < m_numberOfTextureUnits; i++)
+    {
+        m_texture.push_back(nullptr);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -73,12 +79,15 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
     m_ambient = ::fwData::Object::copy( other->m_ambient, cache );
     m_diffuse = ::fwData::Object::copy( other->m_diffuse, cache );
 
-    TextureMap::const_iterator it = other->getTextureIteratorBegin();
-    for(; it != other->getTextureIteratorEnd(); it++)
+    for(size_t i = 0; i < other->getTextureContainerSize(); i++)
     {
-        ::fwData::Texture::sptr dt = ::fwData::Texture::New();
-        dt->deepCopy(it->second);
-        m_texture[it->first] = dt;
+        ::fwData::Texture::sptr ot = other->getTexture(i);
+        if(ot != nullptr)
+        {
+            ::fwData::Texture::sptr dt = ::fwData::Texture::New();
+            dt->deepCopy(ot);
+            m_texture[i] = dt;
+        }
     }
 
     m_shadingMode        = other->m_shadingMode;
@@ -102,15 +111,30 @@ Color::sptr Material::diffuse() const
 
 //------------------------------------------------------------------------------
 
-Image::sptr Material::getTexture(const std::string& name) const
+::fwData::Texture::sptr Material::initTexture(const size_t id) const
 {
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
+    OSLM_ASSERT(
+        "The number of texture units (" << m_texture.size() << ") is insufficient to map a texture to " << id << " " << m_texture.size(),
+        id < m_texture.size());
+
+    if(m_texture.at(id) == nullptr)
     {
-        return it->second->getImage();
+        ::fwData::Texture::sptr t = ::fwData::Texture::New();
+        m_texture[id]             = t;
     }
 
-    return nullptr;
+    return m_texture.at(id);
+}
+
+//------------------------------------------------------------------------------
+
+::fwData::Texture::sptr Material::getTexture(const size_t id) const
+{
+    OSLM_ASSERT(
+        "The number of texture units (" << m_texture.size() << ") is insufficient to map a texture to " << id << " " << m_texture.size(),
+        id < m_texture.size());
+
+    return m_texture.at(id);
 }
 
 //------------------------------------------------------------------------------
@@ -129,34 +153,9 @@ void Material::setDiffuse(const Color::sptr& diffuse)
 
 //------------------------------------------------------------------------------
 
-void Material::setTexture(const Image::sptr& texture, const std::string& name)
+size_t Material::getTextureContainerSize() const
 {
-    TextureMap::const_iterator it = m_texture.find(name);
-    if(it != m_texture.end())
-    {
-        it->second->setImage(texture);
-    }
-    else
-    {
-        ::fwData::Texture::sptr t = ::fwData::Texture::New();
-        t->setImage(texture);
-
-        m_texture[name] = t;
-    }
-}
-
-//------------------------------------------------------------------------------
-
-Material::TextureMap::const_iterator Material::getTextureIteratorBegin() const
-{
-    return m_texture.begin();
-}
-
-//------------------------------------------------------------------------------
-
-Material::TextureMap::const_iterator Material::getTextureIteratorEnd() const
-{
-    return m_texture.end();
+    return m_texture.size();
 }
 
 //------------------------------------------------------------------------------

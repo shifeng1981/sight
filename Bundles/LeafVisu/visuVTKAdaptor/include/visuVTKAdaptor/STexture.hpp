@@ -43,7 +43,7 @@ namespace visuVTKAdaptor
  * @code{.xml}
     <service type="::visuVTKAdaptor::STexture" autoConnect="yes">
        <inout key="texture" uid="..." />
-       <config texture="texture" filtering="linear" wrapping="repeat" blending="none" />
+       <config order="0" filtering="linear" wrapping="repeat" blending="none" lighting="yes" />
    </service>
    @endcode
  *
@@ -52,6 +52,7 @@ namespace visuVTKAdaptor
  *
  * @subsection Configuration Configuration:
  * - \b config(mandatory) : contains the adaptor configuration
+ *    - \b order (optional): id defining the order in which the texture will be combined with multi-texturing
  *    - \b filtering (optional) : filtering of the texture, "nearest" or "linear"
  *    - \b wrapping (optional) : wrapping of the texture, "clamp" or "repeat"
  *    - \b blending (optional) : blending mode for the texture, "none", "replace", "modulate", "add", "add_signed",
@@ -112,8 +113,8 @@ protected:
     /// enable or not the lighting (default true)
     bool m_lighting;
 
-    /// Texture name
-    std::string m_name;
+    /// Texture application order
+    size_t m_order;
 };
 
 } //namespace visuVTKAdaptor

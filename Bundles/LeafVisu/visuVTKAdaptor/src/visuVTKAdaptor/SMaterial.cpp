@@ -131,32 +131,40 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
     m_property->SetSpecularPower(100.); //Shininess
 
     // set texture
-    for(auto it = material->getTextureIteratorBegin(); it != material->getTextureIteratorEnd(); ++it)
+    int texUnitID = 0;
+    for(size_t i = 0; i < material->getTextureContainerSize(); i++)
     {
-        ::fwData::Image::sptr diffTex = material->getTexture(it->first);
+        ::fwData::Texture::sptr texture = material->getTexture(i);
 
-        if(diffTex != nullptr)
+        if(texture != nullptr)
         {
-            ::fwData::mt::ObjectReadLock lock(diffTex);
+            ::fwData::Image::sptr image = texture->getImage();
 
-            if (diffTex->getSizeInBytes() != 0)
+            if(image != nullptr)
             {
-                vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
-                ::fwVtkIO::toVTKImage( diffTex, vtkImage );
+                ::fwData::mt::ObjectReadLock lock(image);
 
-                vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
-                vtkTex->SetInputData(vtkImage);
+                if (image->getSizeInBytes() != 0)
+                {
+                    vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
+                    ::fwVtkIO::toVTKImage( image, vtkImage );
 
-                ::fwData::Texture::FilteringType filtering = material->getTextureFiltering(it->first);
-                vtkTex->SetInterpolate( filtering == ::fwData::Texture::LINEAR );
-                ::fwData::Texture::WrappingType wrapping = material->getTextureWrapping(it->first);
-                vtkTex->SetRepeat( wrapping == ::fwData::Texture::REPEAT );
-                vtkTex->SetEdgeClamp( wrapping == ::fwData::Texture::CLAMP );
-                ::fwData::Texture::BlendingType blending = material->getTextureBlending(it->first);
-                vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
+                    vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
+                    vtkTex->SetInputData(vtkImage);
 
-                m_property->RemoveTexture(it->first.c_str());
-                m_property->SetTexture(it->first.c_str(), vtkTex);
+                    ::fwData::Texture::FilteringType filtering = texture->getFiltering();
+                    vtkTex->SetInterpolate( filtering == ::fwData::Texture::LINEAR );
+                    ::fwData::Texture::WrappingType wrapping = texture->getWrapping();
+                    vtkTex->SetRepeat( wrapping == ::fwData::Texture::REPEAT );
+                    vtkTex->SetEdgeClamp( wrapping == ::fwData::Texture::CLAMP );
+                    ::fwData::Texture::BlendingType blending = texture->getBlending();
+                    vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
+
+                    m_property->RemoveTexture(texUnitID);
+                    m_property->SetTexture(::vtkProperty::VTK_TEXTURE_UNIT_0 + texUnitID, vtkTex);
+
+                    texUnitID++;
+                }
             }
         }
     }

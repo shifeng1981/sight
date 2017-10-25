@@ -139,17 +139,17 @@
 
             <service uid="pngTextureAdaptor1" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker1" />
-                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+                <config renderer="default" picker="" order="0" wrapping="clamp" filtering="linear" blending="none" />
             </service>
 
             <service uid="pngTextureAdaptor2" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker2" />
-                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+                <config renderer="default" picker="" order="1" wrapping="clamp" filtering="linear" blending="add" />
             </service>
 
             <service uid="pngTextureAdaptor3" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker3" />
-                <config renderer="default" picker="" wrapping="clamp" filtering="linear" blending="modulate" />
+                <config renderer="default" picker="" order="2" wrapping="clamp" filtering="linear" blending="add" />
             </service>
 
             <connect>

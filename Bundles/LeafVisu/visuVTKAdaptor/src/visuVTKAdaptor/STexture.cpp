@@ -41,7 +41,7 @@ STexture::STexture() noexcept :
     m_wrapping("repeat"),
     m_blending("none"),
     m_lighting(true),
-    m_name("diffuse")
+    m_order(0)
 {
     newSlot(s_APPLY_TEXTURE_SLOT, &STexture::applyTexture, this );
 }
@@ -60,6 +60,8 @@ void STexture::configuring()
 
     const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
 
+    m_order = std::stol(config.get<std::string>("order", "0"));
+
     m_filtering = config.get<std::string>("filtering", "linear");
 
     m_wrapping = config.get<std::string>("wrapping", "repeat");
@@ -74,9 +76,6 @@ void STexture::configuring()
 void STexture::starting()
 {
     this->initialize();
-
-    /* Get texture name */
-    m_name = this->getInOut< ::fwData::Image >(s_TEXTURE_INOUT)->getID();
 }
 
 //------------------------------------------------------------------------------
@@ -117,78 +116,80 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
             return;
         }
 
-        _material->setTexture(image, m_name);
         if(m_lighting == false)
         {
             _material->setShadingMode(::fwData::Material::AMBIENT);
         }
-    }
 
-    ::fwData::Texture::FilteringType filtering = ::fwData::Texture::LINEAR;
-    ::fwData::Texture::WrappingType wrapping   = ::fwData::Texture::REPEAT;
-    ::fwData::Texture::BlendingType blending   = ::fwData::Texture::NONE;
+        ::fwData::Texture::sptr texture = _material->initTexture(m_order);
 
-    if(m_filtering == "nearest")
-    {
-        filtering = ::fwData::Texture::NEAREST;
-    }
-    else if(m_filtering == "linear")
-    {
-        filtering = ::fwData::Texture::LINEAR;
-    }
-    else
-    {
-        OSLM_WARN("STexture filtering type unknown or not supported : " << m_filtering);
-    }
-    _material->setTextureFiltering(filtering, m_name);
+        texture->setImage(image);
 
-    if(m_wrapping == "repeat")
-    {
-        wrapping = ::fwData::Texture::REPEAT;
-    }
-    else if(m_wrapping == "clamp")
-    {
-        wrapping = ::fwData::Texture::CLAMP;
-    }
-    else
-    {
-        OSLM_WARN("STexture wrapping type unknown or not supported : " << m_wrapping);
-    }
-    _material->setTextureWrapping(wrapping, m_name);
+        ::fwData::Texture::FilteringType filtering = ::fwData::Texture::LINEAR;
+        if(m_filtering == "nearest")
+        {
+            filtering = ::fwData::Texture::NEAREST;
+        }
+        else if(m_filtering == "linear")
+        {
+            filtering = ::fwData::Texture::LINEAR;
+        }
+        else
+        {
+            OSLM_WARN("STexture filtering type unknown or not supported : " << m_filtering);
+        }
+        texture->setFiltering(filtering);
 
-    if(m_blending == "none")
-    {
-        blending = ::fwData::Texture::NONE;
+        ::fwData::Texture::WrappingType wrapping = ::fwData::Texture::REPEAT;
+        if(m_wrapping == "repeat")
+        {
+            wrapping = ::fwData::Texture::REPEAT;
+        }
+        else if(m_wrapping == "clamp")
+        {
+            wrapping = ::fwData::Texture::CLAMP;
+        }
+        else
+        {
+            OSLM_WARN("STexture wrapping type unknown or not supported : " << m_wrapping);
+        }
+        texture->setWrapping(wrapping);
+
+        ::fwData::Texture::BlendingType blending = ::fwData::Texture::NONE;
+        if(m_blending == "none")
+        {
+            blending = ::fwData::Texture::NONE;
+        }
+        else if(m_blending == "replace")
+        {
+            blending = ::fwData::Texture::REPLACE;
+        }
+        else if(m_blending == "modulate")
+        {
+            blending = ::fwData::Texture::MODULATE;
+        }
+        else if(m_blending == "add")
+        {
+            blending = ::fwData::Texture::ADD;
+        }
+        else if(m_blending == "add_signed")
+        {
+            blending = ::fwData::Texture::ADD_SIGNED;
+        }
+        else if(m_blending == "interpolate")
+        {
+            blending = ::fwData::Texture::INTERPOLATE;
+        }
+        else if(m_blending == "subtract")
+        {
+            blending = ::fwData::Texture::SUBTRACT;
+        }
+        else
+        {
+            OSLM_WARN("Texture blending mode unknown or not supported : " << m_blending);
+        }
+        texture->setBlending(blending);
     }
-    else if(m_blending == "replace")
-    {
-        blending = ::fwData::Texture::REPLACE;
-    }
-    else if(m_blending == "modulate")
-    {
-        blending = ::fwData::Texture::MODULATE;
-    }
-    else if(m_blending == "add")
-    {
-        blending = ::fwData::Texture::ADD;
-    }
-    else if(m_blending == "add_signed")
-    {
-        blending = ::fwData::Texture::ADD_SIGNED;
-    }
-    else if(m_blending == "interpolate")
-    {
-        blending = ::fwData::Texture::INTERPOLATE;
-    }
-    else if(m_blending == "subtract")
-    {
-        blending = ::fwData::Texture::SUBTRACT;
-    }
-    else
-    {
-        OSLM_WARN("Texture blending mode unknown or not supported : " << m_wrapping);
-    }
-    _material->setTextureBlending(blending, m_name);
 
     ::fwData::Object::ModifiedSignalType::sptr sig;
     sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
