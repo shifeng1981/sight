@@ -15,10 +15,8 @@ set( DEPENDENCIES
     fwTools
     fwQtQuick
 )
-set( REQUIREMENTS gui )
-list(APPEND PLUGINS 
-    QtQuick
-    platforms
-    imageformats
-
+set( REQUIREMENTS 
+    gui
+    dataReg
+    servicesReg
 )

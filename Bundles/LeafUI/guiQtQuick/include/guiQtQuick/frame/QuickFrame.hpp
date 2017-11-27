@@ -33,10 +33,10 @@ public:
     fwCoreServiceClassDefinitionsMacro( (QuickFrame)(::fwGui::IFrameSrv) );
 
     /// Constructor. Do nothing.
-    GUIQTQUICK_API QuickFrame() throw();
+    GUIQTQUICK_API QuickFrame();
 
     /// Destructor. Do nothing.
-    GUIQTQUICK_API virtual ~QuickFrame() throw();
+    GUIQTQUICK_API virtual ~QuickFrame();
 
 protected:
 
@@ -48,29 +48,25 @@ protected:
      * @brief This method is used to configure the class parameters.
      * @see ::fwGui::IFrameSrv::initialize()
      */
-    GUIQTQUICK_API virtual void configuring() throw( ::fwTools::Failed );
+    GUIQTQUICK_API virtual void configuring() override;
 
     /**
      * @brief Register a view with defined id.
      * @see ::fwGui::IFrameSrv::create()
      */
-    GUIQTQUICK_API virtual void starting() throw(::fwTools::Failed);
+    GUIQTQUICK_API virtual void starting() override;
 
     /**
      * @brief This method remove the view in the frame.
      * @see ::fwGui::IFrameSrv::destroy()
      */
-    GUIQTQUICK_API virtual void stopping() throw(::fwTools::Failed);
+    GUIQTQUICK_API virtual void stopping() override;
 
     /**
      * @brief This method is used to update services. Do nothing.
      */
-    GUIQTQUICK_API virtual void updating() throw(::fwTools::Failed);
+    GUIQTQUICK_API virtual void updating() override;
 
-    /**
-     * @brief This method gives information about the class. Do nothing.
-     */
-    GUIQTQUICK_API virtual void info(std::ostream& _sstream );
     ///@}
 
     std::string m_framePath;

@@ -2,7 +2,7 @@
     <requirement id="dataReg" />
     <requirement id="servicesReg" />
     <requirement id="visuVTKQuick" />
-    <extension implements="::fwServices::registry::AppConfig2">
+    <extension implements="::fwServices::registry::AppConfig">
         <id>Ex05QtQuickConfig</id>
         <config>
             <object uid="imageUID" type="::fwData::Image" />
@@ -28,7 +28,7 @@
 
             <service uid="frame" type="::guiQtQuick::frame::QuickFrame" autoConnect="no">
                 <frame>
-                    <qml>@BUNDLE_PREFIX@/Ex05QtQuick_0-1/frame.qml</qml>
+                    <qml>Ex05QtQuick-0.1/frame.qml</qml>
                 </frame>
             </service>
 

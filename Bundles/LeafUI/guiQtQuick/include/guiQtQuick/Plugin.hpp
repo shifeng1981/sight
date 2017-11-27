@@ -27,15 +27,15 @@ public:
     /**
      * @brief   destructor
      */
-    GUIQTQUICK_API ~Plugin() throw();
+    GUIQTQUICK_API ~Plugin() noexcept;
 
     // Overrides
     GUIQTQUICK_API void start() throw(::fwRuntime::RuntimeException);
 
     // Overrides
-    GUIQTQUICK_API void stop() throw();
+    GUIQTQUICK_API void stop() noexcept;
 
-    GUIQTQUICK_API int run() throw();
+    GUIQTQUICK_API int run() noexcept;
 
 protected:
 

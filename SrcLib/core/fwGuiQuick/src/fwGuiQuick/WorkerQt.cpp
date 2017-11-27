@@ -9,33 +9,22 @@
 #include "fwGuiQuick/App.hpp"
 #include "fwGuiQuick/util/FuncSlot.hpp"
 
-#include <fwCore/util/LazyInstantiator.hpp>
+#include <fwRuntime/profile/Profile.hpp>
 
 #include <fwServices/registry/ActiveWorkers.hpp>
 
-#include <fwThread/Worker.hpp>
 #include <fwThread/Timer.hpp>
+#include <fwThread/Worker.hpp>
 
-#include <fwRuntime/profile/Profile.hpp>
-
-#include <boost/bind.hpp>
-#include <boost/thread.hpp>
-#include <functional>
-#include <QEvent>
 #include <QDir>
-#include <QPointer>
-#include <QTimer>
-#include <QStringList>
-#include <QSharedPointer>
+#include <QEvent>
 #include <QFont>
+#include <QPointer>
+#include <QSharedPointer>
+#include <QStringList>
+#include <QTimer>
 
-#ifdef ANDROID
-#include <fwRuntime/operations.hpp>
-#include <android_native_app_glue.h>
-#include <thread>
-#include <QAbstractEventDispatcher>
-#include <QWidget>
-#endif
+#include <functional>
 
 namespace fwGuiQuick
 {
@@ -70,7 +59,6 @@ const int WorkerQtTask::s_WORKER_QT_TASK_EVENT_TYPE = QEvent::registerEventType(
 class WorkerQt : public ::fwThread::Worker
 {
 public:
-    typedef ::boost::thread ThreadType;
 
     WorkerQt();
 
@@ -113,9 +101,6 @@ protected:
 {
     SPTR(WorkerQt) workerQt = std::make_shared< WorkerQt >();
     workerQt->init(argc, argv, guiEnabled);
-
-    ::fwServices::registry::ActiveWorkers::getDefault()->addWorker(
-        ::fwServices::registry::ActiveWorkers::s_DEFAULT_WORKER, workerQt);
 
     return workerQt;
 }
@@ -201,7 +186,11 @@ void WorkerQt::init( int& argc, char** argv, bool guiEnabled )
 {
     OSLM_TRACE("Init Qt" << ::fwThread::getCurrentThreadId() <<" Start");
 
-    QDir pluginDir("./plugins");
+#ifdef WIN32
+    QDir pluginDir("./bin/qt5/plugins");
+#else
+    QDir pluginDir("./lib/qt5/plugins");
+#endif
     if (pluginDir.exists())
     {
         QCoreApplication::setLibraryPaths(QStringList(pluginDir.absolutePath()));
@@ -229,15 +218,11 @@ WorkerQt::~WorkerQt()
         SLM_ASSERT("WorkerQt loop shall be created and ran from main thread ",
                    !m_future.valid() && ::fwThread::getCurrentThreadId() == this->getThreadId() );
 
-#ifndef ANDROID
-        ::boost::packaged_task< ExitReturnType > task( std::bind(&QApplication::exec) );
-#else
-        ::boost::packaged_task< ExitReturnType > task( std::bind(&WorkerQt::eventLoop, this) );
-#endif
+        std::packaged_task< ExitReturnType() > task( std::bind(&QApplication::exec) );
 
-        ::boost::future< ExitReturnType > ufuture = task.get_future();
+        std::future< ExitReturnType > ufuture = task.get_future();
 
-        m_future = ::boost::move(ufuture);
+        m_future = std::move(ufuture);
 
         task();
     }
@@ -312,7 +297,7 @@ void TimerQt::setDuration(TimeDurationType duration)
 {
     ::fwCore::mt::ScopedLock lock(m_mutex);
     m_timerQt->setInterval( static_cast<int>(
-                                ::boost::chrono::duration_cast< ::boost::chrono::milliseconds >(duration).count())
+                                std::chrono::duration_cast< std::chrono::milliseconds >(duration).count())
                             );
 }
 

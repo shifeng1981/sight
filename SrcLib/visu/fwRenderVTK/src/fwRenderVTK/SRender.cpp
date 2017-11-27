@@ -68,6 +68,7 @@ static const ::fwServices::IService::KeyType s_OFFSCREEN_INOUT = "offScreen";
 SRender::SRender() noexcept :
     m_pendingRenderRequest(false),
     m_renderMode(RenderMode::AUTO),
+    m_quickMode(false),
     m_width(1280),
     m_height(720),
     m_offScreen(false),
@@ -250,10 +251,9 @@ void SRender::configuring()
 
     m_sceneConf = srvConf.get_child("scene");
 
-    const std::string quickModeAttribute = m_sceneConf.get("<xmlattr>.quickMode");
-    m_quickMode = (quickModeAttribute == "true");
+    m_quickMode = m_sceneConf.get<bool>("<xmlattr>.quickMode", false);
 
-    const std::string& renderMode = m_sceneConf.get("<xmlattr>.renderMode", "auto");
+    const std::string renderMode = m_sceneConf.get("<xmlattr>.renderMode", "auto");
 
     if (renderMode == "auto")
     {

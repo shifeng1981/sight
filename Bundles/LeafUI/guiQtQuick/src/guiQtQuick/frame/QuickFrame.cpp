@@ -8,6 +8,7 @@
 
 #include <fwQtQuick/Engine.hpp>
 
+#include <fwRuntime/operations.hpp>
 #include <fwRuntime/Runtime.hpp>
 
 #include <fwServices/macros.hpp>
@@ -19,31 +20,27 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
 
-#define ROOTPATH BUNDLE_PREFIX "/guiQtQuick_0-1"
-
 namespace guiQtQuick
 {
 namespace frame
 {
 
-fwServicesRegisterMacro( ::fwGui::IFrameSrv, ::guiQtQuick::frame::QuickFrame, ::fwData::Object );
+fwServicesRegisterMacro( ::fwGui::IFrameSrv, ::guiQtQuick::frame::QuickFrame);
 
-QuickFrame::QuickFrame() throw()
+QuickFrame::QuickFrame()
 {
 }
 
 //-----------------------------------------------------------------------------
 
-QuickFrame::~QuickFrame() throw()
+QuickFrame::~QuickFrame()
 {
 }
 
 //-----------------------------------------------------------------------------
 
-void QuickFrame::configuring() throw( ::fwTools::Failed )
+void QuickFrame::configuring()
 {
-    SLM_TRACE_FUNC();
-
     SLM_ASSERT( "<service> tag is required.", m_configuration->getName() == "service" );
 
     m_framePath = m_configuration->find("frame").at(0)->find("qml").at(0)->getValue();
@@ -51,7 +48,7 @@ void QuickFrame::configuring() throw( ::fwTools::Failed )
 
 //-----------------------------------------------------------------------------
 
-void QuickFrame::starting() throw(::fwTools::Failed)
+void QuickFrame::starting()
 {
 #if SPYLOG_LEVEL >= 5
 
@@ -74,40 +71,25 @@ void QuickFrame::starting() throw(::fwTools::Failed)
 
 #endif
 
-#ifdef ANDROID
-
-    ::boost::filesystem::path qmlDir  = ::fwRuntime::Runtime::getDefault()->getWorkingPath() / "qml";
-    ::boost::filesystem::path qmlDir2 = ::fwRuntime::Runtime::getDefault()->getWorkingPath() / "lib";
-    QQmlEngine engine;
-    engine.addImportPath(QString::fromStdString(qmlDir.c_str()));
-    engine.addImportPath(QString::fromStdString(qmlDir2.c_str()));
-#endif
-
-    fwQtQuick::Engine* engine = fwQtQuick::Engine::getInstance();
+    ::fwQtQuick::Engine* engine = ::fwQtQuick::Engine::getInstance();
     SLM_ASSERT(" fwQtQuickFrame is not instanced", engine);
-    engine->setRootPath(ROOTPATH);
-    engine->setFramePath(m_framePath.c_str());
+    const auto bundlePath = ::fwRuntime::getBundleResourcePath(std::string("guiQtQuick"));
+    engine->setRootPath(bundlePath.string());
+    const auto path = ::fwRuntime::getBundleResourceFilePath(m_framePath);
+    engine->setFramePath(path.string().c_str());
     engine->init();
-
 }
 
 //-----------------------------------------------------------------------------
 
-void QuickFrame::stopping() throw(::fwTools::Failed)
+void QuickFrame::stopping()
 {
     SLM_TRACE_FUNC();
 }
 
 //-----------------------------------------------------------------------------
 
-void QuickFrame::info(std::ostream& _sstream )
-{
-    SLM_TRACE_FUNC();
-}
-
-//-----------------------------------------------------------------------------
-
-void QuickFrame::updating() throw(::fwTools::Failed)
+void QuickFrame::updating()
 {
     SLM_TRACE_FUNC();
 }
