@@ -16,4 +16,6 @@ set( DEPENDENCIES
 )
 set( REQUIREMENTS
     visuVTK
+    dataReg
+    servicesReg
 )

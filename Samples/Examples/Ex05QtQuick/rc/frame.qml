@@ -1,5 +1,4 @@
 import QtQuick 2.6
-import QtGraphicalEffects 1.0
 import Render 1.0 as Render
 import Ui 1.0 as Ui
 
@@ -103,25 +102,5 @@ Rectangle {
 
             visible: false
         }
-
-
-        InnerShadow {
-              anchors.fill: parent
-              radius: 16
-              samples: 24
-              horizontalOffset: -3
-              verticalOffset: 3
-              color: "#b00000"
-              source: opMask
-          }
-
-        OpacityMask {
-            id: opMask
-            anchors.fill: parent
-            source: renderVTK
-            maskSource: mask
-            visible: false
-        }
     }
-
 }

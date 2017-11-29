@@ -74,9 +74,9 @@ void QuickFrame::starting()
     ::fwQtQuick::Engine* engine = ::fwQtQuick::Engine::getInstance();
     SLM_ASSERT(" fwQtQuickFrame is not instanced", engine);
     const auto bundlePath = ::fwRuntime::getBundleResourcePath(std::string("guiQtQuick"));
-    engine->setRootPath(bundlePath.string());
+    engine->setRootPath(bundlePath);
     const auto path = ::fwRuntime::getBundleResourceFilePath(m_framePath);
-    engine->setFramePath(path.string().c_str());
+    engine->setFramePath(path);
     engine->init();
 }
 

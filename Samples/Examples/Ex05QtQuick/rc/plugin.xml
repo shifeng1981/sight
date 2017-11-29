@@ -1,29 +1,26 @@
-<plugin id="Ex05QtQuick" version="@DASH_VERSION@">
+<plugin id="Ex05QtQuick" version="@PROJECT_VERSION@">
     <requirement id="dataReg" />
     <requirement id="servicesReg" />
+    
     <requirement id="visuVTKQuick" />
+    
     <extension implements="::fwServices::registry::AppConfig">
         <id>Ex05QtQuickConfig</id>
         <config>
             <object uid="imageUID" type="::fwData::Image" />
             <object uid="meshUID" type="::fwData::Mesh" />
-            <object uid="TFSelectionUID" type="::fwData::Composite">
-                <item key="SelectedTF">
-                    <object uid="SelectedTFUID" type="::fwData::TransferFunction">
-                        <colors>
-                            <step color="#00000000" value="-1000" />
-                            <step color="#00000000" value="50" />
-                            <step color="#80000000" value="80" />
-                            <step color="#ff5a4626" value="100" />
-                            <step color="#c6ffff33" value="170" />
-                            <step color="#e2bf7f8c" value="220" />
-                            <step color="#ff8000a6" value="280" />
-                            <step color="#ffffc4e6" value="330" />
-                            <step color="#ffffffff" value="400" />
-                        </colors>
-                    </object>
-
-                </item>
+            <object uid="transferFunction" type="::fwData::TransferFunction">
+                <colors>
+                    <step color="#00000000" value="-1000" />
+                    <step color="#00000000" value="50" />
+                    <step color="#80000000" value="80" />
+                    <step color="#ff5a4626" value="100" />
+                    <step color="#c6ffff33" value="170" />
+                    <step color="#e2bf7f8c" value="220" />
+                    <step color="#ff8000a6" value="280" />
+                    <step color="#ffffc4e6" value="330" />
+                    <step color="#ffffffff" value="400" />
+                </colors>
             </object>
 
             <service uid="frame" type="::guiQtQuick::frame::QuickFrame" autoConnect="no">
@@ -52,8 +49,8 @@
 
             <service uid="volumeAdaptor" type="::visuVTKVRAdaptor::SVolume" autoConnect="yes">
                 <inout key="image" uid="imageUID" />
-                <inout key="tfSelection" uid="TFSelectionUID" />
-                <config renderer="default" selectedTFKey="SelectedTF" />
+                <inout key="tf" uid="transferFunction" />
+                <config renderer="default" />
             </service>
 
             <service uid="Interactor1" type="::visuVTKAdaptor::SInteractorStyle">

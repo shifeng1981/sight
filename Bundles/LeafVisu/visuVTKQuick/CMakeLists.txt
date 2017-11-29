@@ -1,14 +1,9 @@
 fwLoadProperties()
 
-add_definitions("-DQT_NO_KEYWORDS")
+target_compile_definitions(${FWPROJECT_NAME} PUBLIC "-DQT_NO_KEYWORDS")
 
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
-
-if(NOT ANDROID)
-    find_package(VTK COMPONENTS vtkViewsQt REQUIRED NO_MODULE)
-else()
-    find_package(VTK COMPONENTS vtkGUISupportQt REQUIRED NO_MODULE)
-endif()
+find_package(VTK COMPONENTS vtkViewsQt REQUIRED NO_MODULE)
 
 fwForwardInclude(
     ${VTK_INCLUDE_DIRS} 

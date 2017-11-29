@@ -6,8 +6,6 @@
 
 #include "visuVTKQuick/Plugin.hpp"
 
-#include <fwCore/spyLog.hpp>
-
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
 
 namespace visuVTKQuick
@@ -15,7 +13,7 @@ namespace visuVTKQuick
 
 //-----------------------------------------------------------------------------
 
-static ::fwRuntime::utils::GenericExecutableFactoryRegistrar<Plugin> registrar("visuVTKQuick::Plugin");
+static ::fwRuntime::utils::GenericExecutableFactoryRegistrar<Plugin> registrar("::visuVTKQuick::Plugin");
 
 //-----------------------------------------------------------------------------
 

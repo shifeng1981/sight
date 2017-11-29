@@ -13,23 +13,21 @@ namespace fwQtQuick
 
 //-----------------------------------------------------------------------------
 
-Engine::Engine()
+Engine::Engine() :
+    m_rootObject(nullptr)
 {
-    //----
 }
 
 //-----------------------------------------------------------------------------
 
 Engine::~Engine()
 {
-    //----
 }
 
 //-----------------------------------------------------------------------------
 
 Engine* Engine::getInstance()
 {
-    SLM_TRACE_FUNC();
     static Engine instance;
     return &instance;
 }
@@ -38,25 +36,24 @@ Engine* Engine::getInstance()
 
 auto Engine::init()->void
 {
-    SLM_TRACE_FUNC();
-    fwQtQuick::Register::Init();
-    SLM_ASSERT("Quick frame is not instancied", this->getInstance());
+    ::fwQtQuick::Register::Init();
+
+    SLM_ASSERT("Quick frame is not instanced", this->getInstance());
     QQuickView* mainView = new QQuickView();
     auto engine          = mainView->engine();
-    engine->addImportPath(m_RootPath.c_str());
+    engine->addImportPath(m_RootPath.string().c_str());
     auto context = engine->rootContext();
     context->setContextProperty("App", this->getInstance());
 
-    std::string rootQml = m_RootPath + std::string("/root.qml");
-    mainView->setSource(QUrl(rootQml.c_str()));
+    const auto rootQml = m_RootPath / "root.qml";
+    mainView->setSource(QUrl::fromLocalFile(rootQml.string().c_str()));
     mainView->setPersistentOpenGLContext(true);
     mainView->setPersistentSceneGraph(true);
     mainView->setResizeMode(QQuickView::SizeRootObjectToView);
     mainView->show();
 
     m_rootObject = mainView->rootObject();
-
-    fwQtQuick::code::Compiler::instance->openFile(QString(m_FramePath.c_str()));
+    ::fwQtQuick::code::Compiler::instance->openFile(m_FramePath.string().c_str());
 
 }
 
@@ -64,8 +61,7 @@ auto Engine::init()->void
 
 auto Engine::getCompiler()->fwQtQuick::code::Compiler*
 {
-    SLM_TRACE_FUNC();
-    return fwQtQuick::code::Compiler::instance;
+    return ::fwQtQuick::code::Compiler::instance;
 }
 
 //-----------------------------------------------------------------------------

@@ -11,6 +11,8 @@
 #include "fwQtQuick/config.hpp"
 #include "fwQtQuick/utils/Register.hpp"
 
+#include <boost/filesystem/path.hpp>
+
 #include <QQuickItem>
 #include <QQuickView>
 
@@ -32,13 +34,13 @@ public:
 
     //------------------------------------------------------------------------------
 
-    void setFramePath(std::string framePath)
+    void setFramePath(const ::boost::filesystem::path& framePath)
     {
         m_FramePath = framePath;
     }
     //------------------------------------------------------------------------------
 
-    void setRootPath(std::string rootPath)
+    void setRootPath(const ::boost::filesystem::path& rootPath)
     {
         m_RootPath = rootPath;
     }
@@ -58,8 +60,8 @@ private:
     void operator=(Engine const&) = delete;
 
     static fwQtQuick::Register::Controller<Engine> Register;
-    std::string m_FramePath;
-    std::string m_RootPath;
+    ::boost::filesystem::path m_FramePath;
+    ::boost::filesystem::path m_RootPath;
     QObject* m_rootObject;
 
 };
