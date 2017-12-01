@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -42,9 +42,6 @@ class VISUVTKADAPTOR_CLASS_API MeshVtkCommand;
 /**
  * @brief   Display a ::fwData::Mesh in the generic scene
  *
- * @section Signals Signals
- * - \b textureApplied(SPTR(::fwData::Material)) : emitted when a texture was applied.
- *
  * @section Slots Slots
  * - \b updateVisibility(bool) : change the visibility of the mesh.
  * - \b updatePointColors() : the mesh points colors were modified.
@@ -73,17 +70,18 @@ class VISUVTKADAPTOR_CLASS_API MeshVtkCommand;
  * - \b mesh [::fwData::Mesh]: mesh to display.
  *
  * @subsection Configuration Configuration:
- * - \b config(mandatory) : contains the adaptor configuration
- *    - \b renderer(mandatory) : renderer where the mesh is displayed
- *    - \b picker(optional) : picker used to pick on the mesh
- *    - \b transform(optional) : transform visually applied on the mesh
+ * - \b config(mandatory) : contains the adaptor configuration.
+ *    - \b renderer(mandatory) : renderer where the mesh is displayed.
+ *    - \b picker(optional) : picker used to pick on the mesh.
+ *    - \b transform(optional) : transform visually applied on the mesh.
  *    - \b color : hexadecimal color code of the diffuse material (i.e RGB "#ff00ff" or RGBA "#ff224508"). This
  *    overrides the current diffuse color of the mesh material.
  *    - \b unclippedcolor : hexadecimal color code of the diffuse material of the unclipped part.
- *    - \b autoresetcamera : reset the camera point of view when the mesh is modified ("yes" or "no", default: "yes") .
+ *    - \b autoresetcamera : reset the camera point of view when the mesh is modified ("yes" or "no", default: "yes").
  *    - \b uvgen : generate UV coordinates ("sphere", "cylinder" or "plane").
  *    - \b shadingMode : "ambient", "flat", "gouraud" or "phong" (default: phong).
- *    - \b clippingplane(optional) : identifier of the planes collection used for clipping
+ *    - \b clippingplane(optional) : identifier of the planes collection used for clipping.
+ *    - \b texture(optional) : texture(s) to be applied to the mesh.
  */
 class VISUVTKADAPTOR_CLASS_API SMesh : public ::fwRenderVTK::IAdaptor
 {
@@ -95,14 +93,6 @@ public:
     VISUVTKADAPTOR_API virtual ~SMesh() noexcept;
 
     static const ::fwServices::IService::KeyType s_MESH_INPUT;
-
-    /**
-     * @name Signals API
-     * @{
-     */
-    typedef ::fwCom::Signal< void ( SPTR(::fwData::Material) ) > TextureAppliedSignalType;
-    VISUVTKADAPTOR_API static const ::fwCom::Signals::SignalKeyType s_TEXTURE_APPLIED_SIG;
-    /** @} */
 
     /**
      * @name Slots API
@@ -265,9 +255,6 @@ protected:
     };
 
     UvGenType m_uvgen;
-
-    /// Signal to emit when a texture must be applied on a material.
-    TextureAppliedSignalType::sptr m_sigTextureApplied;
 };
 
 } //namespace visuVTKAdaptor

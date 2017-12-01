@@ -134,40 +134,23 @@
 
             <service uid="cubeAdaptor" type="::visuVTKAdaptor::SMesh" autoConnect="yes">
                 <in key="mesh" uid="mesh" />
-                <config renderer="default" uvgen="plane" />
+                <config renderer="default" uvgen="plane" texture="pngTex1,pngTex2,pngTex3" />
             </service>
 
             <service uid="pngTextureAdaptor1" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker1" />
-                <config renderer="default" picker="" order="0" wrapping="clamp" filtering="linear" blending="none" />
+                <config renderer="default" picker="" name="pngTex1" order="0" wrapping="clamp" filtering="linear" blending="none" />
             </service>
 
             <service uid="pngTextureAdaptor2" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker2" />
-                <config renderer="default" picker="" order="1" wrapping="clamp" filtering="linear" blending="add" />
+                <config renderer="default" picker="" name="pngTex2" order="1" wrapping="clamp" filtering="linear" blending="add" />
             </service>
 
             <service uid="pngTextureAdaptor3" type="::visuVTKAdaptor::STexture" autoConnect="yes">
                 <inout key="texture" uid="pngMarker3" />
-                <config renderer="default" picker="" order="2" wrapping="clamp" filtering="linear" blending="add" />
+                <config renderer="default" picker="" name="pngTex3" order="2" wrapping="clamp" filtering="linear" blending="add" />
             </service>
-
-            <connect>
-                <signal>cubeAdaptor/textureApplied</signal>
-                <slot>pngTextureAdaptor1/applyTexture</slot>
-            </connect>
-
-            <connect>
-                <signal>cubeAdaptor/textureApplied</signal>
-                <slot>pngTextureAdaptor2/applyTexture</slot>
-            </connect>
-
-            <connect>
-                <signal>cubeAdaptor/textureApplied</signal>
-                <slot>pngTextureAdaptor3/applyTexture</slot>
-            </connect>
-
-            <start uid="mainFrame" />
 
             <start uid="pngReader1" />
             <start uid="pngReader2" />
@@ -176,6 +159,8 @@
             <start uid="pngTextureAdaptor1" />
             <start uid="pngTextureAdaptor2" />
             <start uid="pngTextureAdaptor3" />
+
+            <start uid="mainFrame" />
 
             <start uid="meshReader" />
             <start uid="cubeAdaptor" />

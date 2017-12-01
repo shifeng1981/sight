@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -44,6 +44,7 @@ void MaterialTest::tearDown()
 void MaterialTest::materialSetupTest()
 {
     const int c_nbTextures = 8;
+    std::ostringstream oss;
 
     //-----------test values
     ::fwData::Color::sptr CAMBIENT = ::fwData::Color::New();
@@ -60,33 +61,12 @@ void MaterialTest::materialSetupTest()
     CPPUNIT_ASSERT_EQUAL(material->ambient()->getRGBA()[0], CAMBIENT->getRGBA()[0]);
     CPPUNIT_ASSERT_EQUAL(material->diffuse()->getRGBA()[0], CDIFF->getRGBA()[0]);
 
-    ::fwData::Image::sptr img;
-
-    const size_t nDim = 2;
-    ::fwTools::Type type = ::fwTools::Type::create("int8");
-    double spacing = 2.5;
-    std::vector<double> vectorSpacing(nDim, spacing);
-    double origin = 2.7;
-    std::vector<double> vectorOrigin(nDim, origin);
-    ::boost::int32_t size = 42;
-    ::fwData::Image::SizeType vectorSize(nDim, size);
-
     // Allocate and set the textures
     for(size_t i = 0; i < c_nbTextures; i++)
     {
-        img = ::fwData::Image::New();
-
-        img->setType(::fwTools::Type::create("int8"));
-        img->setSpacing(vectorSpacing);
-        img->setOrigin(vectorOrigin);
-        img->setSize(vectorSize);
-
-        ::fwData::Texture::sptr texture = material->initTexture(i);
-        CPPUNIT_ASSERT(texture != nullptr);
-        texture->setImage(img);
-        texture->setFiltering(::fwData::Texture::FilteringType::LINEAR);
-        texture->setWrapping(::fwData::Texture::WrappingType::REPEAT);
-        texture->setBlending(::fwData::Texture::BlendingType::MODULATE);
+        oss.str("");
+        oss << i;
+        material->addTexture(oss.str());
     }
 
     // Test if everything is OK
@@ -95,22 +75,9 @@ void MaterialTest::materialSetupTest()
 
     for(size_t i = 0; i < c_nbTextures; i++)
     {
-        ::fwData::Texture::sptr texture = material->getTexture(i);
-        CPPUNIT_ASSERT(texture != nullptr);
-        CPPUNIT_ASSERT_EQUAL(
-            texture->getFiltering(), ::fwData::Texture::FilteringType::LINEAR);
-        CPPUNIT_ASSERT_EQUAL(
-            texture->getWrapping(), ::fwData::Texture::WrappingType::REPEAT);
-        CPPUNIT_ASSERT_EQUAL(
-            texture->getBlending(), ::fwData::Texture::BlendingType::MODULATE);
-
-        img = texture->getImage();
-        CPPUNIT_ASSERT(img != nullptr);
-        CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
-        CPPUNIT_ASSERT(img->getType() == type);
-        CPPUNIT_ASSERT(img->getSpacing() == vectorSpacing);
-        CPPUNIT_ASSERT(img->getOrigin() == vectorOrigin);
-        CPPUNIT_ASSERT(img->getSize() == vectorSize);
+        oss.str("");
+        oss << i;
+        CPPUNIT_ASSERT_EQUAL(material->getTexture(i), oss.str());
     }
 }
 
@@ -119,6 +86,7 @@ void MaterialTest::materialSetupTest()
 void MaterialTest::materialCopyTest()
 {
     const int c_nbTextures = 8;
+    std::ostringstream oss;
 
     //-----------test values
     ::fwData::Color::sptr CAMBIENT = ::fwData::Color::New();
@@ -135,32 +103,11 @@ void MaterialTest::materialCopyTest()
     CPPUNIT_ASSERT_EQUAL(material->ambient()->getRGBA()[0], CAMBIENT->getRGBA()[0]);
     CPPUNIT_ASSERT_EQUAL(material->diffuse()->getRGBA()[0], CDIFF->getRGBA()[0]);
 
-    ::fwData::Image::sptr img;
-
-    const size_t nDim = 2;
-    ::fwTools::Type type = ::fwTools::Type::create("int8");
-    double spacing = 2.5;
-    std::vector<double> vectorSpacing(nDim, spacing);
-    double origin = 2.7;
-    std::vector<double> vectorOrigin(nDim, origin);
-    ::boost::int32_t size = 42;
-    ::fwData::Image::SizeType vectorSize(nDim, size);
-
     for(size_t i = 0; i < c_nbTextures; i++)
     {
-        img = ::fwData::Image::New();
-
-        img->setType(::fwTools::Type::create("int8"));
-        img->setSpacing(vectorSpacing);
-        img->setOrigin(vectorOrigin);
-        img->setSize(vectorSize);
-
-        ::fwData::Texture::sptr texture = material->initTexture(i);
-        CPPUNIT_ASSERT(texture != nullptr);
-        texture->setImage(img);
-        texture->setFiltering(::fwData::Texture::FilteringType::LINEAR);
-        texture->setWrapping(::fwData::Texture::WrappingType::REPEAT);
-        texture->setBlending(::fwData::Texture::BlendingType::MODULATE);
+        oss.str("");
+        oss << i;
+        material->addTexture(oss.str());
     }
 
     {
@@ -174,22 +121,9 @@ void MaterialTest::materialCopyTest()
 
         for(size_t i = 0; i < c_nbTextures; i++)
         {
-            ::fwData::Texture::sptr texture = materialCopy->getTexture(i);
-            CPPUNIT_ASSERT(texture != nullptr);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getFiltering(), ::fwData::Texture::FilteringType::LINEAR);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getWrapping(), ::fwData::Texture::WrappingType::REPEAT);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getBlending(), ::fwData::Texture::BlendingType::MODULATE);
-
-            img = texture->getImage();
-            CPPUNIT_ASSERT(img != nullptr);
-            CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
-            CPPUNIT_ASSERT(img->getType() == type);
-            CPPUNIT_ASSERT(img->getSpacing() == vectorSpacing);
-            CPPUNIT_ASSERT(img->getOrigin() == vectorOrigin);
-            CPPUNIT_ASSERT(img->getSize() == vectorSize);
+            oss.str("");
+            oss << i;
+            CPPUNIT_ASSERT_EQUAL(material->getTexture(i), oss.str());
         }
     }
 
@@ -205,22 +139,9 @@ void MaterialTest::materialCopyTest()
 
         for(size_t i = 0; i < c_nbTextures; i++)
         {
-            ::fwData::Texture::sptr texture = materialCopy->getTexture(i);
-            CPPUNIT_ASSERT(texture != nullptr);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getFiltering(), ::fwData::Texture::FilteringType::LINEAR);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getWrapping(), ::fwData::Texture::WrappingType::REPEAT);
-            CPPUNIT_ASSERT_EQUAL(
-                texture->getBlending(), ::fwData::Texture::BlendingType::MODULATE);
-
-            img = texture->getImage();
-            CPPUNIT_ASSERT(img != nullptr);
-            CPPUNIT_ASSERT_EQUAL(img->getNumberOfDimensions(), nDim);
-            CPPUNIT_ASSERT(img->getType() == type);
-            CPPUNIT_ASSERT(img->getSpacing() == vectorSpacing);
-            CPPUNIT_ASSERT(img->getOrigin() == vectorOrigin);
-            CPPUNIT_ASSERT(img->getSize() == vectorSize);
+            oss.str("");
+            oss << i;
+            CPPUNIT_ASSERT_EQUAL(material->getTexture(i), oss.str());
         }
     }
 }

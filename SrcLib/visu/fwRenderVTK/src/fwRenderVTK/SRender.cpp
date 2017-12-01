@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -531,12 +531,32 @@ vtkObject* SRender::getVtkObject(const VtkObjectIdType& objectId) const
 vtkTransform* SRender::getOrAddVtkTransform( const VtkObjectIdType& _id )
 {
     vtkTransform* t = vtkTransform::SafeDownCast(getVtkObject(_id));
-    if(t == 0)
+    if(t == nullptr)
     {
         t = vtkTransform::New();
         this->addVtkObject(_id, t);
     }
     return t;
+}
+
+//-----------------------------------------------------------------------------
+
+vtkTexture* SRender::addVtkTexture( const VtkObjectIdType& _id )
+{
+    vtkTexture* t = vtkTexture::SafeDownCast(getVtkObject(_id));
+    if(t == nullptr)
+    {
+        t = vtkTexture::New();
+        this->addVtkObject(_id, t);
+    }
+    return t;
+}
+
+//-----------------------------------------------------------------------------
+
+vtkTexture* SRender::getVtkTexture( const VtkObjectIdType& _id )
+{
+    return vtkTexture::SafeDownCast(getVtkObject(_id));
 }
 
 //-----------------------------------------------------------------------------

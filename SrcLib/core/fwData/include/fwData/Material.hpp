@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -11,7 +11,6 @@
 #include "fwData/factory/new.hpp"
 #include "fwData/Image.hpp"
 #include "fwData/Object.hpp"
-#include "fwData/Texture.hpp"
 
 fwCampAutoDeclareDataMacro((fwData)(Material), FWDATA_API);
 
@@ -29,8 +28,6 @@ public:
 
     fwCoreClassDefinitionsWithFactoryMacro( (Material)(::fwData::Object), (()), ::fwData::factory::New< Material >);
     fwCampMakeFriendDataMacro((fwData)(Material));
-
-    typedef std::vector< ::fwData::Texture::sptr > TextureMap;
 
     /**
      * @brief Constructor
@@ -72,33 +69,18 @@ public:
     FWDATA_API void setDiffuse(const Color::sptr& diffuse);
 
     /**
-     * @brief initializes and returns the texture object at a specifix index
+     * @brief Add a new texture to this material
      *
-     * @param id order for multi-texturing
+     * @param id id of the texture to be applied.
      */
-    FWDATA_API ::fwData::Texture::sptr initTexture(const size_t id = 0) const;
+    FWDATA_API void addTexture(const std::string id);
 
     /**
      * @brief returns the texture object at a specifix index
      *
      * @param id order for multi-texturing
      */
-    FWDATA_API ::fwData::Texture::sptr getTexture(const size_t id = 0) const;
-
-    /**
-     * @brief returns editable texture image
-     *
-     * @param id order for multi-texturing
-     */
-    FWDATA_API Image::sptr getTextureImage(const size_t id = 0) const;
-
-    /**
-     * @brief Setter for texture image
-     *
-     * @param texture texture
-     * @param id order for multi-texturing
-     */
-    FWDATA_API void setTextureImage(const Image::sptr& texture, const size_t id = 0);
+    FWDATA_API std::string getTexture(const size_t id = 0) const;
 
     /**
      * @brief Options
@@ -193,15 +175,8 @@ protected:
     /// Diffuse color
     Color::sptr m_diffuse;
 
-    /// Diffuse texture
-    mutable TextureMap m_texture;
-
-    /// Number of available texture units
-    /// Note:
-    /// As we use a vtkProperty object, only 8 texturing units are available as of now
-    /// One could think to get the number of available texture units via the TextureUnitManager
-    /// But it makes the use of multi-texturing not working
-    const size_t m_numberOfTextureUnits = 8;
+    /// Associated texture(s)
+    std::vector<std::string> m_texture;
 
 };
 

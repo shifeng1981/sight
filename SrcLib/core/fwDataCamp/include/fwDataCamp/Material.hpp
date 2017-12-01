@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -17,7 +17,6 @@ fwCampAutoDeclareEnumMacro((fwData)(Material)(ShadingType));
 fwCampAutoDeclareEnumMacro((fwData)(Material)(RepresentationType));
 fwCampAutoDeclareEnumMacro((fwData)(Material)(OptionsType));
 
-fwCampDeclareAccessor((fwData)(Material), (fwData)(Texture));
 fwCampDeclareAccessor((fwData)(Material), (fwData)(Color));
 fwCampDeclareAccessor((fwData)(Material), (fwData)(Image));
 

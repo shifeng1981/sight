@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -19,7 +19,7 @@ fwCampImplementDataMacro((fwData)(Material))
     .property("options_mode", &::fwData::Material::m_optionsMode)
     .property("ambient", &::fwData::Material::m_ambient)
     .property("diffuse", &::fwData::Material::m_diffuse)
-    .property("diffuse_texture", &::fwData::Material::m_texture)
+    .property("texture", &::fwData::Material::m_texture)
     ;
 }
 

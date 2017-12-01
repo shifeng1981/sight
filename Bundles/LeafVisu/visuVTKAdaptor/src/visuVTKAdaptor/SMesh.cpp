@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -29,6 +29,9 @@
 #include <fwVtkIO/helper/Mesh.hpp>
 #include <fwVtkIO/vtk.hpp>
 
+#include <boost/foreach.hpp>
+#include <boost/tokenizer.hpp>
+
 #include <vtkActor.h>
 #include <vtkCamera.h>
 #include <vtkCommand.h>
@@ -55,8 +58,6 @@ namespace visuVTKAdaptor
 {
 
 //-----------------------------------------------------------------------------
-
-const ::fwCom::Signals::SignalKeyType SMesh::s_TEXTURE_APPLIED_SIG = "textureApplied";
 
 const ::fwCom::Slots::SlotKeyType SMesh::s_UPDATE_VISIBILITY_SLOT       = "updateVisibility";
 const ::fwCom::Slots::SlotKeyType SMesh::s_UPDATE_POINT_COLORS_SLOT     = "updatePointColors";
@@ -346,8 +347,6 @@ SMesh::SMesh() noexcept :
     m_unclippedPartMaterial->diffuse()->setRGBA("#aaaaff44");
     m_clippingPlanesId = "";
 
-    m_sigTextureApplied = newSignal<TextureAppliedSignalType>(s_TEXTURE_APPLIED_SIG);
-
     newSlot(s_UPDATE_VISIBILITY_SLOT, &SMesh::updateVisibility, this);
     newSlot(s_UPDATE_POINT_COLORS_SLOT, &SMesh::updatePointColors, this);
     newSlot(s_UPDATE_CELL_COLORS_SLOT, &SMesh::updateCellColors, this);
@@ -433,8 +432,15 @@ void SMesh::configuring()
 
     if (config.count("texture"))
     {
-        SLM_FATAL("'texture' is deprecated, you need to connect manually the SMesh::textureApplied signal to the "
-                  "STexture::applyTexture slot.");
+        const std::string textures = config.get<std::string>("texture", "");
+
+        const ::boost::char_separator<char> sep(", ;");
+        const ::boost::tokenizer< ::boost::char_separator<char> > tokens {textures, sep};
+
+        for(const auto& token : tokens)
+        {
+            m_material->addTexture(token);
+        }
     }
 
     if (config.count("shadingMode"))
@@ -763,10 +769,6 @@ void SMesh::updateMesh( ::fwData::Mesh::csptr mesh )
     {
         m_mapper->SetInputData(m_polyData);
     }
-
-    ::fwData::Material::sptr material = this->getMaterial();
-    SLM_ASSERT("Missing material", material);
-    m_sigTextureApplied->asyncEmit(material);
 
     if (m_autoResetCamera)
     {

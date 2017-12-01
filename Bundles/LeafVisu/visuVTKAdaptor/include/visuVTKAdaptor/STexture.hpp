@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -52,6 +52,7 @@ namespace visuVTKAdaptor
  *
  * @subsection Configuration Configuration:
  * - \b config(mandatory) : contains the adaptor configuration
+ *    - \b name (mandatory): name of the texture, as used in the texture field of a mesh.
  *    - \b order (optional): id defining the order in which the texture will be combined with multi-texturing
  *    - \b filtering (optional) : filtering of the texture, "nearest" or "linear"
  *    - \b wrapping (optional) : wrapping of the texture, "clamp" or "repeat"
@@ -65,14 +66,6 @@ class VISUVTKADAPTOR_CLASS_API STexture : public ::fwRenderVTK::IAdaptor
 public:
 
     fwCoreServiceClassDefinitionsMacro( (STexture)(::fwRenderVTK::IAdaptor) );
-
-    /**
-     * @name Slots API
-     * @{
-     */
-    VISUVTKADAPTOR_API static const ::fwCom::Slots::SlotKeyType s_APPLY_TEXTURE_SLOT;
-    typedef ::fwCom::Slot< void ( SPTR(::fwData::Material) ) > ApplyTextureSlotType;
-    /** @} */
 
     /// Constructor
     VISUVTKADAPTOR_API STexture() noexcept;
@@ -95,9 +88,6 @@ protected:
      */
     VISUVTKADAPTOR_API virtual KeyConnectionsMap getAutoConnections() const override;
 
-    /// Slot called when a texture must be applied on a material.
-    void applyTexture( SPTR(::fwData::Material) _material);
-
     /// Contains all mesh adaptors that currently have this texture applied. Needed when image is updated.
     std::set< SPTR(::fwData::Material) > m_materialSet;
 
@@ -114,7 +104,7 @@ protected:
     bool m_lighting;
 
     /// Texture application order
-    size_t m_order;
+    std::string m_name;
 };
 
 } //namespace visuVTKAdaptor

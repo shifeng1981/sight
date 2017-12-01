@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -130,42 +130,20 @@ void SMaterial::updateMaterial( CSPTR(::fwData::Material)material )
     m_property->SetSpecularColor(1., 1., 1.);
     m_property->SetSpecularPower(100.); //Shininess
 
-    // set texture
+    // Set textures
     int texUnitID = 0;
     for(size_t i = 0; i < material->getTextureContainerSize(); i++)
     {
-        ::fwData::Texture::sptr texture = material->getTexture(i);
+        std::string name = material->getTexture(i);
 
-        if(texture != nullptr)
+        vtkTexture* vtkTex = this->getRenderService()->getVtkTexture("Texture_" + name);
+
+        if(vtkTex)
         {
-            ::fwData::Image::sptr image = texture->getImage();
+            m_property->RemoveTexture(texUnitID);
+            m_property->SetTexture(::vtkProperty::VTK_TEXTURE_UNIT_0 + texUnitID, vtkTex);
 
-            if(image != nullptr)
-            {
-                ::fwData::mt::ObjectReadLock lock(image);
-
-                if (image->getSizeInBytes() != 0)
-                {
-                    vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
-                    ::fwVtkIO::toVTKImage( image, vtkImage );
-
-                    vtkSmartPointer<vtkTexture> vtkTex = vtkSmartPointer< vtkTexture >::New();
-                    vtkTex->SetInputData(vtkImage);
-
-                    ::fwData::Texture::FilteringType filtering = texture->getFiltering();
-                    vtkTex->SetInterpolate( filtering == ::fwData::Texture::LINEAR );
-                    ::fwData::Texture::WrappingType wrapping = texture->getWrapping();
-                    vtkTex->SetRepeat( wrapping == ::fwData::Texture::REPEAT );
-                    vtkTex->SetEdgeClamp( wrapping == ::fwData::Texture::CLAMP );
-                    ::fwData::Texture::BlendingType blending = texture->getBlending();
-                    vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE + blending);
-
-                    m_property->RemoveTexture(texUnitID);
-                    m_property->SetTexture(::vtkProperty::VTK_TEXTURE_UNIT_0 + texUnitID, vtkTex);
-
-                    texUnitID++;
-                }
-            }
+            texUnitID++;
         }
     }
 

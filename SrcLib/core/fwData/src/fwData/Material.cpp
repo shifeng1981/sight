@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -33,12 +33,6 @@ Material::Material(::fwData::Object::Key key) :
 {
     newSignal< AddedTextureSignalType >(s_ADDED_TEXTURE_SIG);
     newSignal< RemovedTextureSignalType >(s_REMOVED_TEXTURE_SIG);
-
-    // Fill the texture vector with nullptr
-    for(int i = 0; i < m_numberOfTextureUnits; i++)
-    {
-        m_texture.push_back(nullptr);
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -81,13 +75,7 @@ void Material::cachedDeepCopy(const Object::csptr& _source, DeepCopyCacheType& c
 
     for(size_t i = 0; i < other->getTextureContainerSize(); i++)
     {
-        ::fwData::Texture::sptr ot = other->getTexture(i);
-        if(ot != nullptr)
-        {
-            ::fwData::Texture::sptr dt = ::fwData::Texture::New();
-            dt->deepCopy(ot);
-            m_texture[i] = dt;
-        }
+        m_texture.push_back(other->getTexture(i));
     }
 
     m_shadingMode        = other->m_shadingMode;
@@ -111,34 +99,6 @@ Color::sptr Material::diffuse() const
 
 //------------------------------------------------------------------------------
 
-::fwData::Texture::sptr Material::initTexture(const size_t id) const
-{
-    OSLM_ASSERT(
-        "The number of texture units (" << m_texture.size() << ") is insufficient to map a texture to " << id << " " << m_texture.size(),
-        id < m_texture.size());
-
-    if(m_texture.at(id) == nullptr)
-    {
-        ::fwData::Texture::sptr t = ::fwData::Texture::New();
-        m_texture[id]             = t;
-    }
-
-    return m_texture.at(id);
-}
-
-//------------------------------------------------------------------------------
-
-::fwData::Texture::sptr Material::getTexture(const size_t id) const
-{
-    OSLM_ASSERT(
-        "The number of texture units (" << m_texture.size() << ") is insufficient to map a texture to " << id << " " << m_texture.size(),
-        id < m_texture.size());
-
-    return m_texture.at(id);
-}
-
-//------------------------------------------------------------------------------
-
 void Material::setAmbient(const Color::sptr& ambient)
 {
     m_ambient = ambient;
@@ -149,6 +109,24 @@ void Material::setAmbient(const Color::sptr& ambient)
 void Material::setDiffuse(const Color::sptr& diffuse)
 {
     m_diffuse = diffuse;
+}
+
+//------------------------------------------------------------------------------
+
+void Material::addTexture(const std::string id)
+{
+    m_texture.push_back(id);
+}
+
+//------------------------------------------------------------------------------
+
+std::string Material::getTexture(const size_t id) const
+{
+    OSLM_ASSERT(
+        "The number of present texture (" << m_texture.size() << ") is insufficient to map a texture to " << id << " " << m_texture.size(),
+        id < m_texture.size());
+
+    return m_texture.at(id);
 }
 
 //------------------------------------------------------------------------------

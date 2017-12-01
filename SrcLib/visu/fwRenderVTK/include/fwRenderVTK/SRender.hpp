@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -16,6 +16,8 @@
 #include <fwRuntime/ConfigurationElement.hpp>
 
 #include <fwServices/helper/Config.hpp>
+
+#include <vtkTexture.h>
 
 #include <map>
 
@@ -132,6 +134,12 @@ public:
 
     /// Get a vtkTransform in the SRender, referenced by a key. Create it if it does not exist.
     FWRENDERVTK_API vtkTransform* getOrAddVtkTransform( const VtkObjectIdType& _id );
+
+    /// Get a vtkTexture in the SRender, referenced by a key. Create it if it does not exist.
+    FWRENDERVTK_API vtkTexture* getVtkTexture( const VtkObjectIdType& _id );
+
+    /// Add a vtkTexture in the SRender, referenced by a key. Create it if it does not exist.
+    FWRENDERVTK_API vtkTexture* addVtkTexture( const VtkObjectIdType& _id );
 
     bool getPendingRenderRequest() const;
 

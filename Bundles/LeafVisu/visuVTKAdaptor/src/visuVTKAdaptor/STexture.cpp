@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -22,15 +22,16 @@
 
 #include <fwServices/macros.hpp>
 
-#include <vtkRenderWindowInteractor.h>
+#include <fwVtkIO/vtk.hpp>
+
+#include <vtkImageData.h>
+#include <vtkSmartPointer.h>
 #include <vtkTexture.h>
 
 fwServicesRegisterMacro( ::fwRenderVTK::IAdaptor, ::visuVTKAdaptor::STexture);
 
 namespace visuVTKAdaptor
 {
-
-const ::fwCom::Slots::SlotKeyType STexture::s_APPLY_TEXTURE_SLOT = "applyTexture";
 
 static const ::fwServices::IService::KeyType s_TEXTURE_INOUT = "texture";
 
@@ -41,9 +42,8 @@ STexture::STexture() noexcept :
     m_wrapping("repeat"),
     m_blending("none"),
     m_lighting(true),
-    m_order(0)
+    m_name("")
 {
-    newSlot(s_APPLY_TEXTURE_SLOT, &STexture::applyTexture, this );
 }
 
 //------------------------------------------------------------------------------
@@ -60,15 +60,14 @@ void STexture::configuring()
 
     const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
 
-    m_order = std::stol(config.get<std::string>("order", "0"));
+    m_name = config.get<std::string>("name", "");
+    SLM_ASSERT("The 'name' attribute is missing. It is mandatory to be able to reference the texture.",
+               !(m_name.empty()));
 
     m_filtering = config.get<std::string>("filtering", "linear");
-
-    m_wrapping = config.get<std::string>("wrapping", "repeat");
-
-    m_blending = config.get<std::string>("blending", "none");
-
-    m_lighting = (config.get<std::string>("lighting", "yes") == "yes");
+    m_wrapping  = config.get<std::string>("wrapping", "repeat");
+    m_blending  = config.get<std::string>("blending", "none");
+    m_lighting  = (config.get<std::string>("lighting", "yes") == "yes");
 }
 
 //------------------------------------------------------------------------------
@@ -76,38 +75,81 @@ void STexture::configuring()
 void STexture::starting()
 {
     this->initialize();
+
+    // Get or create a vtkTexture of the specified name
+    vtkTexture* vtkTex = this->getRenderService()->addVtkTexture("Texture_" + m_name);
+
+    vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
+    vtkImage->SetDimensions(1, 1, 1);
+    vtkImage->AllocateScalars(VTK_UNSIGNED_CHAR, 4);
+
+    unsigned char* pixel = static_cast<unsigned char*>(vtkImage->GetScalarPointer(0, 0, 0));
+    pixel[0] = 255;
+    pixel[1] = 255;
+    pixel[2] = 255;
+    pixel[3] = 0;
+
+    vtkTex->SetInputData(vtkImage);
+
+    // Set interpolation to nearest by default
+    vtkTex->SetInterpolate( 0 );
+
+    // If the user wants a linear interpolation, apply it
+    if(m_filtering == "linear")
+    {
+        vtkTex->SetInterpolate( 1 );
+    }
+
+    // Set default values on for wrapping/clamping
+    vtkTex->SetRepeat( 0 );
+    vtkTex->SetEdgeClamp( 0 );
+    if(m_wrapping == "repeat")
+    {
+        vtkTex->SetRepeat( 1 );
+    }
+    else if(m_wrapping == "clamp")
+    {
+        vtkTex->SetEdgeClamp( 1 );
+    }
+
+    if(m_blending == "none")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_NONE);
+    }
+    else if(m_blending == "replace")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_REPLACE);
+    }
+    else if(m_blending == "modulate")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_MODULATE);
+    }
+    else if(m_blending == "add")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_ADD);
+    }
+    else if(m_blending == "add_signed")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_ADD_SIGNED);
+    }
+    else if(m_blending == "interpolate")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_INTERPOLATE);
+    }
+    else if(m_blending == "subtract")
+    {
+        vtkTex->SetBlendingMode(::vtkTexture::VTK_TEXTURE_BLENDING_MODE_SUBTRACT);
+    }
 }
 
 //------------------------------------------------------------------------------
 
 void STexture::updating()
 {
-    for(::fwData::Material::sptr material :  m_materialSet)
-    {
-        applyTexture(material);
-    }
-}
-
-//------------------------------------------------------------------------------
-
-void STexture::stopping()
-{
-}
-
-//------------------------------------------------------------------------------
-
-void STexture::applyTexture( SPTR(::fwData::Material)_material )
-{
-    if(m_materialSet.count(_material) == 0)
-    {
-        m_materialSet.insert(_material);
-    }
-
     ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_TEXTURE_INOUT);
     SLM_ASSERT("Texture image is missing.", image);
 
-    ::fwData::mt::ObjectWriteLock matLock(_material);
-
+    if(image)
     {
         ::fwData::mt::ObjectReadLock imLock(image);
 
@@ -116,87 +158,20 @@ void STexture::applyTexture( SPTR(::fwData::Material)_material )
             return;
         }
 
-        if(m_lighting == false)
-        {
-            _material->setShadingMode(::fwData::Material::AMBIENT);
-        }
+        vtkSmartPointer< vtkImageData > vtkImage = vtkSmartPointer< vtkImageData >::New();
+        ::fwVtkIO::toVTKImage( image, vtkImage );
 
-        ::fwData::Texture::sptr texture = _material->initTexture(m_order);
+        vtkTexture* vtkTex = this->getRenderService()->addVtkTexture("Texture_" + m_name);
+        vtkTex->SetInputData(vtkImage);
 
-        texture->setImage(image);
-
-        ::fwData::Texture::FilteringType filtering = ::fwData::Texture::LINEAR;
-        if(m_filtering == "nearest")
-        {
-            filtering = ::fwData::Texture::NEAREST;
-        }
-        else if(m_filtering == "linear")
-        {
-            filtering = ::fwData::Texture::LINEAR;
-        }
-        else
-        {
-            OSLM_WARN("STexture filtering type unknown or not supported : " << m_filtering);
-        }
-        texture->setFiltering(filtering);
-
-        ::fwData::Texture::WrappingType wrapping = ::fwData::Texture::REPEAT;
-        if(m_wrapping == "repeat")
-        {
-            wrapping = ::fwData::Texture::REPEAT;
-        }
-        else if(m_wrapping == "clamp")
-        {
-            wrapping = ::fwData::Texture::CLAMP;
-        }
-        else
-        {
-            OSLM_WARN("STexture wrapping type unknown or not supported : " << m_wrapping);
-        }
-        texture->setWrapping(wrapping);
-
-        ::fwData::Texture::BlendingType blending = ::fwData::Texture::NONE;
-        if(m_blending == "none")
-        {
-            blending = ::fwData::Texture::NONE;
-        }
-        else if(m_blending == "replace")
-        {
-            blending = ::fwData::Texture::REPLACE;
-        }
-        else if(m_blending == "modulate")
-        {
-            blending = ::fwData::Texture::MODULATE;
-        }
-        else if(m_blending == "add")
-        {
-            blending = ::fwData::Texture::ADD;
-        }
-        else if(m_blending == "add_signed")
-        {
-            blending = ::fwData::Texture::ADD_SIGNED;
-        }
-        else if(m_blending == "interpolate")
-        {
-            blending = ::fwData::Texture::INTERPOLATE;
-        }
-        else if(m_blending == "subtract")
-        {
-            blending = ::fwData::Texture::SUBTRACT;
-        }
-        else
-        {
-            OSLM_WARN("Texture blending mode unknown or not supported : " << m_blending);
-        }
-        texture->setBlending(blending);
+        this->requestRender();
     }
+}
 
-    ::fwData::Object::ModifiedSignalType::sptr sig;
-    sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
-    {
-        ::fwCom::Connection::Blocker block(sig->getConnection(m_slotUpdate));
-        sig->asyncEmit();
-    }
+//------------------------------------------------------------------------------
+
+void STexture::stopping()
+{
 }
 
 //------------------------------------------------------------------------------
