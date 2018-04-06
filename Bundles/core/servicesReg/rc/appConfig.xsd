@@ -33,8 +33,29 @@
             <xs:element name="connect"  type="ConnectionType"  minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="start" type="StartType" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="update" type="UpdateType" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="qml" type="QmlType" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="QmlType">
+        <xs:sequence>
+            <xs:element name="file" type="xs:string" minOccurs="1" maxOccurs="1" />
+            <xs:element name="ctx" type="ContextType" minOccurs="0" maxOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    <!-- ContextType -->
+    <xs:complexType name="ContextType">
+        <xs:sequence>
+            <xs:element name="class" type="ClassType" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- ClassType -->
+    <xs:complexType name="ClassType">
+        <xs:attribute name="uid" type="xs:string"/>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
 
     <!-- Object Type -->
     <xs:complexType name="ObjectType">
