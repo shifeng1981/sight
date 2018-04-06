@@ -52,9 +52,30 @@ namespace fwServices
      	*/
   		FWSERVICES_API void	startBundle();
 
+  	   /**
+  	    * @brief Load QML file
+  	    * @note Assert if the file in not founded
+  	    */
+  	    FWSERVICES_API void	loadQMLFile(::fwRuntime::ConfigurationElement::csptr const&);
+
+  	   /**
+  	    * @brief Create QML context if needed
+  	    *	i.e create user-needed class and link with QML
+  	    */
+  	    FWSERVICES_API void createContext(::fwRuntime::ConfigurationElement::csptr const&);
+
 	private:
 		/// Is in unit testing mode
 		bool	m_isUnitTest;
 		std::string	m_configId;
+
+		/**
+		 * Static member for key xml parsing
+		 * @{
+		 */
+		static std::string	QmlEntryPoint;
+		static std::string	File;
+		static std::string	Context;
+		static std::string	Class;
 	};
 }
