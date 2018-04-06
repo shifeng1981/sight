@@ -22,7 +22,7 @@ Plugin::Plugin() noexcept :
     m_configurationName(""),
     m_parametersName("")
 {
-    std::cout << "APP QML IS CURRENTLY USED" << std::endl;
+    std::cout << "/!\\ Experimental QML app is currently used" << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -41,7 +41,6 @@ void Plugin::start()
     {
         m_parametersName = this->getBundle()->getParameterValue("parameters");
     }
-    std::cout << "Config : <" << m_configurationName << "> <" << m_parametersName << ">" << std::endl;
 }
 
 //------------------------------------------------------------------------------

@@ -13,6 +13,12 @@ namespace fwServices
     class FWSERVICES_CLASS_API QmlAppConfigManager : public IAppConfigManager
     {
     public:
+    	fwCoreClassDefinitionsWithFactoryMacro((QmlAppConfigManager)(::fwServices::IAppConfigManager),
+        	                                   (()),
+                                           	std::make_shared< QmlAppConfigManager >)
+	    fwCoreAllowSharedFromThis()
+
+
         QmlAppConfigManager();
         ~QmlAppConfigManager();
         

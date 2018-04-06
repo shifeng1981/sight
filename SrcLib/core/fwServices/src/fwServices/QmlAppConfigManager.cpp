@@ -3,6 +3,7 @@
 fwServices::QmlAppConfigManager::QmlAppConfigManager() :
 	m_isUnitTest(false)
 {
+	std::cout << "/!\\ Using QmlAppConfigManager" << std::endl;
 }
 
 // -----------------------------------------------------------
