@@ -1,0 +1,54 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2015-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
+#include "fwServices/IAppConfigManager.hpp"
+
+namespace fwServices
+{
+    class FWSERVICES_CLASS_API QmlAppConfigManager : public IAppConfigManager
+    {
+    public:
+        QmlAppConfigManager();
+        ~QmlAppConfigManager();
+        
+
+	   /**
+     	* @name Overrides
+     	* @{
+     	*/
+	    FWSERVICES_API void setConfig(const std::string& configId,
+	                                          const FieldAdaptorType& replaceFields = FieldAdaptorType());
+	    FWSERVICES_API void setConfig(const std::string& configId,
+	                                          const ::fwData::Composite::csptr& replaceFields);
+	    FWSERVICES_API ::fwData::Object::sptr getConfigRoot() const;
+	    FWSERVICES_API void launch();
+	    FWSERVICES_API void stopAndDestroy();
+	    FWSERVICES_API void create();
+	    FWSERVICES_API void start();
+	    FWSERVICES_API void update();
+	    FWSERVICES_API void stop();
+	    FWSERVICES_API void destroy();
+	    ///@}
+
+	    /// Setter for `m_isUnitTest`
+  	    FWSERVICES_API void	setIsUnitTest(bool isUnitTest);
+
+  	private:
+  	   /**
+     	* @brief Starts the bundle associated to the config
+     	* @note  Does nothing if the bundle is already started or if the config id is not specified (ie. if config is set
+     	*        with setConfig(::fwRuntime::ConfigurationElement::csptr cfgElem) ).
+     	*/
+  		FWSERVICES_API void	startBundle();
+
+	private:
+		/// Is in unit testing mode
+		bool	m_isUnitTest;
+		std::string	m_configId;
+	};
+}

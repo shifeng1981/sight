@@ -1,0 +1,7 @@
+<plugin id="appQml" class="::appQml::Plugin" version="@PROJECT_VERSION@" >
+
+    <library name="appQml" />
+    <requirement id="servicesReg" />
+    <requirement id="dataReg" />
+
+</plugin>
