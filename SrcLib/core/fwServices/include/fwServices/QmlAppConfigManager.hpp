@@ -7,6 +7,7 @@
 #pragma once
 
 #include "fwServices/IAppConfigManager.hpp"
+#include "fwServices/IQmlEngine.hpp"
 
 namespace fwServices
 {
@@ -43,6 +44,7 @@ namespace fwServices
 
 	    /// Setter for `m_isUnitTest`
   	    FWSERVICES_API void	setIsUnitTest(bool isUnitTest);
+  	    FWSERVICES_API void	setEngine(SPTR(::fwServices::IQmlEngine) const&);
 
   	private:
   	   /**
@@ -68,6 +70,7 @@ namespace fwServices
 		/// Is in unit testing mode
 		bool	m_isUnitTest;
 		std::string	m_configId;
+		SPTR(::fwServices::IQmlEngine)	m_qmlEngine;
 
 		/**
 		 * Static member for key xml parsing
@@ -77,5 +80,8 @@ namespace fwServices
 		static std::string	File;
 		static std::string	Context;
 		static std::string	Class;
+		/**
+		 * }@
+		 */
 	};
 }

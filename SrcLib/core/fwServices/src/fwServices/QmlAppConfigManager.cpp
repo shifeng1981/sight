@@ -51,7 +51,6 @@ void	fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
 
 ::fwData::Object::sptr	fwServices::QmlAppConfigManager::getConfigRoot() const
 {
-
 }
 
 // -----------------------------------------------------------
@@ -74,10 +73,16 @@ void	fwServices::QmlAppConfigManager::stopAndDestroy()
 	this->destroy();
 }
 
+void	fwServices::QmlAppConfigManager::setEngine(SPTR(::fwServices::IQmlEngine) const& engine)
+{
+	m_qmlEngine = engine;
+}
+
 // -----------------------------------------------------------
 
 void	fwServices::QmlAppConfigManager::create()
 {
+	SLM_ASSERT("Missing QML engine", m_qmlEngine);
 	SLM_ASSERT("Manager already running.", m_state == STATE_DESTROYED);
 	bool	qmlFound = false;
 
@@ -98,7 +103,8 @@ void	fwServices::QmlAppConfigManager::create()
 
 void	fwServices::QmlAppConfigManager::start()
 {
-
+	SLM_ASSERT("Manager not created", m_state == STATE_CREATED);
+	m_qmlEngine->launch();
 }
 
 // -----------------------------------------------------------
@@ -155,6 +161,7 @@ void	fwServices::QmlAppConfigManager::loadQMLFile(::fwRuntime::ConfigurationElem
 		if (elem->getName() == ::fwServices::QmlAppConfigManager::File)
 		{
 			std::cout << "file found <" << elem->getValue() << ">" << std::endl;
+			m_qmlEngine->loadFile(elem->getValue());
 			return ;
 		}
 	}
@@ -177,7 +184,6 @@ void	fwServices::QmlAppConfigManager::createContext(::fwRuntime::ConfigurationEl
    	            std::string	cType = classElem->getAttributeValue("type");
 
    	            std::cout << uid << " " << cType << std::endl;
-
 			}
 		}
 	}

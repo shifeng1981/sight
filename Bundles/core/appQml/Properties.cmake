@@ -7,6 +7,7 @@ set( DEPENDENCIES
     fwCore
     fwRuntime
     fwServices
+    fwGuiQt
 )
 set( REQUIREMENTS  )
 

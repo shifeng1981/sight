@@ -12,6 +12,7 @@
 #include <fwRuntime/Plugin.hpp>
 
 #include <fwServices/QmlAppConfigManager.hpp>
+#include <fwServices/IQmlEngine.hpp>
 
 namespace appQml
 {
@@ -42,6 +43,7 @@ private:
     std::string m_configurationName;
     std::string m_parametersName;
     ::fwServices::QmlAppConfigManager::sptr m_appConfigMng;
+    SPTR(::fwServices::IQmlEngine)  m_qmlEngine;
 };
 
 } // namespace appQml

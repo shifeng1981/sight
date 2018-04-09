@@ -2,6 +2,8 @@
 
 #include "fwGuiQt/config.hpp"
 
+#include <fwServices/IQmlEngine.hpp>
+
 #include <QQmlEngine>
 #include <QQmlComponent>
 
@@ -14,19 +16,18 @@ namespace fwGuiQt
 	 *	@brief: The purpose is to load `scriptFile`.qml and display it
 	 *
 	 */
-class FWGUIQT_CLASS_API QtQmlEngine : public QQmlEngine
+class FWGUIQT_CLASS_API QtQmlEngine : public ::fwServices::IQmlEngine, public QQmlEngine
 {
-	Q_OBJECT
 
 public:
-	FWGUIQT_API QtQmlEngine(std::string const& scriptFile);
+	FWGUIQT_API QtQmlEngine();
 	~QtQmlEngine();
 	
 	/**
 	 *	@brief: This function load file specified by scriptFile
 	 *		This call can throw if the file contain a error or if it can't be found
 	 */
-	void	loadFile();
+	void	loadFile(std::string const& scriptFile);
 	/**
 	 *	@brief: Run script file
 	 */

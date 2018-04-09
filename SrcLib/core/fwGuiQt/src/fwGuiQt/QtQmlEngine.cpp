@@ -2,19 +2,23 @@
 
 #include <QCoreApplication>
 #include <QQuickWindow>
+#include <QFileInfo>
 
-fwGuiQt::QtQmlEngine::QtQmlEngine(std::string const& scriptFile)
+namespace fwGuiQt
 {
-	m_scriptFile = scriptFile;
+
+fwGuiQt::QtQmlEngine::QtQmlEngine()
+{
 }
 
-void	fwGuiQt::QtQmlEngine::loadFile()
+void	fwGuiQt::QtQmlEngine::loadFile(std::string const& scriptFile)
 {
+	m_scriptFile = scriptFile;
 	m_component = std::unique_ptr<QQmlComponent>(new QQmlComponent(this));
 
 	QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
-	m_component->loadUrl(QUrl::fromLocalFile(QString::fromStdString(m_scriptFile)));
+	m_component->loadUrl(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
 
 	SLM_ASSERT(qPrintable(m_component->errorString()), m_component->isReady());
 }
@@ -36,3 +40,6 @@ void	fwGuiQt::QtQmlEngine::launch()
 fwGuiQt::QtQmlEngine::~QtQmlEngine()
 {
 }
+
+} // fwGuiQt
+

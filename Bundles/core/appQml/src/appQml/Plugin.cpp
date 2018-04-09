@@ -11,6 +11,8 @@
 #include <fwServices/registry/AppConfig.hpp>
 #include <fwServices/registry/AppConfigParameters.hpp>
 
+#include <fwGuiQt/QtQmlEngine.hpp>
+
 namespace appQml
 {
 
@@ -50,8 +52,10 @@ void Plugin::initialize()
     SLM_ASSERT("The OSR is already initialized.", !m_appConfigMng );
     SLM_ASSERT("The configuration name parameter is not initialized.", !m_configurationName.empty());
 
+    m_qmlEngine = std::shared_ptr<::fwServices::IQmlEngine>(new ::fwGuiQt::QtQmlEngine());
     m_appConfigMng = ::fwServices::QmlAppConfigManager::New();
 
+    m_appConfigMng->setEngine(m_qmlEngine);
     if( m_parametersName.empty() )
     {
         const ::fwServices::registry::FieldAdaptorType fields;
