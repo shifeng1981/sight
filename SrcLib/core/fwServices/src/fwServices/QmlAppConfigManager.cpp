@@ -62,7 +62,7 @@ void	fwServices::QmlAppConfigManager::launch()
 	this->startBundle();
 	this->create();
 	this->start();
-	this->stop();
+	this->update();
 }
 
 // -----------------------------------------------------------
@@ -105,6 +105,7 @@ void	fwServices::QmlAppConfigManager::start()
 {
 	SLM_ASSERT("Manager not created", m_state == STATE_CREATED);
 	m_qmlEngine->launch();
+	m_state = STATE_STARTED;
 }
 
 // -----------------------------------------------------------
@@ -118,14 +119,15 @@ void	fwServices::QmlAppConfigManager::update()
 
 void	fwServices::QmlAppConfigManager::stop()
 {
-
+    SLM_ASSERT("Manager is not started, cannot stop.", m_state == STATE_STARTED);
+    m_state = STATE_STOPPED;
 }
 
 // -----------------------------------------------------------
 
 void	fwServices::QmlAppConfigManager::destroy()
 {
-
+    m_state = STATE_DESTROYED;
 }
 
 // -----------------------------------------------------------
