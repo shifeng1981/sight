@@ -162,7 +162,6 @@ void	fwServices::QmlAppConfigManager::loadQMLFile(::fwRuntime::ConfigurationElem
 	{
 		if (elem->getName() == ::fwServices::QmlAppConfigManager::File)
 		{
-			std::cout << "file found <" << elem->getValue() << ">" << std::endl;
 			m_qmlEngine->loadFile(elem->getValue());
 			return ;
 		}
@@ -180,12 +179,12 @@ void	fwServices::QmlAppConfigManager::createContext(::fwRuntime::ConfigurationEl
 		{
 			for (const auto& classElem : elem->getElements())
 			{
-	            SLM_ASSERT("Missing attribute \"uid\".", classElem->hasAttribute("uid"));
+	            SLM_ASSERT("Missing attribute \"uid\".", classElem->hasAttribute("name"));
    	            SLM_ASSERT("Missing attribute \"type\".", classElem->hasAttribute("type"));
-   	            std::string	uid = classElem->getAttributeValue("uid");
+   	            std::string	uid = classElem->getAttributeValue("name");
    	            std::string	cType = classElem->getAttributeValue("type");
 
-   	            std::cout << uid << " " << cType << std::endl;
+   	            m_qmlEngine->addCtx(uid, cType);
 			}
 		}
 	}

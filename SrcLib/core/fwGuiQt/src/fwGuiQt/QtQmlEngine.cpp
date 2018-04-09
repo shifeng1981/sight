@@ -1,17 +1,19 @@
 #include "fwGuiQt/QtQmlEngine.hpp"
+#include "fwGuiQt/QtQmlInstancier.hpp"
 
 #include <QCoreApplication>
 #include <QQuickWindow>
 #include <QFileInfo>
+#include <QQmlContext>
 
 namespace fwGuiQt
 {
 
-fwGuiQt::QtQmlEngine::QtQmlEngine()
+QtQmlEngine::QtQmlEngine()
 {
 }
 
-void	fwGuiQt::QtQmlEngine::loadFile(std::string const& scriptFile)
+void	QtQmlEngine::loadFile(std::string const& scriptFile)
 {
 	m_scriptFile = scriptFile;
 	m_component = std::unique_ptr<QQmlComponent>(new QQmlComponent(this));
@@ -23,7 +25,7 @@ void	fwGuiQt::QtQmlEngine::loadFile(std::string const& scriptFile)
 	SLM_ASSERT(qPrintable(m_component->errorString()), m_component->isReady());
 }
 
-void	fwGuiQt::QtQmlEngine::launch()
+void	QtQmlEngine::launch()
 {
 	// Create QQuickWindow
 	QObject	*topLevel = m_component->create();
@@ -37,7 +39,17 @@ void	fwGuiQt::QtQmlEngine::launch()
 	window->show();
 }
 
-fwGuiQt::QtQmlEngine::~QtQmlEngine()
+void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
+{
+	std::cout << "Ctx : " << type << std::endl;
+	QObject *ctxElem = QtQmlInstancier::instanciate(type);
+
+	SLM_ASSERT("Class not found : " + type, ctxElem != nullptr);
+	std::cout << uid << ":" << ctxElem << std::endl;
+	rootContext()->setContextProperty(QString::fromStdString(uid), ctxElem);
+}
+
+QtQmlEngine::~QtQmlEngine()
 {
 }
 

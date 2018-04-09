@@ -4,10 +4,12 @@
 
 #include <fwServices/IQmlEngine.hpp>
 
-#include <QQmlEngine>
+#include <QQmlApplicationEngine>
 #include <QQmlComponent>
+#include <QObject>
 
 #include <memory>
+#include <vector>
 
 namespace fwGuiQt
 {
@@ -16,7 +18,7 @@ namespace fwGuiQt
 	 *	@brief: The purpose is to load `scriptFile`.qml and display it
 	 *
 	 */
-class FWGUIQT_CLASS_API QtQmlEngine : public ::fwServices::IQmlEngine, public QQmlEngine
+class FWGUIQT_CLASS_API QtQmlEngine : public ::fwServices::IQmlEngine, public QQmlApplicationEngine
 {
 
 public:
@@ -33,9 +35,17 @@ public:
 	 */
 	void	launch();
 
+	/**
+	 * @brief: This function will instanciate a class derived of QObject
+	 * @uid: Name of the context (to be used in QML)
+	 * @type: Class name
+	 */
+	virtual void FWSERVICES_API 	addCtx(std::string const& uid, std::string const& type);
+
 private:
 	std::string	m_scriptFile;
 	std::unique_ptr<QQmlComponent>	m_component;
+	std::vector<std::unique_ptr<QObject> >	m_context;
 };
 
 } // fwGuiQt
