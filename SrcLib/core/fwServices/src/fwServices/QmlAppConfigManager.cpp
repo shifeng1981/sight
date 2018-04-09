@@ -90,8 +90,8 @@ void	fwServices::QmlAppConfigManager::create()
 	{
 		if (elem->getName() == ::fwServices::QmlAppConfigManager::QmlEntryPoint)
 		{
-			this->loadQMLFile(elem);
 			this->createContext(elem);
+			this->loadQMLFile(elem);
 			qmlFound = true;
 		}
 	}

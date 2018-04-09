@@ -40,5 +40,10 @@ ApplicationWindow {
                 }
             }            
         }
+        Component.onCompleted: {
+            QMLObjectName.onSend.connect(function(value) {
+                console.log("received from C++ : " + value);
+            });            
+        }
     }
 }
