@@ -31,9 +31,11 @@ ApplicationWindow {
                 anchors.fill: parent
                 hoverEnabled: true
                 onEntered: {
+                    container.color = "#208080"
                     QMLObjectName.in()
                 }
                 onExited: {
+                    container.color = "#204040"
                     QMLObjectName.out()
                 }
             }            
