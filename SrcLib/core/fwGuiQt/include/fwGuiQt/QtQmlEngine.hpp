@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QObject>
+#include <QQuickWindow>
 
 #include <memory>
 #include <vector>
@@ -20,10 +21,14 @@ namespace fwGuiQt
 	 */
 class FWGUIQT_CLASS_API QtQmlEngine : public ::fwServices::IQmlEngine, public QQmlApplicationEngine
 {
+private:
+	static QtQmlEngine	*m_qtQmlEngine;
 
 public:
 	FWGUIQT_API QtQmlEngine();
 	~QtQmlEngine();
+
+	static QtQmlEngine&	getEngine();
 	
 	/**
 	 *	@brief: This function load file specified by scriptFile
@@ -36,6 +41,11 @@ public:
 	void	launch();
 
 	/**
+	 *	@brief: return root window
+	 */
+	QQuickWindow	*getWindow() const;
+
+	/**
 	 * @brief: This function will instanciate a class derived of QObject
 	 * @uid: Name of the context (to be used in QML)
 	 * @type: Class name
@@ -46,6 +56,7 @@ private:
 	std::string	m_scriptFile;
 	std::unique_ptr<QQmlComponent>	m_component;
 	std::vector<std::unique_ptr<QObject> >	m_context;
+	QQuickWindow	*m_rootWindow;
 };
 
 } // fwGuiQt

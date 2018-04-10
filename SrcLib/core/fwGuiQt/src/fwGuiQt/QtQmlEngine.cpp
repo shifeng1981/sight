@@ -9,8 +9,16 @@
 namespace fwGuiQt
 {
 
+QtQmlEngine	*QtQmlEngine::m_qtQmlEngine = nullptr;
+
 QtQmlEngine::QtQmlEngine()
 {
+	m_qtQmlEngine = this;
+}
+
+QtQmlEngine&	QtQmlEngine::getEngine()
+{
+	return *m_qtQmlEngine;
 }
 
 void	QtQmlEngine::loadFile(std::string const& scriptFile)
@@ -29,24 +37,28 @@ void	QtQmlEngine::launch()
 {
 	// Create QQuickWindow
 	QObject	*topLevel = m_component->create();
-	QQuickWindow	*window = qobject_cast<QQuickWindow *>(topLevel);
+	m_rootWindow = qobject_cast<QQuickWindow *>(topLevel);
 
 	// Get window dimension (suggested by QML file)
-	QSurfaceFormat surfaceFormat = window->requestedFormat();
-	window->setFormat(surfaceFormat);
+	QSurfaceFormat surfaceFormat = m_rootWindow->requestedFormat();
+	m_rootWindow->setFormat(surfaceFormat);
 
 	//Display window
-	window->show();
+	m_rootWindow->show();
 }
 
 void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
 {
-	std::cout << "Ctx : " << type << std::endl;
 	QObject *ctxElem = QtQmlInstancier::instanciate(type);
 
 	SLM_ASSERT("Class not found : " + type, ctxElem != nullptr);
 	std::cout << uid << ":" << ctxElem << std::endl;
 	rootContext()->setContextProperty(QString::fromStdString(uid), ctxElem);
+}
+
+QQuickWindow	*QtQmlEngine::getWindow() const
+{
+	return m_rootWindow;
 }
 
 QtQmlEngine::~QtQmlEngine()
