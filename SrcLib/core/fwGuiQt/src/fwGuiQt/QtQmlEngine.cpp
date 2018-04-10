@@ -52,7 +52,6 @@ void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
 	QObject *ctxElem = QtQmlInstancier::instanciate(type);
 
 	SLM_ASSERT("Class not found : " + type, ctxElem != nullptr);
-	std::cout << uid << ":" << ctxElem << std::endl;
 	rootContext()->setContextProperty(QString::fromStdString(uid), ctxElem);
 }
 
