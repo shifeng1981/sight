@@ -23,10 +23,11 @@ ApplicationWindow {
             height: 400
             color: "#204040"
             Text {
-                width: parent.width
+                width: container.width
                 text: "Une app en QML"
                 color: "#FFFFFF"
                 horizontalAlignment: Text.AlignCenter
+                clip: true
             }
             MouseArea {
                 anchors.fill: parent
@@ -46,7 +47,11 @@ ApplicationWindow {
         }
         Component.onCompleted: {
             testId.onSend.connect(function(value) {
-                console.log("received from C++ : " + value);
+                container.width = 300 - value
+                container.height = 400 - value
+                if (value > 10) {
+                    console.log("received from C++ : " + value);                    
+                }
             });            
         }
     }

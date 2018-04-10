@@ -10,10 +10,18 @@
 namespace fwGuiQt
 {
 
+/**
+ *	@brief: Registration class
+ *		This class a new type based on typename T and cType.
+ *		Then store it in QtQmlInstancier
+ */
 template<typename T>
 class QtQmlRegistar
 {
 public:
+	/**
+	 * @brief: Constructor
+	 */
 	QtQmlRegistar(std::string const& cType)
 	{
 		std::shared_ptr<QtQmlObject<T>>	qtObject(new QtQmlObject<T>(cType));
@@ -21,6 +29,9 @@ public:
 		QtQmlInstancier::addClass(qtObject);
 	}
 
+	/**
+	 *	@brief: Destructor
+	 */
 	~QtQmlRegistar()
 	{
 	}

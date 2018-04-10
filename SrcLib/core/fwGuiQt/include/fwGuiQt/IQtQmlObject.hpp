@@ -13,7 +13,14 @@ public:
 	IQtQmlObject(std::string const& cType);
 	virtual ~IQtQmlObject();
 
+	/**
+	 *	@brief: This method create a new object derived of QObject
+	 */
 	virtual QObject *instanciate() const = 0;
+
+	/**
+	 *	@brief: This method return the classType
+	 */
 	std::string const&	getClassType() const;
 
 private:
