@@ -19,7 +19,6 @@ std::string	fwServices::QmlAppConfigManager::Class = "class";
 fwServices::QmlAppConfigManager::QmlAppConfigManager() :
 	m_isUnitTest(false)
 {
-	std::cout << "/!\\ Using QmlAppConfigManager" << std::endl;
 }
 
 // -----------------------------------------------------------

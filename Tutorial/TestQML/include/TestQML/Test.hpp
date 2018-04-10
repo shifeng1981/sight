@@ -2,6 +2,7 @@
 
 #include <fwGuiQt/QtQmlRegistar.hxx>
 #include <fwGuiQt/QtQmlType.hxx>
+#include <fwGuiQt/QtQmlHelper.hpp>
 
 #include <iostream>
 
@@ -18,8 +19,11 @@ public:
 	
 	Q_INVOKABLE void	in()
 	{
-		m_count += 1;
+		//m_count += 1;
 		std::cout << "Controller IN" << std::endl;
+		QObject *container = fwGuiQt::QtQmlHelper::getObjectByName("container");
+
+		container->setProperty("visible", !container->property("visible").value<bool>());
 		send(m_count);
 	}
 

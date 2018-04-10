@@ -24,7 +24,6 @@ Plugin::Plugin() noexcept :
     m_configurationName(""),
     m_parametersName("")
 {
-    std::cout << "/!\\ Experimental QML app is currently used" << std::endl;
 }
 
 //------------------------------------------------------------------------------

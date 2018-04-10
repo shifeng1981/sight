@@ -18,6 +18,7 @@ ApplicationWindow {
             event.accepted = true
         }
         Rectangle {
+            objectName: "container"
             id: container
             width: 300
             height: 400
