@@ -2,6 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.0
+import com.wurmel.io 1
 
 ApplicationWindow {
     id: mainWindow
@@ -12,7 +13,7 @@ ApplicationWindow {
         height: 600
         focus: true
         Keys.onEscapePressed: {
-            QMLObjectName.exiting()
+            testId.exiting()
             Qt.quit()
             event.accepted = true
         }
@@ -32,16 +33,19 @@ ApplicationWindow {
                 hoverEnabled: true
                 onEntered: {
                     container.color = "#208080"
-                    QMLObjectName.in()
+                    testId.in()
                 }
                 onExited: {
                     container.color = "#204040"
-                    QMLObjectName.out()
+                    testId.out()
                 }
             }            
         }
+        Test {
+            id: testId
+        }
         Component.onCompleted: {
-            QMLObjectName.onSend.connect(function(value) {
+            testId.onSend.connect(function(value) {
                 console.log("received from C++ : " + value);
             });            
         }

@@ -14,10 +14,9 @@
         <config>
             <qml>
                 <file>share/TutoQML-0.1/app.qml</file>
-                <ctx>
+                <!--<ctx>
                     <class name="QMLObjectName" type="::test"/>
-                <!-- To be continued... -->
-                </ctx>
+                </ctx>-->
             </qml>
         </config>
     </extension>

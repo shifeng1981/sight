@@ -1,7 +1,11 @@
-#include <fwGuiQt/QtQmlRegistar.hxx>
-#include <iostream>
-#include <QObject>
 #include "TestQML/config.hpp"
+
+#include <fwGuiQt/QtQmlRegistar.hxx>
+#include <fwGuiQt/QtQmlType.hxx>
+
+#include <iostream>
+
+#include <QObject>
 
 
 class Test : public QObject 
@@ -37,4 +41,5 @@ public:
 		int	m_count;
 
 	static fwGuiQt::QtQmlRegistar<Test>	registar;
+	static fwGuiQt::QtQmlType<Test>	type;
 };
