@@ -56,7 +56,7 @@ namespace fwServices
 
   	   /**
   	    * @brief Load QML file
-  	    * @note Assert if the file in not founded
+        * @note Assert if the file is not found
   	    */
   	    FWSERVICES_API void	loadQMLFile(::fwRuntime::ConfigurationElement::csptr const&);
 
