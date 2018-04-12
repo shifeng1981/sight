@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -118,167 +118,203 @@ void WorkerTest::basicTest()
 
 void WorkerTest::timerTest()
 {
-    ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
-
-    TestHandler handler;
-    handler.setWorkerId(worker->getThreadId());
-
-    ::fwThread::Timer::sptr timer = worker->createTimer();
-
-    std::chrono::milliseconds duration = std::chrono::milliseconds(100);
-
-    timer->setFunction( std::bind( &TestHandler::nextStepNoSleep, &handler) );
-    timer->setDuration(duration);
-
-    CPPUNIT_ASSERT(!timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
-
-    timer->start();
-
-    CPPUNIT_ASSERT(timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
-
-    std::this_thread::sleep_for( duration/10. );
-
-    for (int i = 1; i < 50; ++i)
+    //Basic tests
     {
-        std::this_thread::sleep_for( duration );
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
 
-        CPPUNIT_ASSERT(timer->isRunning());
-        CPPUNIT_ASSERT(handler.m_threadCheckOk);
-        CPPUNIT_ASSERT_EQUAL(i, handler.m_step);
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
 
-    }
-
-    timer->stop();
-
-    std::this_thread::sleep_for( duration*3 );
-
-    CPPUNIT_ASSERT(!timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(49, handler.m_step);
-
-    // test start after stop
-    handler.m_step = 0;
-
-    timer->start();
-
-    CPPUNIT_ASSERT(timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
-
-    std::this_thread::sleep_for( duration/10. );
-
-    for (int i = 1; i < 50; ++i)
-    {
-        std::this_thread::sleep_for( duration );
-
-        CPPUNIT_ASSERT(timer->isRunning());
-        CPPUNIT_ASSERT(handler.m_threadCheckOk);
-        CPPUNIT_ASSERT_EQUAL(i, handler.m_step);
-
-    }
-
-    timer->stop();
-
-    std::this_thread::sleep_for( duration*3 );
-
-    CPPUNIT_ASSERT(!timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(49, handler.m_step);
-
-    // change timer duration on the fly
-    // change timer duration
-    handler.m_step = 0;
-
-    timer->start();
-
-    CPPUNIT_ASSERT(timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
-
-    std::this_thread::sleep_for( duration/10. );
-
-    for (int i = 1; i < 25; ++i)
-    {
-        std::this_thread::sleep_for( duration );
-
-        CPPUNIT_ASSERT(timer->isRunning());
-        CPPUNIT_ASSERT(handler.m_threadCheckOk);
-        CPPUNIT_ASSERT_EQUAL(i, handler.m_step);
-
-    }
-
-    duration = std::chrono::milliseconds(50);
-    timer->setDuration(duration);
-
-    for (int i = 24; i < 50; ++i)
-    {
-        std::this_thread::sleep_for( duration );
-
-        CPPUNIT_ASSERT(timer->isRunning());
-        CPPUNIT_ASSERT(handler.m_threadCheckOk);
-        CPPUNIT_ASSERT_EQUAL(i, handler.m_step);
-
-    }
-
-    timer->stop();
-
-    std::this_thread::sleep_for( duration*3 );
-
-    CPPUNIT_ASSERT(!timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(49, handler.m_step);
-
-    // one shot test
-    handler.m_step = 0;
-
-    duration = std::chrono::milliseconds(10);
-    timer->setDuration(duration);
-    timer->setOneShot(true);
-
-    timer->start();
-
-    CPPUNIT_ASSERT(timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
-
-    std::this_thread::sleep_for( duration*10 );
-
-    CPPUNIT_ASSERT(!timer->isRunning());
-    CPPUNIT_ASSERT(handler.m_threadCheckOk);
-    CPPUNIT_ASSERT_EQUAL(1, handler.m_step);
-
-    // This test was added to reproduce a bug that is now fixed
-    // The timer could be deleted before the call back is over
-    // To reproduce that issue, we need to ensure that the callee access the memory in the bounds of the timer
-    // at the end of the callback
-    // We could not derive easily from WorkerAsio to create the conditions of the crash, but you can modify it
-    // if necessary to reproduce. It is quite hard to achieve since it depends on the actual runtime memory layout
-    // - Declare a new *last* member in WorkerAsio -> int64_t m_checkMemory;
-    // - Initialize it to 12345 in the constructor
-    // - Assert that m_checkMemory==12345 in TimerAsio::call() at the end of the if
-    // - You may need to uncomment the tests above
-    {
         ::fwThread::Timer::sptr timer = worker->createTimer();
-        duration                      = std::chrono::milliseconds(10);
-        timer->setFunction( [duration]()
-                {
-                    std::this_thread::sleep_for( duration*90 );
-                } );
 
-        timer->setDuration(duration);
+        timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+        timer->setDuration(std::chrono::milliseconds(100));
 
         timer->start();
-        std::this_thread::sleep_for( duration * 2 );
+        {
+            CPPUNIT_ASSERT(timer->isRunning());
+            CPPUNIT_ASSERT(handler.m_threadCheckOk);
+            std::this_thread::sleep_for(std::chrono::milliseconds(250));
+        }
         timer->stop();
 
-        timer.reset();
+        CPPUNIT_ASSERT_EQUAL(2, handler.m_step);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+
+        worker->stop();
     }
 
-    worker->stop();
+    //Test the timer when we used a function which has it time duration longer than the timer's call duration.
+    //The timer mustn't call the function until the last call has finished.
+    /*
+     * It mustn't do that (values in milliseconds) :
+     *  10     50
+     * |--|----------|
+     *    |10    50
+     *    |--|----------|
+     *       |10    50
+     *       |--|----------|
+     *
+     * But that instead :
+     *  10     50     0    50      0     50
+     * |--|----------|-|----------|-|----------|
+     */
+    {
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
+
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
+
+        ::fwThread::Timer::sptr timer = worker->createTimer();
+
+        timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+        timer->setDuration(std::chrono::milliseconds(10));
+
+        timer->start();
+        {
+            CPPUNIT_ASSERT(timer->isRunning());
+            CPPUNIT_ASSERT(handler.m_threadCheckOk);
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        timer->stop();
+
+        CPPUNIT_ASSERT_EQUAL(2, handler.m_step);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+
+        worker->stop();
+    }
+
+    // Test for "stop()" blocking until call has finished it's execution
+    {
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
+
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
+
+        ::fwThread::Timer::sptr timer = worker->createTimer();
+
+        timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+        timer->setDuration(std::chrono::milliseconds(10));
+
+        timer->start();
+        {
+            CPPUNIT_ASSERT(timer->isRunning());
+            CPPUNIT_ASSERT(handler.m_threadCheckOk);
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
+        timer->stop();
+
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+
+        int step = handler.m_step;
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        CPPUNIT_ASSERT_EQUAL(step, handler.m_step);
+
+        worker->stop();
+    }
+
+    /// Test for multiple start, stop
+    {
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
+
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
+
+        ::fwThread::Timer::sptr timer = worker->createTimer();
+
+        timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+        timer->setDuration(std::chrono::milliseconds(10));
+
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        timer->start();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(timer->isRunning());
+        timer->start();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(timer->isRunning());
+        timer->start();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(timer->isRunning());
+        timer->start();
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+        timer->stop();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        timer->stop();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        timer->stop();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        timer->stop();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+
+        CPPUNIT_ASSERT_EQUAL(2, handler.m_step);
+
+        worker->stop();
+    }
+
+    /// Test for instant stop
+    {
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
+
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
+
+        ::fwThread::Timer::sptr timer = worker->createTimer();
+
+        timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+        timer->setDuration(std::chrono::milliseconds(10));
+
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+        timer->start();
+        timer->stop();
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT(!timer->isRunning());
+
+        CPPUNIT_ASSERT_EQUAL(0, handler.m_step);
+
+        worker->stop();
+    }
+
+    /// Test when delete timer during execution
+    {
+        ::fwThread::Worker::sptr worker = ::fwThread::Worker::New();
+
+        TestHandler handler;
+        handler.setWorkerId(worker->getThreadId());
+
+        {
+            ::fwThread::Timer::sptr timer = worker->createTimer();
+
+            timer->setFunction( std::bind( &TestHandler::nextStep, &handler) );
+            timer->setDuration(std::chrono::milliseconds(10));
+
+            CPPUNIT_ASSERT(handler.m_threadCheckOk);
+            CPPUNIT_ASSERT(!timer->isRunning());
+            timer->start();
+            CPPUNIT_ASSERT(handler.m_threadCheckOk);
+            CPPUNIT_ASSERT(timer->isRunning());
+            std::this_thread::sleep_for(std::chrono::milliseconds(70));
+        }
+
+        CPPUNIT_ASSERT(handler.m_threadCheckOk);
+        CPPUNIT_ASSERT_EQUAL(1, handler.m_step);
+
+        worker->stop();
+    }
 }
 
 //-----------------------------------------------------------------------------

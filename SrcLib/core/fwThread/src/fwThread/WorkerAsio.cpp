@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -11,6 +11,7 @@
 
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/io_service.hpp>
+#include <boost/thread/condition_variable.hpp>
 
 namespace fwThread
 {
@@ -139,6 +140,9 @@ protected:
 
     /// Timer's state.
     bool m_running;
+
+    bool m_wait;
+    ::boost::condition_variable m_cond;
 };
 
 //------------------------------------------------------------------------------
@@ -224,12 +228,14 @@ TimerAsio::TimerAsio(::boost::asio::io_service& ioSrv) :
     m_timer(ioSrv),
     m_duration(std::chrono::seconds(1)),
     m_oneShot(false),
-    m_running(false)
+    m_running(false),
+    m_wait(false)
 {
 }
 
 TimerAsio::~TimerAsio()
 {
+    stop();
 }
 
 //------------------------------------------------------------------------------
@@ -245,8 +251,11 @@ void TimerAsio::setDuration(TimeDurationType duration)
 void TimerAsio::start()
 {
     ::fwCore::mt::ScopedLock lock(m_mutex);
-    this->rearmNoLock(m_duration);
-    m_running = true;
+    if (!m_running )
+    {
+        this->rearmNoLock(m_duration);
+        m_running = true;
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -258,6 +267,11 @@ void TimerAsio::stop()
     {
         m_running = false;
         this->cancelNoLock();
+        while(m_wait)
+        {
+            m_cond.wait(lock);
+        }
+
     }
 }
 
@@ -278,6 +292,10 @@ void TimerAsio::call(const ::boost::system::error_code& error)
 {
     if(!error)
     {
+        {
+            ::fwCore::mt::ScopedLock lock(m_mutex);
+            m_wait = true;
+        }
         // We keep a reference to prevent a deletion of the Timer before the call back is over
         // This means the timer may delete itself, this is not awesome but that seems to be enough for now
         TimerAsio::sptr deleteLater = std::dynamic_pointer_cast<TimerAsio>(shared_from_this());
@@ -292,8 +310,31 @@ void TimerAsio::call(const ::boost::system::error_code& error)
 
         if (!oneShot)
         {
-            this->rearmNoLock(duration);
-            m_function();
+            const std::chrono::time_point<std::chrono::system_clock> begin = std::chrono::system_clock::now();
+            {
+                m_function();
+            }
+            const std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
+
+            const TimeDurationType elapsedTime   = std::chrono::duration_cast<TimeDurationType>(end - begin);
+            const TimeDurationType remainingTime = duration-elapsedTime;
+
+            OSLM_WARN_IF("Duration : " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count()
+                                       << " milliseconds.\nFunction elapsed time : "
+                                       << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
+                                       << " milliseconds.\nNew duration time : "
+                                       << std::chrono::duration_cast<std::chrono::milliseconds>(remainingTime).count()
+                                       << " milliseconds.\nThe new duration will be 0"
+                                       << " and doesn't respect the request duration.", remainingTime.count() < 0);
+
+            {
+                ::fwCore::mt::ScopedLock lock(m_mutex);
+                if(m_running)
+                {
+                    remainingTime.count() < 0 ?
+                    this->rearmNoLock(TimeDurationType(0)) : this->rearmNoLock(remainingTime);
+                }
+            }
         }
         else
         {
@@ -301,8 +342,12 @@ void TimerAsio::call(const ::boost::system::error_code& error)
             ::fwCore::mt::ScopedLock lock(m_mutex);
             m_running = false;
         }
+        {
+            ::fwCore::mt::ScopedLock lock(m_mutex);
+            m_wait = false;
+            m_cond.notify_one();
+        }
     }
-
 }
 
 //------------------------------------------------------------------------------
@@ -313,4 +358,3 @@ void TimerAsio::cancelNoLock()
 }
 
 } //namespace fwThread
-

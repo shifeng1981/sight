@@ -25,12 +25,10 @@ namespace fwThread
 
 /**
  * @brief   This class creates and manages a pool of threads which process tasks.
- *
- * The purpose of this class is to provide a set of threads that can be used to process tasks asynchronously.
- *
  */
 class FWTHREAD_CLASS_API Pool
 {
+
 public:
     typedef std::shared_ptr<Pool> sptr;
 
