@@ -13,7 +13,7 @@
         <id>tutoBasicConfig</id><!-- identifier of the configuration -->
         <config>
             <qml>
-                <file>share/TutoQML-0.1/app.qml</file>
+                <file>share/TutoQML-@PROJECT_VERSION@/app.qml</file>
                 <!--<ctx>
                     <class name="QMLObjectName" type="::test"/>
                 </ctx>-->

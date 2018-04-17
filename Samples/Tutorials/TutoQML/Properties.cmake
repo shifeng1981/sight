@@ -15,6 +15,7 @@ set( REQUIREMENTS # The bundles used by this application
     fwGuiQt
     appQml
     TestQML
+    SBoolTest
     )
 
 # Set the configuration to use : 'tutoBasicConfig'
