@@ -1,0 +1,14 @@
+rc/test.qml
+CMakeLists.txt
+Properties.cmake
+rc/ToolBarSeparator.qml
+rc/View.qml
+rc/app.qml
+rc/icons/important.png
+rc/icons/monkey.png
+rc/icons/pause.svg
+rc/icons/start.svg
+rc/icons/stop.svg
+rc/icons/system.png
+rc/icons/unreadable.png
+rc/plugin.xml

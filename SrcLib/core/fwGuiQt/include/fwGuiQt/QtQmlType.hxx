@@ -4,6 +4,8 @@
 
 #include <QQmlEngine>
 
+#include <iostream>
+
 namespace fwGuiQt
 {
 
@@ -24,13 +26,18 @@ public:
 		qmlRegisterType<Type>(packageName.c_str(), versionMajor, versionMinor, objectName.c_str());
 	}
 
+	FWGUIQT_API QtQmlType(std::string const& typeName)
+    	{
+        	qmlRegisterInterface<Type>(typeName.c_str());
+	}
+
 	/**
 	 *	@brief: destructor, do nothing.
 	 */
 	FWGUIQT_API ~QtQmlType()
 	{
 	}
-	
+
 };
 
 } // fwGuiQt

@@ -1,13 +1,17 @@
 #include "fwGuiQt/QtQmlEngine.hpp"
 #include "fwGuiQt/QtQmlInstancier.hpp"
+#include "fwGuiQt/QtQmlType.hxx"
 
 #include <QCoreApplication>
 #include <QQuickWindow>
 #include <QFileInfo>
 #include <QQmlContext>
+#include <QVBoxLayout>
 
 namespace fwGuiQt
 {
+
+static QtQmlType<QVBoxLayout>    registar("com.fw4spl", 1, 0,  "QVBoxLayout");
 
 QtQmlEngine	*QtQmlEngine::m_qtQmlEngine = nullptr;
 
@@ -23,28 +27,22 @@ QtQmlEngine&	QtQmlEngine::getEngine()
 
 void	QtQmlEngine::loadFile(std::string const& scriptFile)
 {
-	m_scriptFile = scriptFile;
-	m_component = std::unique_ptr<QQmlComponent>(new QQmlComponent(this));
+    m_scriptFile = scriptFile;
+    m_rootWindow = new QQuickWidget;
 
-	QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
+    QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
-	m_component->loadUrl(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
+    m_rootWindow->setSource(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
 
-	SLM_ASSERT(qPrintable(m_component->errorString()), m_component->isReady());
 }
 
 void	QtQmlEngine::launch()
 {
-	// Create QQuickWindow
-	QObject	*topLevel = m_component->create();
-	m_rootWindow = qobject_cast<QQuickWindow *>(topLevel);
+    // Get window dimension (suggested by QML file)
+    m_rootWindow->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
-	// Get window dimension (suggested by QML file)
-	QSurfaceFormat surfaceFormat = m_rootWindow->requestedFormat();
-	m_rootWindow->setFormat(surfaceFormat);
-
-	//Display window
-	m_rootWindow->show();
+    //Display window
+    m_rootWindow->show();
 }
 
 void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
@@ -55,7 +53,7 @@ void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
 	rootContext()->setContextProperty(QString::fromStdString(uid), ctxElem);
 }
 
-QQuickWindow	*QtQmlEngine::getWindow() const
+QQuickWidget	*QtQmlEngine::getWindow() const
 {
 	return m_rootWindow;
 }

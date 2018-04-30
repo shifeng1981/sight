@@ -34,8 +34,8 @@ Plugin::Plugin() noexcept
                 "It could also happen for generated 'profile.xml' files, check it to be sure.",
                 qApp == nullptr );
 
-    vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(0);
-    QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());
+/*    vtkOpenGLRenderWindow::SetGlobalMaximumNumberOfMultiSamples(0);
+    QSurfaceFormat::setDefaultFormat(QVTKOpenGLWidget::defaultFormat());*/
 }
 
 //-----------------------------------------------------------------------------

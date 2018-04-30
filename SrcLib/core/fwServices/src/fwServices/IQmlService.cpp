@@ -13,28 +13,45 @@ IQmlService::~IQmlService()
 
 void	IQmlService::start()
 {
-	// Connect in/out method
-	connect(this, SIGNAL(inSet()), this, SLOT(inChange()));
-	connect(this, SIGNAL(outSet()), this, SLOT(outChange()));
 	m_serviceState = STARTED;
+    this->starting();
 	emit started();
 }
 
 void	IQmlService::update()
 {
+    this->updating();
 	emit updated();
+}
+
+void    IQmlService::configure()
+{
+    if (m_configurationState == NOT_CONFIGURED)
+    {
+        try {
+            this->configuring();
+        }
+        catch (std::exception& e) {
+            SLM_ERROR(std::string("Error while configuring service: '") + e.what());
+        }
+    }
+    else {
+        this->reconfiguring();
+    }
 }
 
 void	IQmlService::stop()
 {
 	SLM_ASSERT("Service isn't running", m_serviceState == STARTED);
 	m_serviceState = STOPPED;
+    this->stopping();
 	emit stopped();
 }
 
 void	IQmlService::destroy()
 {
 	m_serviceState = DESTROYED;
+    this->destroying();
 	emit destroyed();
 }
 

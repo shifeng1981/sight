@@ -25,7 +25,6 @@ public:
 	QtQmlRegistar(std::string const& cType)
 	{
 		std::shared_ptr<QtQmlObject<T>>	qtObject(new QtQmlObject<T>(cType));
-
 		QtQmlInstancier::addClass(qtObject);
 	}
 

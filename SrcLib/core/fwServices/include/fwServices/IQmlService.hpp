@@ -15,12 +15,6 @@ class FWSERVICES_CLASS_API IQmlService : public QObject
 {
 	Q_OBJECT
 
-	/**
-	 * QML expose in/out
-	 */
-	Q_PROPERTY(bool in MEMBER m_dataIn NOTIFY inSet);
-	Q_PROPERTY(bool out MEMBER m_dataOut NOTIFY outSet);
-
 public:
 	enum ServiceState
 	{
@@ -28,6 +22,12 @@ public:
 		STOPPED = 1,
 		DESTROYED = 2
 	};
+
+    enum ConfigurationState
+    {
+        NOT_CONFIGURED = 0,
+        CONFIGURED = 1
+    };
 
 public:
 	// Ctor, do nothing
@@ -37,6 +37,32 @@ public:
 
 
 	ServiceState 	getState() const;
+
+    /**
+     *  @brief: This function must be override by children. It's called after a start()
+     */
+    virtual void FWSERVICES_API starting() = 0;
+    /**
+     *  @brief: This function must be override by children. It's called after a stop()
+     */
+    virtual void FWSERVICES_API stopping() = 0;
+    /**
+     *  @brief: This function must be override by children. It's called after a update()
+     */
+    virtual void FWSERVICES_API updating() = 0;
+    /**
+     *  @brief: This function must be override by children. It's called after a destroy()
+     */
+    virtual void FWSERVICES_API destroying() = 0;
+    /**
+     *  @brief: This function must be override by children. It's called after a configure()
+     */
+    virtual void FWSERVICES_API configuring() = 0;
+    /**
+     *  @brief: This function must be override by children. It's called after a reconfigure()
+     */
+    virtual void FWSERVICES_API reconfiguring() = 0;
+
 	
 	/**
 	 *	@brief: Q_SLOTS functions list, that handle run/stop/destroy service
@@ -47,32 +73,28 @@ public Q_SLOTS:
 	 *	This function must be call from subclasses
 	 *	@post: emit started
 	 */
-	virtual void FWSERVICES_API	start();
+    void FWSERVICES_API	start();
 	/**
 	 *	@brief: stop the service
 	 *	@post: emit stopped
 	 */
-	virtual void FWSERVICES_API	stop();
+    void FWSERVICES_API	stop();
 	/**
 	 *	@brief: release service data (thread, etc.)
 	 *	@post: emit destroyed()
 	 */
-	virtual void FWSERVICES_API	destroy();
+    void FWSERVICES_API	destroy();
 	/**
 	 *	@brief: call to update service data
 	 *	@post: emit updated() for service chain
 	 */
-	virtual void FWSERVICES_API update();
+    void FWSERVICES_API update();
+    /**
+     *  @brief: Used to configure service
+     *  Call "configuring" or "reconfiguring" function depend of current configuration state
+     */
+    void FWSERVICES_API configure();
 
-private Q_SLOTS:
-	/**
-	 *	@brief: Slot will link to signal Data::changed() and inSet()
-	 */
-	virtual void FWSERVICES_API inChange() = 0;
-	/**
-	 *	@brief: Slot will link to outSet
-	 */
-	virtual void FWSERVICES_API outChange() = 0;
 
 Q_SIGNALS:
 	// Extern signals
@@ -81,14 +103,9 @@ Q_SIGNALS:
 	void	stopped();
 	void	destroyed();
 
-	// Intra signals
-	void	inSet();
-	void	outSet();
-
 private:
-	bool	m_dataIn;
-	bool	m_dataOut;
-	ServiceState	m_serviceState;
+    ServiceState	m_serviceState = STOPPED;
+    ConfigurationState  m_configurationState = NOT_CONFIGURED;
 };
 
 } // fwServices

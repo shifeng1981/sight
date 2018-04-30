@@ -17,6 +17,7 @@ set( DEPENDENCIES
     fwThread
     fwJobs
     fwIO
+    fwGuiQt
 )
 set( REQUIREMENTS  )
 

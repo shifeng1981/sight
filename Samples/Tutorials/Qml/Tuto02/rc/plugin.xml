@@ -4,16 +4,20 @@
 
     <!-- The bundles in requirements are automatically started when this 
          Application is launched. -->
+
     <requirement id="dataReg" />
     <requirement id="servicesReg" />
-    <requirement id="servicesReg" />
+    <requirement id="ioVTK" />
+    <requirement id="vtkSimpleNegato"/>
+
+
 
     <!-- Defines the App-config -->
     <extension implements="::fwServices::registry::AppConfig">
         <id>tutoBasicConfig</id><!-- identifier of the configuration -->
         <config>
             <qml>
-                <file>share/TutoQML-@PROJECT_VERSION@/app.qml</file>
+                <file>share/TutoQML-@PROJECT_VERSION@/test.qml</file>
                 <!--<ctx>
                     <class name="QMLObjectName" type="::test"/>
                 </ctx>-->

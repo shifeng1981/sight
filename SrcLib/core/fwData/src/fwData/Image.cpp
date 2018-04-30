@@ -61,6 +61,16 @@ Image::Image(::fwData::Object::Key key) :
     newSignal< TransparencyModifiedSignalType >(s_TRANSPARENCY_MODIFIED_SIG);
 }
 
+Image::Image() :
+    m_type(),
+    m_windowCenter(0.),
+    m_windowWidth(0.),
+    m_numberOfComponents(1),
+    m_dataArray(::fwData::Array::New())
+{
+
+}
+
 //------------------------------------------------------------------------------
 
 Image::~Image() noexcept

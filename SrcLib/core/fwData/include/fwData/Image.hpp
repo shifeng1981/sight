@@ -68,6 +68,8 @@ public:
      */
     FWDATA_API Image(::fwData::Object::Key key);
 
+    FWDATA_API  Image();
+
     /**
      * @brief Destructor
      */

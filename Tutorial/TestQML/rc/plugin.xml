@@ -1,7 +1,0 @@
-<plugin id="TestQML" class="::TestQML::Plugin" version="@PROJECT_VERSION@" >
-
-    <library name="TestQML" />
-    <requirement id="servicesReg" />
-    <requirement id="dataReg" />
-
-</plugin>

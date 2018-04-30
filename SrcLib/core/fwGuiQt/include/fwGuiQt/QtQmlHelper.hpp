@@ -3,7 +3,7 @@
 # include "fwGuiQt/config.hpp"
 
 # include <QObject>
-# include <QQuickWindow>
+# include <QQuickWidget>
 
 namespace fwGuiQt
 {
@@ -22,10 +22,10 @@ public:
 	static QObject FWGUIQT_API	*getObjectByName(std::string const& id);
 
 private:
-	/**
-	 *	@brief: private helper to retrieve the first object of the app i.e the window
+    /**
+     *	@brief: private helper to retrieve the first object of the app i.e the window
 	 */
-	static QQuickWindow FWGUIQT_API	*getRootObject();
+    static QQuickWidget FWGUIQT_API	*getRootObject();
 };
 
 } // fwGuiQt

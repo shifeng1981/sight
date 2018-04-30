@@ -9,13 +9,12 @@ set( REQUIREMENTS # The bundles used by this application
     guiQt
     ioVTK
     uiIO # contains services to show dialogs for reader/writer selection
+    ioVTK
     visuVTKQt
     vtkSimpleNegato
     fwlauncher
     fwGuiQt
     appQml
-    TestQML
-    SBoolTest
     )
 
 # Set the configuration to use : 'tutoBasicConfig'
