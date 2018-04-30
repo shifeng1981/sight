@@ -43,9 +43,17 @@ public:
      * @brief render: perform open GL command
      */
     void FWRENDERVTK_API   render();
+
+    /**
+     * @brief: synchronize m_item when frame is ready
+     */
     virtual void FWRENDERVTK_API synchronize(QQuickFramebufferObject *);
 
 Q_SIGNALS:
+    /**
+     * @brief ready
+     * Emit when frame is ready
+     */
     void    ready();
 
 
@@ -65,22 +73,48 @@ public:
     FWRENDERVTK_API FrameBufferItem();
     FWRENDERVTK_API ~FrameBufferItem();
 
+    /**
+     *  @brief: create a FrameBufferRenderer instance
+     */
     QQuickFramebufferObject::Renderer FWRENDERVTK_API  *createRenderer() const;
+    /**
+     *  @brief: return m_win
+     */
     vtkInternalOpenGLRenderWindow    FWRENDERVTK_API *getRenderWindow() const;
 
+    /**
+     *  @brief: initialize variables
+     */
     void FWRENDERVTK_API initialize();
+
+    /**
+     * @brief getRenderer
+     * @return current renderer
+     */
     vtkSmartPointer<vtkRenderer>    getRenderer() const;
 
 
 protected:
-     bool event(QEvent* evt) Q_DECL_OVERRIDE;
+    /**
+     * Event management
+     * Theses events are transmit to VTK by QVTKAdapter
+     * @{
+     */
+    bool event(QEvent* evt) Q_DECL_OVERRIDE;
 
-     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-     void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-     void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-     void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+
+    /**
+     * }@
+     */
 
 Q_SIGNALS:
+    /**
+     * @brief ready: emit when FrameBufferItem is ready
+     */
     void    ready();
 
 private:
