@@ -171,9 +171,9 @@ public Q_SLOTS:
      */
 protected:
     template<typename T>
-    T const    get(QVariantMap const& target, std::string const& key, T const& defaultValue);
+    T const FWSERVICES_API   get(QVariantMap const& target, std::string const& key, T const& defaultValue);
     template<typename T>
-    T const    get(QVariantMap const& target, std::string const& key);
+    T const  FWSERVICES_API  get(QVariantMap const& target, std::string const& key);
 
 
 
@@ -188,7 +188,7 @@ public:
      *  This object usually is a derived class of "::fwData::Object"
      */
     template<typename T>
-    typename T::sptr     getInOut(const std::string& propertyName) const;
+    typename T::sptr FWSERVICES_API    getInOut(const std::string& propertyName) const;
 
 Q_SIGNALS:
 	// Extern signals
