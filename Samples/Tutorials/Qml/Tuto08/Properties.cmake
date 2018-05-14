@@ -12,7 +12,6 @@ set( REQUIREMENTS # The bundles used by this application
     ioVTK
     visuVTKQt
     visuVTKAdaptor
-    vtkSimpleNegato
     fwlauncher
     fwGuiQt
     appQml

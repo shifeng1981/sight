@@ -64,8 +64,6 @@ const ::fwCom::Slots::SlotKeyType SQRender::s_TOGGLE_AUTO_RENDER_SLOT = "toggleA
 
 static const ::fwServices::IService::KeyType s_OFFSCREEN_INOUT = "offScreen";
 
-static ::fwServices::QtQmlType<SQRender>   registar("com.fw4spl.vtk", 1, 0, "SRender");
-
 //-----------------------------------------------------------------------------
 
 SQRender::SQRender() noexcept :
@@ -106,7 +104,7 @@ void SQRender::configureRenderer( const ConfigType& rendererConf )
 
 //vtk depth peeling not available on android (Offscreen rendering issues)
 #ifndef ANDROID
-        m_renderers[id]->SetUseDepthPeeling( 1  );
+        m_renderers[id]->SetUseDepthPeeling( 1 );
         m_renderers[id]->SetMaximumNumberOfPeels( 8  );
         m_renderers[id]->SetOcclusionRatio( 0. );
 #endif

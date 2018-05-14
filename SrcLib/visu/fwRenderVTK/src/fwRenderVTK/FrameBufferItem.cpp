@@ -25,7 +25,6 @@
 namespace fwRenderVTK
 {
 
-static ::fwServices::QtQmlType<FrameBufferItem>    registar("com.fw4spl.vtk", 1, 0, "FrameBuffer");
 
 FrameBufferRenderer::FrameBufferRenderer(vtkInternalOpenGLRenderWindow *rw, FrameBufferItem const* item) :
     m_vtkRenderWindow(rw),
@@ -51,7 +50,7 @@ QOpenGLFramebufferObject    *FrameBufferRenderer::createFramebufferObject(const 
     QOpenGLFramebufferObjectFormat  format;
 
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-    format.setSamples(4);
+    format.setSamples(0);
 
     m_framebufferObject = new QOpenGLFramebufferObject(size, format);
     m_vtkRenderWindow->setFrameBufferObject(m_framebufferObject);
@@ -89,7 +88,7 @@ FrameBufferItem::FrameBufferItem() :
     m_interactorAdapter(nullptr)
 {
     setMirrorVertically(true);
-    setAcceptTouchEvents(true);
+//    setAcceptTouchEvents(true);
     m_renderer = vtkSmartPointer<vtkRenderer>::New();
     this->setAcceptedMouseButtons(Qt::AllButtons);
     m_win = vtkInternalOpenGLRenderWindow::New();

@@ -31,7 +31,7 @@ namespace fwIO
  * @li Finally we must call stop() before deleting the service
  * @todo ACH : remove some methods : getSupportedExtensions ? getSelectorDialogTitle ?
  */
-class FWIO_CLASS_API IQmlReader : public ::fwServices::IQmlService
+class FWIO_CLASS_QT_API IQmlReader : public ::fwServices::IQmlService
 {
     Q_OBJECT
 
@@ -55,17 +55,17 @@ public:
      * This method is used to find
      * the file path  using a file selector.
      */
-    FWIO_API virtual void configureWithIHM() = 0;
+    FWIO_QT_API virtual void configureWithIHM() = 0;
 
     /**
      * @brief   returns  (filename) extension
      */
-    FWIO_API virtual std::vector< std::string > getSupportedExtensions();
+    FWIO_QT_API virtual std::vector< std::string > getSupportedExtensions();
 
     /**
      * @brief   returns  the title of selector dialog box
      */
-    FWIO_API virtual std::string getSelectorDialogTitle();
+    FWIO_QT_API virtual std::string getSelectorDialogTitle();
 
     /**
      * @brief This method must be implemented by concrete service readers
@@ -75,57 +75,57 @@ public:
      * A reader can support file and folder, or files and folder, but not
      * file and files ( because files include file concept ).
      */
-    FWIO_API virtual ::fwIO::IOPathType getIOPathType() const;
+    FWIO_QT_API virtual ::fwIO::IOPathType getIOPathType() const;
 
     /**
      * @brief Returns the file path set by the user or set during service configuration
      * @pre exception if a file path is not defined  ( m_locations.empty() )
      * @pre exception if service does not support FILE mode
      */
-    FWIO_API const ::boost::filesystem::path& getFile() const;
+    FWIO_QT_API const ::boost::filesystem::path& getFile() const;
 
     /**
      * @brief Sets file path
      * @pre exception if service does not support FILE mode
      */
-    FWIO_API void setFile(const ::boost::filesystem::path& file);
+    FWIO_QT_API void setFile(const ::boost::filesystem::path& file);
 
     /**
      * @brief Returns file paths set by the user or set during service configuration
      * @pre exception if a file path is not defined ( m_locations.empty() )
      * @pre exception if service does not support FILES mode
      */
-    FWIO_API const ::fwIO::LocationsType& getFiles() const;
+    FWIO_QT_API const ::fwIO::LocationsType& getFiles() const;
 
     /**
      * @brief Sets file paths
      * @pre exception if service does not support FILES mode
      */
-    FWIO_API void setFiles(const ::fwIO::LocationsType& files);
+    FWIO_QT_API void setFiles(const ::fwIO::LocationsType& files);
 
     /**
      * @brief Returns folder path set by the user or set during service configuration
      * @pre exception if a folder path is not defined ( m_locations.empty() )
      * @pre exception if service does not support FOLDER mode
      */
-    FWIO_API const ::boost::filesystem::path& getFolder() const;
+    FWIO_QT_API const ::boost::filesystem::path& getFolder() const;
 
     /**
      * @brief Clear any location set by the setFile/setFiles/setFolder setter
      */
-    FWIO_API void clearLocations();
+    FWIO_QT_API void clearLocations();
 
     /**
      * @brief Returns file/files/folder paths set by the user or set during service configuration
      * @pre exception if a file path is not defined ( m_locations.empty() )
      */
-    FWIO_API const ::fwIO::LocationsType& getLocations() const;
+    FWIO_QT_API const ::fwIO::LocationsType& getLocations() const;
 
     /**
      * @brief Sets folder path
      * @pre exception if service does not support FOLDER mode
      */
-    FWIO_API void setFolder(const ::boost::filesystem::path& folder);
+    FWIO_QT_API void setFolder(const ::boost::filesystem::path& folder);
 
     /**
      * @brief Slot: Sets the folder when a path is configured in FILE or FILES mode
@@ -133,18 +133,18 @@ public:
      *
      * @pre exception if service does not support FILE or FILES mode
      */
-    FWIO_API void setFileFolder(::boost::filesystem::path folder);
+    FWIO_QT_API void setFileFolder(::boost::filesystem::path folder);
 
     /// Returns if a location has been defined ( by the configuration process or directly by user )
-    FWIO_API bool hasLocationDefined() const;
+    FWIO_QT_API bool hasLocationDefined() const;
 
     //@}
 
 protected:
 
-    FWIO_API IQmlReader() noexcept;
+    FWIO_QT_API IQmlReader() noexcept;
 
-    FWIO_API virtual ~IQmlReader() noexcept;
+    FWIO_QT_API virtual ~IQmlReader() noexcept;
 
     /**
      * @brief This method proposes to parse xml configuration to retrieve
@@ -199,7 +199,7 @@ protected:
      *  </service>
      * @endcode
      */
-    FWIO_API virtual void configuring() override;
+    FWIO_QT_API virtual void configuring() override;
 
     /**
      * @brief Title of the window that will open when the `configureWithIHM` slot is called
@@ -207,8 +207,8 @@ protected:
     std::string m_windowTitle;
 
 Q_SIGNALS:
-    void    filepathChanged(const QString& newPath);
-    void    readDone();
+    FWIO_QT_API void    filepathChanged(const QString& newPath);
+    FWIO_QT_API void    readDone();
 
 private:
 

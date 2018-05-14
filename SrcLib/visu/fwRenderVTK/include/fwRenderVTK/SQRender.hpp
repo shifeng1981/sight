@@ -101,7 +101,7 @@ class IVtkRenderWindowInteractorManager;
  *   - \b uid (mandatory): the uid of the adaptor
  * - \b flip (optional): if true, flip the output of the renderer in offscreen mode.
  */
-class FWRENDERVTK_CLASS_API SQRender : public ::fwServices::IQmlService
+class FWRENDERVTK_CLASS_QT_API SQRender : public ::fwServices::IQmlService
 {
     Q_OBJECT
     Q_PROPERTY(QVariantMap scene READ scene WRITE setScene)
@@ -124,31 +124,31 @@ public:
     typedef std::map< std::string, ::fwData::Object::csptr > ConstObjectMapType;
     using ConfigType = QVariantMap;
 
-    FWRENDERVTK_API static const ::fwCom::Slots::SlotKeyType s_RENDER_SLOT;
-    FWRENDERVTK_API static const ::fwCom::Slots::SlotKeyType s_REQUEST_RENDER_SLOT;
-    FWRENDERVTK_API static const ::fwCom::Slots::SlotKeyType s_TOGGLE_AUTO_RENDER_SLOT;
+    FWRENDERVTK_QT_API static const ::fwCom::Slots::SlotKeyType s_RENDER_SLOT;
+    FWRENDERVTK_QT_API static const ::fwCom::Slots::SlotKeyType s_REQUEST_RENDER_SLOT;
+    FWRENDERVTK_QT_API static const ::fwCom::Slots::SlotKeyType s_TOGGLE_AUTO_RENDER_SLOT;
 
-    FWRENDERVTK_API static const ::fwCom::Signals::SignalKeyType s_DROPPED_SIG;
+    FWRENDERVTK_QT_API static const ::fwCom::Signals::SignalKeyType s_DROPPED_SIG;
     typedef ::fwCom::Signal< void (std::string)> DroppedSignalType;
 
-    FWRENDERVTK_API SQRender() noexcept;
+    FWRENDERVTK_QT_API SQRender() noexcept;
 
-    FWRENDERVTK_API virtual ~SQRender() noexcept;
+    FWRENDERVTK_QT_API virtual ~SQRender() noexcept;
 
     /// Returns the vtkRenderer with the given id
-    FWRENDERVTK_API vtkRenderer* getRenderer(RendererIdType rendererId);
+    FWRENDERVTK_QT_API vtkRenderer* getRenderer(RendererIdType rendererId);
 
     /// Returns true if the scene is shown on screen
     bool isShownOnScreen();
 
     /// Returns the picker with the given id
-    FWRENDERVTK_API vtkAbstractPropPicker* getPicker(PickerIdType pickerId);
+    FWRENDERVTK_QT_API vtkAbstractPropPicker* getPicker(PickerIdType pickerId);
 
     /// Returns the vtkObject with the given id
-    FWRENDERVTK_API vtkObject* getVtkObject(const VtkObjectIdType& objectId) const;
+    FWRENDERVTK_QT_API vtkObject* getVtkObject(const VtkObjectIdType& objectId) const;
 
     /// Get a vtkTransform in the SQRender, referenced by a key. Create it if it does not exist.
-    FWRENDERVTK_API vtkTransform* getOrAddVtkTransform( const VtkObjectIdType& _id );
+    FWRENDERVTK_QT_API vtkTransform* getOrAddVtkTransform( const VtkObjectIdType& _id );
 
     bool getPendingRenderRequest() const;
 
@@ -165,33 +165,33 @@ public:
     RenderMode getRenderMode() const;
 
     /// Tells if the rendering is done offscreen
-    FWRENDERVTK_API bool isOffScreen() const;
+    FWRENDERVTK_QT_API bool isOffScreen() const;
 
     /// Allows to change the size of the offscreen renderer at runtime. This overrides XML configuration settings.
-    FWRENDERVTK_API void setOffScreenRenderSize(unsigned int _width, unsigned int _height);
+    FWRENDERVTK_QT_API void setOffScreenRenderSize(unsigned int _width, unsigned int _height);
 
-    FWRENDERVTK_API QVariantMap const&  scene() const;
-    FWRENDERVTK_API void    setScene(QVariantMap const& scene);
+    FWRENDERVTK_QT_API QVariantMap const&  scene() const;
+    FWRENDERVTK_QT_API void    setScene(QVariantMap const& scene);
 
 protected:
 
     /// Renders the scene.
-    FWRENDERVTK_API void render();
+    FWRENDERVTK_QT_API void render();
 
     /// Starts the render context, start the adaptors with start="yes"
-    FWRENDERVTK_API virtual void starting() override;
+    FWRENDERVTK_QT_API virtual void starting() override;
 
     /// Stops the context, stops the started adaptors
-    FWRENDERVTK_API virtual void stopping() override;
+    FWRENDERVTK_QT_API virtual void stopping() override;
 
     /// configures the scene
-    FWRENDERVTK_API virtual void configuring() override;
+    FWRENDERVTK_QT_API virtual void configuring() override;
 
     /// Does nothing.
-    FWRENDERVTK_API virtual void updating() override;
+    FWRENDERVTK_QT_API virtual void updating() override;
 
     /// Add a vtk object in the SQRender, referenced by a key.
-    FWRENDERVTK_API void addVtkObject( const VtkObjectIdType& _id, vtkObject* _vtkObj );
+    FWRENDERVTK_QT_API void addVtkObject( const VtkObjectIdType& _id, vtkObject* _vtkObj );
 
 private:
 

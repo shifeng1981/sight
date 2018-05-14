@@ -39,7 +39,7 @@ class IOVTK_CLASS_API SQImageReader : public ::fwIO::IQmlReader
 
 
 public:
-    ~SQImageReader() noexcept
+    IOVTK_API ~SQImageReader() noexcept
     {
     }
 

@@ -42,7 +42,6 @@
 
 namespace visuVTKAdaptor
 {
-static const ::fwServices::QtQmlType<SQNegatoMPR>  registar("com.fw4spl.vtk.adaptors", 1, 0, "SNegatoMPR");
 
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_TYPE_SLOT   = "updateSliceType";
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_MODE_SLOT   = "updateSliceMode";

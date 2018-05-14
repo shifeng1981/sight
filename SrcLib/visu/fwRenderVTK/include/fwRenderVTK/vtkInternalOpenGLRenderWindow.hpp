@@ -31,7 +31,7 @@ public:
     friend class FrameBufferRenderer;
 
     static vtkInternalOpenGLRenderWindow FWRENDERVTK_API    *New();
-    vtkTypeMacro(vtkInternalOpenGLRenderWindow, vtkGenericOpenGLRenderWindow);
+    vtkTypeMacro(vtkInternalOpenGLRenderWindow, vtkExternalOpenGLRenderWindow);
 
 
 protected:

@@ -8,6 +8,8 @@
 
 #include "uiIO/Plugin.hpp"
 
+#include "uiIO/editor/SQIOSelector.hpp"
+
 namespace uiIO
 {
 
@@ -25,6 +27,7 @@ Plugin::~Plugin() noexcept
 
 void Plugin::start()
 {
+    static ::fwServices::QtQmlType<::uiIO::editor::SQIOSelector>   registar("com.fw4spl.uiIO", 1, 0, "SIOSelector");
 }
 
 //-----------------------------------------------------------------------------

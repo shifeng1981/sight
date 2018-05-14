@@ -14,7 +14,7 @@
 namespace fwServices
 {
 
-class FWSERVICES_CLASS_API   QtObjectHolder: public QObject
+class FWSERVICES_CLASS_QT_API   QtObjectHolder: public QObject
 {
     Q_OBJECT
 public:
@@ -27,13 +27,13 @@ public:
      * @param object: object to hold
      * @param parent: default Qt parent
      */
-    FWSERVICES_API QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, QObject *parent = 0);
+    FWSERVICES_QT_API QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, QObject *parent = 0);
 
     /**
      * @brief QtObjectHolder: constructor copy
      * @param other: class to copy
      */
-    FWSERVICES_API QtObjectHolder(QtObjectHolder const& other);
+    FWSERVICES_QT_API QtObjectHolder(QtObjectHolder const& other);
 
     /**
      * @brief QtObjectHolder: default constructor
@@ -41,34 +41,34 @@ public:
      *
      * This constructor allow us to instanciate "empty" object
      */
-    FWSERVICES_API QtObjectHolder(QObject *parent = 0);
+    FWSERVICES_QT_API QtObjectHolder(QObject *parent = 0);
 
     /**
      * @brief: return stored data in "m_object"
      *
      * If the data is not set and used, the behavior is undefined.
      */
-    std::shared_ptr<::fwData::Object>& FWSERVICES_API getObject();
+    FWSERVICES_QT_API std::shared_ptr<::fwData::Object>& getObject();
 
     /**
      *  @brief: same as above but with constness
      */
-    std::shared_ptr<::fwData::Object> const& FWSERVICES_API  getObject() const;
+    FWSERVICES_QT_API std::shared_ptr<::fwData::Object> const& getObject() const;
 
     /**
      * @brief ~QtObjectHolder: Destructor, do nothing, use RAII to clean objects
      */
-    FWSERVICES_API ~QtObjectHolder();
+    FWSERVICES_QT_API ~QtObjectHolder();
 
     /**
      * @brief: Compare the data stored inside this object with another.
      */
-    bool FWSERVICES_API operator!=(QtObjectHolder const& other);
+    FWSERVICES_QT_API bool  operator!=(QtObjectHolder const& other);
 
     /**
      * @brief: = operator, used to pass value in QML
      */
-    QtObjectHolder& FWSERVICES_API operator=(QtObjectHolder const& other);
+    FWSERVICES_QT_API QtObjectHolder& operator=(QtObjectHolder const& other);
 
 private:
     std::shared_ptr<::fwData::Object> m_object;

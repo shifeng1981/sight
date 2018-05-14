@@ -34,7 +34,7 @@ typename T::sptr IQmlService::getInOut(const std::string& propertyName) const
     if (!propertyVariant.isNull() && propertyVariant.canConvert<QtObjectHolder *>())
     {
         auto propertyHolder = propertyVariant.value<QtObjectHolder *>();
-
+if (propertyHolder)
         return std::dynamic_pointer_cast<T>(propertyHolder->getObject());
     }
     return typename T::sptr();

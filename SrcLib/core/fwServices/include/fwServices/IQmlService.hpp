@@ -19,7 +19,7 @@
 namespace fwServices
 {
 
-class FWSERVICES_CLASS_API IQmlService : public QObject,
+class FWSERVICES_CLASS_QT_API IQmlService : public QObject,
                                          public ::fwCom::HasSlots,
                                          public ::fwCom::HasSignals,
                                          public ::fwTools::fwID
@@ -53,9 +53,9 @@ public:
 
 public:
 	// Ctor, do nothing
-	FWSERVICES_API IQmlService();
+    FWSERVICES_QT_API IQmlService();
 	// Dtor, do nothing
-	virtual FWSERVICES_API ~IQmlService();
+    virtual FWSERVICES_QT_API ~IQmlService();
 
 
     ServiceState 	getStatus() const;
@@ -110,27 +110,27 @@ protected:
     /**
      *  @brief: This function should be override by children. It's called after a start()
      */
-    virtual void FWSERVICES_API starting();
+    virtual void FWSERVICES_QT_API starting();
     /**
      *  @brief: This function should be override by children. It's called after a stop()
      */
-    virtual void FWSERVICES_API stopping();
+    virtual void FWSERVICES_QT_API stopping();
     /**
      *  @brief: This function should be override by children. It's called after a update()
      */
-    virtual void FWSERVICES_API updating();
+    virtual void FWSERVICES_QT_API updating();
     /**
      *  @brief: This function should be override by children. It's called after a destroy()
      */
-    virtual void FWSERVICES_API destroying();
+    virtual void FWSERVICES_QT_API destroying();
     /**
      *  @brief: This function should be override by children. It's called after a configure()
      */
-    virtual void FWSERVICES_API configuring();
+    virtual void FWSERVICES_QT_API configuring();
     /**
      *  @brief: This function should be override by children. It's called after a reconfigure()
      */
-    virtual void FWSERVICES_API reconfiguring();
+    virtual void FWSERVICES_QT_API reconfiguring();
 
     SPTR(::fwThread::Worker) m_associatedWorker;
 
@@ -143,27 +143,27 @@ public Q_SLOTS:
 	 *	This function must be call from subclasses
 	 *	@post: emit started
 	 */
-    void FWSERVICES_API	start();
+    void FWSERVICES_QT_API	start();
 	/**
 	 *	@brief: stop the service
 	 *	@post: emit stopped
 	 */
-    void FWSERVICES_API	stop();
+    void FWSERVICES_QT_API	stop();
 	/**
 	 *	@brief: release service data (thread, etc.)
 	 *	@post: emit destroyed()
 	 */
-    void FWSERVICES_API	destroy();
+    void FWSERVICES_QT_API	destroy();
 	/**
 	 *	@brief: call to update service data
 	 *	@post: emit updated() for service chain
 	 */
-    void FWSERVICES_API update();
+    void FWSERVICES_QT_API update();
     /**
      *  @brief: Used to configure service
      *  Call "configuring" or "reconfiguring" function depend of current configuration state
      */
-    void FWSERVICES_API configure();
+    void FWSERVICES_QT_API configure();
 
 
     /**
@@ -181,7 +181,7 @@ public:
     /**
      *  @brief: Exposition of generic qml's properties
      */
-    void    FWSERVICES_API setProperty(const std::string& name, const QVariant& value);
+    void    FWSERVICES_QT_API setProperty(const std::string& name, const QVariant& value);
 
     /**
      *  @brief: T object stored in a QtObjectHolder by propertyName

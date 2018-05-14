@@ -50,6 +50,7 @@ void	fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
 
 ::fwData::Object::sptr	fwServices::QmlAppConfigManager::getConfigRoot() const
 {
+    return nullptr;
 }
 
 // -----------------------------------------------------------

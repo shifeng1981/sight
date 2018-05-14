@@ -19,13 +19,13 @@ public:
 	/**
 	 *	@brief: return a QML object from "objectName" field
 	 */
-	static QObject FWGUIQT_API	*getObjectByName(std::string const& id);
+    static FWGUIQT_API QObject 	*getObjectByName(std::string const& id);
 
 private:
     /**
      *	@brief: private helper to retrieve the first object of the app i.e the window
 	 */
-    static QQuickWidget FWGUIQT_API	*getRootObject();
+    static FWGUIQT_API QQuickWidget 	*getRootObject();
 };
 
 } // fwGuiQt

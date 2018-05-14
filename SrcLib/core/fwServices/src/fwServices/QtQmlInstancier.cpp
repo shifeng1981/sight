@@ -5,7 +5,7 @@
 namespace fwServices
 {
 
-	std::vector<std::shared_ptr<IQtQmlObject> >	QtQmlInstancier::m_classList;
+std::vector<std::shared_ptr<IQtQmlObject> >	QtQmlInstancier::m_classList;
 
 QtQmlInstancier::QtQmlInstancier()
 {

@@ -7,7 +7,7 @@
 namespace fwServices
 {
 
-class FWSERVICES_CLASS_API IQtQmlObject
+class FWSERVICES_CLASS_QT_API IQtQmlObject
 {
 public:
 	IQtQmlObject(std::string const& cType);

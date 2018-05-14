@@ -45,7 +45,6 @@ namespace editor
 {
 
 // Qml expose
-static ::fwServices::QtQmlType<SQIOSelector>   registar("com.fw4spl.uiIO", 1, 0, "SIOSelector");
 
 static const ::fwCom::Signals::SignalKeyType JOB_CREATED_SIGNAL = "jobCreated";
 static const ::fwCom::Slots::SlotKeyType FORWARD_JOB_SLOT       = "forwardJob";

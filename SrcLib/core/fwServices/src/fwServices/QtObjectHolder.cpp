@@ -6,7 +6,6 @@
 
 namespace fwServices
 {
-static QtQmlType<QtObjectHolder> registar = QtQmlType<::fwServices::QtObjectHolder>("com.fw4spl", 1, 0, "TypeHolder");
 
 QtObjectHolder::QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, QObject *parent) :
     QObject(parent),

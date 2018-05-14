@@ -7,7 +7,9 @@
 #include "visuVTKAdaptor/Plugin.hpp"
 
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
-
+#include <visuVTKAdaptor/SQNegatoMPR.hpp>
+#include <fwRenderVTK/FrameBufferItem.hpp>
+#include <fwRenderVTK/SQRender.hpp>
 #include <fwServices/macros.hpp>
 
 namespace visuVTKAdaptor
@@ -23,6 +25,10 @@ Plugin::~Plugin() noexcept
 
 void Plugin::start()
 {
+    const ::fwServices::QtQmlType<SQNegatoMPR>  registar("com.fw4spl.vtk.adaptors", 1, 0, "SNegatoMPR");
+
+    ::fwServices::QtQmlType<::fwRenderVTK::FrameBufferItem>    registar2("com.fw4spl.vtk", 1, 0, "FrameBuffer");
+    ::fwServices::QtQmlType<::fwRenderVTK::SQRender>   registar3("com.fw4spl.vtk", 1, 0, "SRender");
 }
 
 //------------------------------------------------------------------------------

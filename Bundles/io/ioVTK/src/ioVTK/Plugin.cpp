@@ -7,7 +7,7 @@
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
 
 #include "ioVTK/Plugin.hpp"
-
+#include "ioVTK/SQImageReader.hpp"
 namespace ioVTK
 {
 
@@ -19,6 +19,8 @@ Plugin::~Plugin() noexcept
 
 void Plugin::start()
 {
+    // Register a new reader of ::fwData::Image
+    static const ::fwServices::QtQmlType<SQImageReader>    registar("com.fw4spl", 1, 0, "SImageReader");
 }
 
 void Plugin::stop() noexcept

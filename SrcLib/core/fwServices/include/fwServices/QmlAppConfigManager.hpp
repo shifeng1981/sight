@@ -20,8 +20,8 @@ namespace fwServices
 	    fwCoreAllowSharedFromThis()
 
 
-        QmlAppConfigManager();
-        ~QmlAppConfigManager();
+        FWSERVICES_API QmlAppConfigManager();
+        FWSERVICES_API ~QmlAppConfigManager();
         
 
 	   /**

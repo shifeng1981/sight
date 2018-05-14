@@ -13,6 +13,8 @@
 #include <fwServices/registry/AppConfigParameters.hpp>
 #include <fwServices/registry/ServiceConfig.hpp>
 #include <fwServices/registry/ServiceFactory.hpp>
+#include <fwServices/QtObjectHolder.hpp>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwThread/Pool.hpp>
 
@@ -21,6 +23,7 @@ namespace servicesReg
 
 static ::fwRuntime::utils::GenericExecutableFactoryRegistrar<Plugin> registrar("::servicesReg::Plugin");
 
+static ::fwServices::QtQmlType< ::fwServices::QtObjectHolder> registar("com.fw4spl", 1, 0, "TypeHolder");
 //-----------------------------------------------------------------------------
 
 Plugin::~Plugin() noexcept

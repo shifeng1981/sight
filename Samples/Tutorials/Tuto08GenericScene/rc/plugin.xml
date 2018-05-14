@@ -118,7 +118,7 @@
             <!-- *************************** Begin generic scene *************************** -->
 
             <service uid="genericScene" type="::fwRenderVTK::SRender" autoConnect="yes">
-                <scene>
+                <scene renderMode="timer">
                     <!-- Image picker -->
                     <picker id="myPicker" vtkclass="fwVtkCellPicker" />
                     <!-- Renderer -->

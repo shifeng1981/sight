@@ -50,7 +50,7 @@ public:
 	 * @uid: Name of the context (to be used in QML)
 	 * @type: Class name
 	 */
-	virtual void FWSERVICES_API 	addCtx(std::string const& uid, std::string const& type);
+    FWGUIQT_API virtual void addCtx(std::string const& uid, std::string const& type);
 
 private:
 	std::string	m_scriptFile;

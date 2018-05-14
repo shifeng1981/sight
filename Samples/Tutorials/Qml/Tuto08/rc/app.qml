@@ -95,7 +95,7 @@ Rectangle {
 
         config: ({
             "mode": "3d",
-            "slices": "1",
+            "slices": "3",
             "renderer": "default",
             "picker": "myPicker"
         })

@@ -81,7 +81,7 @@ private:
     /// Sub services linked to this service
     ServiceVector m_subServices;
 
-    static ServiceVectorGlobal s_servicesList;
+    FWSERVICES_API static ServiceVectorGlobal s_servicesList;
 };
 
 //------------------------------------------------------------------------------

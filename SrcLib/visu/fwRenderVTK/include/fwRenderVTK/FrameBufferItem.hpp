@@ -25,29 +25,29 @@ namespace fwRenderVTK
 
 class FrameBufferItem;
 
-class  FWRENDERVTK_CLASS_API FrameBufferRenderer : public QObject,
+class  FWRENDERVTK_CLASS_QT_API FrameBufferRenderer : public QObject,
                                                    public QQuickFramebufferObject::Renderer
 {
     Q_OBJECT
 public:
-    FWRENDERVTK_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow *, FrameBufferItem const*);
-    FWRENDERVTK_API ~FrameBufferRenderer();
+    FWRENDERVTK_QT_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow *, FrameBufferItem const*);
+    FWRENDERVTK_QT_API ~FrameBufferRenderer();
     /**
      * @brief createFramebufferObject: initialize a framebuffer
      * @param size: size of the framebuffer
      * @return QOpenGLFrameBufferObject: View where will be perform openGL command (VTK)
      */
-    QOpenGLFramebufferObject FWRENDERVTK_API    *createFramebufferObject(const QSize& size);
+    QOpenGLFramebufferObject FWRENDERVTK_QT_API    *createFramebufferObject(const QSize& size);
 
     /**
      * @brief render: perform open GL command
      */
-    void FWRENDERVTK_API   render();
+    void FWRENDERVTK_QT_API   render();
 
     /**
      * @brief: synchronize m_item when frame is ready
      */
-    virtual void FWRENDERVTK_API synchronize(QQuickFramebufferObject *);
+    virtual void FWRENDERVTK_QT_API synchronize(QQuickFramebufferObject *);
 
 Q_SIGNALS:
     /**
@@ -65,27 +65,27 @@ private:
     friend class vtkInternalOpenGLRenderWindow;
 };
 
-class FWRENDERVTK_CLASS_API  FrameBufferItem : public QQuickFramebufferObject
+class FWRENDERVTK_CLASS_QT_API  FrameBufferItem : public QQuickFramebufferObject
 {
     Q_OBJECT
 
 public:
-    FWRENDERVTK_API FrameBufferItem();
-    FWRENDERVTK_API ~FrameBufferItem();
+    FWRENDERVTK_QT_API FrameBufferItem();
+    FWRENDERVTK_QT_API ~FrameBufferItem();
 
     /**
      *  @brief: create a FrameBufferRenderer instance
      */
-    QQuickFramebufferObject::Renderer FWRENDERVTK_API  *createRenderer() const;
+    QQuickFramebufferObject::Renderer FWRENDERVTK_QT_API  *createRenderer() const;
     /**
      *  @brief: return m_win
      */
-    vtkInternalOpenGLRenderWindow    FWRENDERVTK_API *getRenderWindow() const;
+    vtkInternalOpenGLRenderWindow    FWRENDERVTK_QT_API *getRenderWindow() const;
 
     /**
      *  @brief: initialize variables
      */
-    void FWRENDERVTK_API initialize();
+    void FWRENDERVTK_QT_API initialize();
 
     /**
      * @brief getRenderer

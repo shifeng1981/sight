@@ -51,8 +51,6 @@ namespace ioVTK
 
 //------------------------------------------------------------------------------
 
-// Register a new reader of ::fwData::Image
-static const ::fwServices::QtQmlType<SQImageReader>    registar("com.fw4spl", 1, 0, "SImageReader");
 
 //------------------------------------------------------------------------------
 
