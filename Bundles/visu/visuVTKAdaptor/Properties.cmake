@@ -15,6 +15,7 @@ set( DEPENDENCIES
     fwServices
     fwTools
     fwVtkIO
+    fwGuiQt
 )
 set( REQUIREMENTS
     dataReg

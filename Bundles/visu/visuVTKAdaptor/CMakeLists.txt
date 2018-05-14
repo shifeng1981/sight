@@ -2,11 +2,14 @@ fwLoadProperties()
 
 find_package(Boost QUIET COMPONENTS regex REQUIRED)
 
+find_package(VTK QUIET REQUIRED)
+
 target_compile_definitions(${FWPROJECT_NAME} PUBLIC "-DQT_NO_KEYWORDS")
 
 find_package(Qt5 QUIET COMPONENTS Core Gui Widgets Concurrent Qml Quick QuickWidgets Sql REQUIRED)
 
 fwForwardInclude(
+    ${VTK_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Gui_INCLUDE_DIRS}
@@ -29,6 +32,7 @@ fwLink(
     ${Qt5Quick_LIBRARIES}
     ${Qt5QuickWidgets_LIBRARIES}
     ${Qt5Sql_LIBRARIES}
+    ${VTK_LIBRARIES}
 )
 
 set_target_properties(${FWPROJECT_NAME} PROPERTIES AUTOMOC TRUE)
