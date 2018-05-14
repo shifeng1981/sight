@@ -1,12 +1,12 @@
 #pragma once
 
-# include "fwGuiQt/config.hpp"
+# include "fwServices/config.hpp"
 
 #include <QQmlEngine>
 
 #include <iostream>
 
-namespace fwGuiQt
+namespace fwServices
 {
 
 /**
@@ -15,18 +15,19 @@ namespace fwGuiQt
  *
  */
 template<typename Type>
-class FWGUIQT_CLASS_API QtQmlType
+class FWSERVICES_CLASS_API QtQmlType
 {
 public:
 	/**
 	 *	@brief: constructor, call qmlRegisterType<Type> that precise to QML which class is used for this typename
 	 */
-	FWGUIQT_API QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
+    FWSERVICES_API QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
 	{
+        std::cout << "Register : " << packageName << std::endl;
 		qmlRegisterType<Type>(packageName.c_str(), versionMajor, versionMinor, objectName.c_str());
 	}
 
-	FWGUIQT_API QtQmlType(std::string const& typeName)
+    FWSERVICES_API QtQmlType(std::string const& typeName)
     	{
         	qmlRegisterInterface<Type>(typeName.c_str());
 	}
@@ -34,7 +35,7 @@ public:
 	/**
 	 *	@brief: destructor, do nothing.
 	 */
-	FWGUIQT_API ~QtQmlType()
+    FWSERVICES_API ~QtQmlType()
 	{
 	}
 

@@ -71,6 +71,4 @@ private:
 
 }
 
-
-
 #endif // VTKINTERNALOPENGLRENDERWINDOW_HPP

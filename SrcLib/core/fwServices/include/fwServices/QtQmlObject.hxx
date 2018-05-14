@@ -1,9 +1,9 @@
 #pragma once
 
-#include "fwGuiQt/config.hpp"
-#include "fwGuiQt/IQtQmlObject.hpp"
+#include "fwServices/config.hpp"
+#include "fwServices/IQtQmlObject.hpp"
 
-namespace fwGuiQt
+namespace fwServices
 {
 	/**
 	 *	@brief: This class is a representation of a QMLObject

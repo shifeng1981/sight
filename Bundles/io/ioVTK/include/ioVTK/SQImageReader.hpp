@@ -13,7 +13,7 @@
 
 #include <fwIO/IQmlReader.hpp> // Definition of abstract reader class
 
-#include <fwGuiQt/QtObjectHolder.hpp>
+#include <fwServices/QtObjectHolder.hpp>
 
 #include <boost/filesystem/path.hpp> // Used to save the file system path of loaded image
 
@@ -35,7 +35,7 @@ class IOVTK_CLASS_API SQImageReader : public ::fwIO::IQmlReader
 {
     Q_OBJECT
 
-    Q_PROPERTY(fwGuiQt::QtObjectHolder* image MEMBER m_image NOTIFY imageChanged)
+    Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image NOTIFY imageChanged)
 
 
 public:
@@ -85,11 +85,12 @@ protected:
     IOVTK_API void updating() override;
 
 Q_SIGNALS:
-    void    imageChanged(::fwGuiQt::QtObjectHolder*);
+    void    imageChanged(::fwServices::QtObjectHolder*);
 
 
 public:
-    ::fwGuiQt::QtObjectHolder   *object() const {
+    ::fwServices::QtObjectHolder   *object() const
+    {
         return m_image;
     }
 
@@ -112,7 +113,7 @@ private:
     /// Image path, location of image on filesystem.
     ::boost::filesystem::path m_fsImgPath;
     //SPTR(JobCreatedSignalType) m_sigJobCreated;
-    ::fwGuiQt::QtObjectHolder *m_image;
+    ::fwServices::QtObjectHolder *m_image;
 };
 
 } // namespace ioVTK

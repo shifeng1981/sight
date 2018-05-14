@@ -4,7 +4,7 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "visuVTKAdaptor/SImageSlice.hpp"
+#include "visuVTKAdaptor/SQImageSlice.hpp"
 
 #include <fwCom/Slot.hpp>
 #include <fwCom/Slot.hxx>
@@ -17,6 +17,7 @@
 #include <fwDataTools/fieldHelper/MedicalImageHelpers.hpp>
 
 #include <fwServices/macros.hpp>
+#include <fwServices/QtQmlRegistar.hxx>
 
 #include <fwVtkIO/vtk.hpp>
 
@@ -32,10 +33,10 @@
 #include <vtkRenderer.h>
 #include <vtkTransform.h>
 
-fwServicesRegisterMacro( ::fwRenderVTK::IAdaptor, ::visuVTKAdaptor::SImageSlice );
-
 namespace visuVTKAdaptor
 {
+
+static ::fwServices::QtQmlRegistar<SQImageSlice>    registar("::visuVTKAdaptor::SImageSlice");
 
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_INDEX_SLOT = "updateSliceIndex";
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_TYPE_SLOT  = "updateSliceType";
@@ -44,7 +45,7 @@ static const ::fwServices::IService::KeyType s_IMAGE_INOUT = "image";
 
 //------------------------------------------------------------------------------
 
-SImageSlice::SImageSlice() noexcept :
+SQImageSlice::SQImageSlice() noexcept :
     m_interpolation(true),
     m_actorOpacity(1.),
     m_imageSource(nullptr),
@@ -53,13 +54,18 @@ SImageSlice::SImageSlice() noexcept :
     m_planeOutlineMapper(vtkPolyDataMapper::New()),
     m_planeOutlineActor(vtkActor::New())
 {
-    newSlot(s_UPDATE_SLICE_INDEX_SLOT, &SImageSlice::updateSliceIndex, this);
-    newSlot(s_UPDATE_SLICE_TYPE_SLOT, &SImageSlice::updateSliceType, this);
+    std::cout << "m_imageActor: " << m_imageActor << std::endl;
+    std::cout << "m_planeOutlinePolyData: " << m_planeOutlinePolyData << std::endl;
+    std::cout << "m_planeOutlineMapper: " << m_planeOutlineMapper << std::endl;
+    std::cout << "m_planeOutlineActor: " << m_planeOutlineActor << std::endl;
+
+    newSlot(s_UPDATE_SLICE_INDEX_SLOT, &SQImageSlice::updateSliceIndex, this);
+    newSlot(s_UPDATE_SLICE_TYPE_SLOT, &SQImageSlice::updateSliceType, this);
 }
 
 //------------------------------------------------------------------------------
 
-SImageSlice::~SImageSlice() noexcept
+SQImageSlice::~SQImageSlice() noexcept
 {
     m_imageActor->Delete();
     m_imageActor = nullptr;
@@ -72,11 +78,12 @@ SImageSlice::~SImageSlice() noexcept
 
     m_planeOutlinePolyData->Delete();
     m_planeOutlinePolyData = nullptr;
+    std::cout << "Deleted ImageSlice" << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::starting()
+void SQImageSlice::starting()
 {
     this->initialize();
 
@@ -89,7 +96,7 @@ void SImageSlice::starting()
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::stopping()
+void SQImageSlice::stopping()
 {
     this->removeFromPicker(m_imageActor);
     this->removeAllPropFromRenderer();
@@ -97,7 +104,7 @@ void SImageSlice::stopping()
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::updating()
+void SQImageSlice::updating()
 {
     ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     SLM_ASSERT("Missing image", image);
@@ -118,7 +125,7 @@ void SImageSlice::updating()
 
 //-----------------------------------------------------------------------------
 
-void SImageSlice::updateSliceIndex(int axial, int frontal, int sagittal)
+void SQImageSlice::updateSliceIndex(int axial, int frontal, int sagittal)
 {
     m_axialIndex->value()    = axial;
     m_frontalIndex->value()  = frontal;
@@ -133,7 +140,7 @@ void SImageSlice::updateSliceIndex(int axial, int frontal, int sagittal)
 
 //-----------------------------------------------------------------------------
 
-void SImageSlice::updateSliceType(int from, int to)
+void SQImageSlice::updateSliceType(int from, int to)
 {
     if( to == static_cast<int>(m_orientation) )
     {
@@ -148,9 +155,9 @@ void SImageSlice::updateSliceType(int from, int to)
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::configuring()
+void SQImageSlice::configuring()
 {
-    this->configureParams();
+/*    this->configureParams();
 
     const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
 
@@ -175,12 +182,12 @@ void SImageSlice::configuring()
                interpolation == "on" || interpolation == "off");
     this->setInterpolation(interpolation == "yes");
 
-    this->setActorOpacity(config.get<double>("actorOpacity", 1.));
+    this->setActorOpacity(config.get<double>("actorOpacity", 1.));*/
 }
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::updateImage( ::fwData::Image::sptr image  )
+void SQImageSlice::updateImage( ::fwData::Image::sptr image  )
 {
     this->updateImageInfos(image);
     this->setVtkPipelineModified();
@@ -188,7 +195,7 @@ void SImageSlice::updateImage( ::fwData::Image::sptr image  )
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::updateSImageSliceIndex( ::fwData::Image::sptr image )
+void SQImageSlice::updateSImageSliceIndex( ::fwData::Image::sptr image )
 {
     int axialIndex    = m_axialIndex->value();
     int frontalIndex  = m_frontalIndex->value();
@@ -201,7 +208,7 @@ void SImageSlice::updateSImageSliceIndex( ::fwData::Image::sptr image )
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::setSlice( int slice, ::fwData::Image::sptr image  )
+void SQImageSlice::setSlice( int slice, ::fwData::Image::sptr image  )
 {
     int extent[6];
     std::fill(  extent, extent+6, 0);
@@ -223,13 +230,12 @@ void SImageSlice::setSlice( int slice, ::fwData::Image::sptr image  )
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::buildPipeline( )
+void SQImageSlice::buildPipeline( )
 {
     if (!m_imageSourceId.empty())
     {
         m_imageSource = this->getVtkObject(m_imageSourceId);
     }
-    std::cout << "Image source = " <<  m_imageSource << std::endl;
 
     vtkImageAlgorithm* algorithm = vtkImageAlgorithm::SafeDownCast(m_imageSource);
     vtkImageData* imageData      = vtkImageData::SafeDownCast(m_imageSource);
@@ -266,7 +272,7 @@ void SImageSlice::buildPipeline( )
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::buildOutline()
+void SQImageSlice::buildOutline()
 {
     vtkPoints* points = vtkPoints::New(VTK_DOUBLE);
     points->SetNumberOfPoints(4);
@@ -310,7 +316,7 @@ void SImageSlice::buildOutline()
 
 //------------------------------------------------------------------------------
 
-void SImageSlice::updateOutline()
+void SQImageSlice::updateOutline()
 {
     static const int indexZ[12]   = { 0, 2, 4, 1, 2, 4,  1, 3, 4, 0, 3, 4 };
     static const int indexY[12]   = { 0, 2, 4, 1, 2, 4,  1, 2, 5, 0, 2, 5 };
@@ -336,20 +342,6 @@ void SImageSlice::updateOutline()
 
     m_planeOutlineActor->GetProperty()->SetColor( colors[m_orientation]);
     this->setVtkPipelineModified();
-}
-
-//------------------------------------------------------------------------------
-
-::fwServices::IService::KeyConnectionsMap SImageSlice::getAutoConnections() const
-{
-    KeyConnectionsMap connections;
-
-    connections.push(s_IMAGE_INOUT, ::fwData::Image::s_MODIFIED_SIG, s_UPDATE_SLOT);
-    connections.push(s_IMAGE_INOUT, ::fwData::Image::s_SLICE_INDEX_MODIFIED_SIG, s_UPDATE_SLICE_INDEX_SLOT);
-    connections.push(s_IMAGE_INOUT, ::fwData::Image::s_SLICE_TYPE_MODIFIED_SIG, s_UPDATE_SLICE_TYPE_SLOT);
-    connections.push(s_IMAGE_INOUT, ::fwData::Image::s_BUFFER_MODIFIED_SIG, s_UPDATE_SLOT);
-
-    return connections;
 }
 
 //------------------------------------------------------------------------------

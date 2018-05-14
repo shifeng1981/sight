@@ -4,7 +4,7 @@
 #include "fwRenderVTK/config.hpp"
 #include "fwRenderVTK/vtkInternalOpenGLRenderWindow.hpp"
 
-#include <fwGuiQt/QtQmlType.hxx>
+#include <fwServices/QtQmlType.hxx>
 
 #include <vtkEventQtSlotConnect.h>
 #include <vtkGenericOpenGLRenderWindow.h>
@@ -121,7 +121,7 @@ private:
     vtkInternalOpenGLRenderWindow    *m_win;
     QVTKInteractorAdapter   *m_interactorAdapter;
     vtkSmartPointer<vtkRenderer>    m_renderer;
-    vtkSmartPointer<vtkRenderWindowInteractor> m_interactor;
+    vtkRenderWindowInteractor *m_interactor;
 
     friend class FrameBufferRenderer;
 };

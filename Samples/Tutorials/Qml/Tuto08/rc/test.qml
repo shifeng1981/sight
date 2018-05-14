@@ -4,7 +4,6 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.0
 import com.fw4spl 1
-import com.fw4spl.vtk 1
 
 Rectangle {
     objectName: "mainWindow"
@@ -36,6 +35,7 @@ Rectangle {
         id : vtkRenderWindowContainer
         anchors.fill: parent
         border.width: 4
+        color: "black"
 
         FrameBuffer {
             id: vtkRenderWindow

@@ -1,17 +1,15 @@
 #include "fwGuiQt/QtQmlEngine.hpp"
-#include "fwGuiQt/QtQmlInstancier.hpp"
-#include "fwGuiQt/QtQmlType.hxx"
+
+#include <fwServices/QtQmlType.hxx>
+#include <fwServices/QtQmlInstancier.hxx>
 
 #include <QCoreApplication>
 #include <QQuickWindow>
 #include <QFileInfo>
 #include <QQmlContext>
-#include <QVBoxLayout>
 
 namespace fwGuiQt
 {
-
-static QtQmlType<QVBoxLayout>    registar("com.fw4spl", 1, 0,  "QVBoxLayout");
 
 QtQmlEngine	*QtQmlEngine::m_qtQmlEngine = nullptr;
 
@@ -47,7 +45,7 @@ void	QtQmlEngine::launch()
 
 void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
 {
-	QObject *ctxElem = QtQmlInstancier::instanciate(type);
+    QObject *ctxElem = ::fwServices::QtQmlInstancier::instanciate(type);
 
 	SLM_ASSERT("Class not found : " + type, ctxElem != nullptr);
 	rootContext()->setContextProperty(QString::fromStdString(uid), ctxElem);

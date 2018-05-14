@@ -610,7 +610,7 @@ void AppConfigManager::createServices(::fwRuntime::ConfigurationElement::csptr c
             worker = ::fwThread::Worker::New();
             activeWorkers->addWorker(srvConfig.m_worker, worker);
         }
-        srv->setWorker(worker);
+        srv->m_associatedWorker =(worker);
     }
 
     std::string errMsgTail = " when creating service '" + srvConfig.m_uid + "'.";

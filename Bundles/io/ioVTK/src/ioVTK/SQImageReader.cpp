@@ -31,7 +31,7 @@
 #include <fwServices/macros.hpp>
 #include <fwServices/registry/ActiveWorkers.hpp>
 
-#include <fwGuiQt/QtQmlType.hxx>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwVtkIO/BitmapImageReader.hpp>
 #include <fwVtkIO/ImageReader.hpp>
@@ -52,7 +52,7 @@ namespace ioVTK
 //------------------------------------------------------------------------------
 
 // Register a new reader of ::fwData::Image
-static const ::fwGuiQt::QtQmlType<SQImageReader>    registar("com.fw4spl", 1, 0, "SImageReader");
+static const ::fwServices::QtQmlType<SQImageReader>    registar("com.fw4spl", 1, 0, "SImageReader");
 
 //------------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ SQImageReader::SQImageReader() noexcept
 
 void SQImageReader::starting()
 {
-    m_image = new ::fwGuiQt::QtObjectHolder(std::shared_ptr<::fwData::Image>(new ::fwData::Image()));
+    m_image = new ::fwServices::QtObjectHolder(std::shared_ptr<::fwData::Image>(new ::fwData::Image()));
 }
 
 //------------------------------------------------------------------------------
@@ -283,8 +283,8 @@ bool SQImageReader::loadImage( const ::boost::filesystem::path imgFile, std::sha
 
 void SQImageReader::notificationOfDBUpdate()
 {
-    emit imageChanged(m_image);
-    emit readDone();
+    imageChanged(m_image);
+    readDone();
 }
 
 } // namespace ioVtk

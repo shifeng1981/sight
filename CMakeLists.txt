@@ -5,6 +5,9 @@ project (fw4spl)
 
 enable_testing()
 
+set_target_properties(${FWPROJECT_NAME} PROPERTIES AUTOMOC TRUE)
+
+
 include(CheckVariableExists)
 include(CMakeParseArguments)
 include(GNUInstallDirs)

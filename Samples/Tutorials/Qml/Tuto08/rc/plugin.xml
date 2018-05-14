@@ -1,0 +1,25 @@
+<!-- Application name and version (the version is automatically replaced by CMake
+     using the version defined in the Properties.cmake) -->
+<plugin id="Tuto08" version="@PROJECT_VERSION@">
+
+    <!-- The bundles in requirements are automatically started when this 
+         Application is launched. -->
+
+    <requirement id="dataReg" />
+    <requirement id="servicesReg" />
+    <requirement id="ioVTK" />
+    <requirement id="visuVTKAdaptor"/>
+    <requirement id="uiIO" />
+
+
+
+    <!-- Defines the App-config -->
+    <extension implements="::fwServices::registry::AppConfig">
+        <id>tutoBasicConfig</id>
+        <config>
+            <qml>
+                <file>share/Tuto08-@PROJECT_VERSION@/app.qml</file>
+            </qml>
+        </config>
+    </extension>
+</plugin>

@@ -15,6 +15,7 @@ set( DEPENDENCIES
     fwRuntime
     fwServices
     fwIO
+    fwGuiQt
 )
 
 set( REQUIREMENTS

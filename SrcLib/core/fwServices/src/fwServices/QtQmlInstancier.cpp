@@ -1,8 +1,8 @@
-#include "fwGuiQt/QtQmlInstancier.hpp"
+#include "fwServices/QtQmlInstancier.hxx"
 
 #include <algorithm>
 
-namespace fwGuiQt
+namespace fwServices
 {
 
 	std::vector<std::shared_ptr<IQtQmlObject> >	QtQmlInstancier::m_classList;

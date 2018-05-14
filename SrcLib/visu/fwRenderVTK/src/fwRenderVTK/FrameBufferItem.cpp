@@ -25,7 +25,7 @@
 namespace fwRenderVTK
 {
 
-static ::fwGuiQt::QtQmlType<FrameBufferItem>    registar("com.fw4spl", 1, 0, "FrameBuffer");
+static ::fwServices::QtQmlType<FrameBufferItem>    registar("com.fw4spl.vtk", 1, 0, "FrameBuffer");
 
 FrameBufferRenderer::FrameBufferRenderer(vtkInternalOpenGLRenderWindow *rw, FrameBufferItem const* item) :
     m_vtkRenderWindow(rw),
@@ -90,10 +90,12 @@ FrameBufferItem::FrameBufferItem() :
 {
     setMirrorVertically(true);
     setAcceptTouchEvents(true);
+    m_renderer = vtkSmartPointer<vtkRenderer>::New();
     this->setAcceptedMouseButtons(Qt::AllButtons);
     m_win = vtkInternalOpenGLRenderWindow::New();
     m_win->SetSize(width(), height());
-    m_interactor = vtkSmartPointer<QVTKInteractor>::New();
+    m_win->AddRenderer(m_renderer);
+    m_interactor = QVTKInteractor::New();
     m_win->SetInteractor(m_interactor);
     m_interactorAdapter = new QVTKInteractorAdapter(this);
     m_interactor->Initialize();
@@ -139,8 +141,6 @@ vtkSmartPointer<vtkRenderer>    FrameBufferItem::getRenderer() const
 
 void    FrameBufferItem::initialize()
 {
-    m_renderer = vtkSmartPointer<vtkRenderer>::New();
-    m_win->AddRenderer(m_renderer);
     m_win->SetSize(width(), height());
     m_interactor->SetSize(m_win->GetSize());
 }

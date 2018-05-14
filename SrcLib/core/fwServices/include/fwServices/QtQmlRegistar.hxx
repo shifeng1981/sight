@@ -1,13 +1,13 @@
 #pragma once
 
-# include "fwGuiQt/config.hpp"
-# include "fwGuiQt/QtQmlObject.hxx"
-# include "fwGuiQt/QtQmlInstancier.hpp"
+# include "fwServices/config.hpp"
+# include "fwServices/QtQmlObject.hxx"
+# include "fwServices/QtQmlInstancier.hxx"
 
 # include <vector>
 # include <memory>
 
-namespace fwGuiQt
+namespace fwServices
 {
 
 /**

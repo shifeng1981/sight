@@ -1,12 +1,12 @@
-#include "fwGuiQt/QtObjectHolder.hpp"
-#include "fwGuiQt/QtQmlType.hxx"
+#include "fwServices/QtObjectHolder.hpp"
+#include "fwServices/QtQmlType.hxx"
 
 #include <fwData/Object.hpp>
 
 
-namespace fwGuiQt
+namespace fwServices
 {
-static QtQmlType<QtObjectHolder> registar = QtQmlType<::fwGuiQt::QtObjectHolder>("com.fw4spl", 1, 0, "TypeHolder");
+static QtQmlType<QtObjectHolder> registar = QtQmlType<::fwServices::QtObjectHolder>("com.fw4spl", 1, 0, "TypeHolder");
 
 QtObjectHolder::QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, QObject *parent) :
     QObject(parent),

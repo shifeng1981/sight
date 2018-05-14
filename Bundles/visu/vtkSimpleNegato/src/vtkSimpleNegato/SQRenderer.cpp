@@ -21,7 +21,7 @@
 
 #include <fwGuiQt/QtQmlHelper.hpp>
 #include <fwGuiQt/container/QtContainer.hpp>
-#include <fwGuiQt/QtQmlType.hxx>
+#include <fwServices/QtQmlType.hxx>
 
 #include <vtkCellPicker.h>
 #include <vtkCommand.h>
@@ -49,7 +49,7 @@
 namespace vtkSimpleNegato
 {
 
-static ::fwGuiQt::QtQmlType<SQRenderer>  registar("com.fw4spl", 1, 0, "SRenderer");
+static ::fwServices::QtQmlType<SQRenderer>  registar("com.fw4spl", 1, 0, "SRenderer");
 
 //-----------------------------------------------------------------------------
 
@@ -85,7 +85,8 @@ void SQRenderer::starting()
 
     m_bPipelineIsInit = false;
 
-    m_render = m_target->getRenderer();
+    m_render = vtkSmartPointer<vtkRenderer>::New();
+    m_target->getRenderWindow()->AddRenderer(m_render);
     m_render->SetUseDepthPeeling(1);
 
 }

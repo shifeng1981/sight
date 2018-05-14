@@ -1,6 +1,6 @@
-#include "fwGuiQt/IQtQmlObject.hpp"
+#include "fwServices/IQtQmlObject.hpp"
 
-namespace fwGuiQt
+namespace fwServices
 {
 
 IQtQmlObject::IQtQmlObject(std::string const& cType)

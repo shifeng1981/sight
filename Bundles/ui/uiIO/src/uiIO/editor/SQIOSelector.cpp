@@ -4,7 +4,7 @@
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#include "uiIO/editor/SIOSelector.hpp"
+#include "uiIO/editor/SQIOSelector.hpp"
 
 #include <fwCom/Signal.hxx>
 #include <fwCom/Slots.hpp>
@@ -31,6 +31,8 @@
 #include <fwServices/registry/ServiceConfig.hpp>
 #include <fwServices/registry/ServiceFactory.hpp>
 
+#include <fwServices/QtQmlType.hxx>
+
 #include <boost/foreach.hpp>
 
 #include <sstream>
@@ -42,49 +44,46 @@ namespace uiIO
 namespace editor
 {
 
-//------------------------------------------------------------------------------
-
-fwServicesRegisterMacro( ::fwGui::editor::IDialogEditor, ::uiIO::editor::SIOSelector, ::fwData::Object );
+// Qml expose
+static ::fwServices::QtQmlType<SQIOSelector>   registar("com.fw4spl.uiIO", 1, 0, "SIOSelector");
 
 static const ::fwCom::Signals::SignalKeyType JOB_CREATED_SIGNAL = "jobCreated";
 static const ::fwCom::Slots::SlotKeyType FORWARD_JOB_SLOT       = "forwardJob";
 
 //------------------------------------------------------------------------------
 
-SIOSelector::SIOSelector() :
+SQIOSelector::SQIOSelector() :
     m_mode( READER_MODE ),
-    m_servicesAreExcluded( true )
+    m_servicesAreExcluded( true ),
+    m_qInOut(nullptr)
 {
     m_sigJobCreated  = newSignal< JobCreatedSignalType >( JOB_CREATED_SIGNAL );
-    m_slotForwardJob = newSlot( FORWARD_JOB_SLOT, &SIOSelector::forwardJob, this );
+    m_slotForwardJob = newSlot( FORWARD_JOB_SLOT, &SQIOSelector::forwardJob, this );
 }
 
 //------------------------------------------------------------------------------
 
-SIOSelector::~SIOSelector()  noexcept
+SQIOSelector::~SQIOSelector()  noexcept
 {
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::configuring()
+void SQIOSelector::configuring()
 {
-    const ConfigType srvConfig = this->getConfigTree();
+    SLM_ASSERT("The qml property <mode> must be 'reader' (to open file) or 'writer' (to write a new file).",
+               m_qMode == "writer" || m_qMode == "reader" );
+    m_mode = ( m_qMode == "writer" ) ? WRITER_MODE : READER_MODE;
+    SLM_DEBUG( "mode => " + m_qMode );
 
-    const std::string mode = srvConfig.get<std::string>("type.<xmlattr>.mode", "reader");
-    SLM_ASSERT("The xml attribute <mode> must be 'reader' (to open file) or 'writer' (to write a new file).",
-               mode == "writer" || mode == "reader" );
-    m_mode = ( mode == "writer" ) ? WRITER_MODE : READER_MODE;
-    SLM_DEBUG( "mode => " + mode );
-
-    const std::string selectionMode = srvConfig.get<std::string>("selection.<xmlattr>.mode", "exclude");
-    SLM_ASSERT( "The xml attribute <mode> must be 'include' (to add the selection to selector list ) or "
+    const std::string selectionMode = m_qSelectionMode.toStdString();
+    SLM_ASSERT( "The qml attribute <selectionMode> must be 'include' (to add the selection to selector list ) or "
                 "'exclude' (to exclude the selection of the selector list).",
                 selectionMode == "exclude" || selectionMode == "include" );
     m_servicesAreExcluded = ( selectionMode == "exclude" );
     SLM_DEBUG( "selection mode => " + selectionMode );
 
-    const auto selectionCfg = srvConfig.equal_range("addSelection");
+    /*const auto selectionCfg = srvConfig.equal_range("addSelection");
     for (auto itSelection = selectionCfg.first; itSelection != selectionCfg.second; ++itSelection)
     {
         const std::string service = itSelection->second.get<std::string>("<xmlattr>.service");
@@ -107,61 +106,59 @@ void SIOSelector::configuring()
 
         m_serviceToConfig[service] = configId;
         SLM_DEBUG( "add config '" + configId + "' for service '" + service + "'");
-    }
+    }*/
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::starting()
+void SQIOSelector::starting()
 {
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::stopping()
+void SQIOSelector::stopping()
 {
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::updating()
+void SQIOSelector::updating()
 {
     bool createOutput = false;
-    ::fwData::Object::sptr obj = this->getInOut< ::fwData::Object>(::fwIO::s_DATA_KEY);
+    ::fwData::Object::sptr obj;// = this->getInOut< ::fwData::Object>(::fwIO::s_DATA_KEY);
 
+    if (m_qInOut)
+    {
+        obj = m_qInOut->getObject();
+    }
     // Retrieve implementation of type ::fwIO::IReader for this object
     std::vector< std::string > availableExtensionsId;
     if ( m_mode == READER_MODE )
     {
-        std::string classname = m_dataClassname;
+        std::string classname = m_qDataClassname.toStdString();
 
         // FIXME: support for old version using getObject(): all the 'in' or 'inout' keys were possible
         if (!obj && classname.empty())
         {
-            FW_DEPRECATED_MSG("The object to read is not set correctly, you must set '" + ::fwIO::s_DATA_KEY
-                              + "' as <inout> or define the 'class' of the output object");
-
-            obj = this->getObject();
+            SLM_FATAL("You must provide either an inout object or a dataClassName attribute");
         }
         if (obj)
         {
             SLM_WARN_IF("The 'class' attribute is defined, but the object is set as 'inout', only the object classname "
-                        "is used", !classname.empty())
+                        "is used", !classname.isEmpty());
             classname = obj->getClassname();
         }
-        createOutput          = (!obj && !m_dataClassname.empty());
+        createOutput          = (!obj && !m_qDataClassname.isEmpty());
         availableExtensionsId =
             ::fwServices::registry::ServiceFactory::getDefault()->getImplementationIdFromObjectAndType(
                 classname, "::fwIO::IReader");
     }
-    else // m_mode == WRITER_MODE
+    else
     {
-        // FIXME: support for old version using getObject(): all the 'in' or 'inout' keys were possible
         if (!obj)
         {
-            FW_DEPRECATED_MSG("The object to save is not set correctly, you must set '" + ::fwIO::s_DATA_KEY
-                              + "' as <inout>");
-            obj = this->getObject();
+            SLM_FATAL("You must provide an object in order to write.");
         }
         availableExtensionsId =
             ::fwServices::registry::ServiceFactory::getDefault()->getImplementationIdFromObjectAndType(
@@ -273,10 +270,10 @@ void SIOSelector::updating()
             {
                 if(createOutput)
                 {
-                    obj = ::fwData::factory::New(m_dataClassname);
-                    SLM_ASSERT("Cannot create object with classname='" + m_dataClassname + "'", obj);
+                    obj = ::fwData::factory::New(m_qDataClassname.toStdString());
+                    SLM_ASSERT("Cannot create object with classname='" + m_qDataClassname.toStdString() + "'", obj);
                 }
-
+                std::cout << obj << std::endl;
                 ::fwIO::IReader::sptr reader = ::fwServices::add< ::fwIO::IReader >( extensionId );
                 reader->registerInOut(obj, ::fwIO::s_DATA_KEY);
                 reader->setWorker(m_associatedWorker);
@@ -295,6 +292,7 @@ void SIOSelector::updating()
 
                 try
                 {
+                    reader->setWorker(::fwThread::Worker::sptr());
                     reader->start();
                     reader->configureWithIHM();
 
@@ -308,13 +306,16 @@ void SIOSelector::updating()
 
                     if (createOutput)
                     {
-                        this->setOutput(::fwIO::s_DATA_KEY, obj);
+                        std::cout << "Created" << std::endl;
+                        m_qInOut = new ::fwServices::QtObjectHolder(obj);
                     }
+                    done();
                 }
                 catch (std::exception& e)
                 {
                     std::string msg = "Failed to read : \n" + std::string(e.what());
                     ::fwGui::dialog::MessageDialog::showMessageDialog("Reader Error", msg);
+                    failure(msg.c_str());
                 }
             }
             else
@@ -366,7 +367,7 @@ void SIOSelector::updating()
     }
     else
     {
-        SLM_WARN("SIOSelector::load : availableExtensions is empty.");
+        SLM_WARN("SQIOSelector::load : availableExtensions is empty.");
         if ( m_mode == READER_MODE )
         {
             ::fwGui::dialog::MessageDialog messageBox;
@@ -390,24 +391,24 @@ void SIOSelector::updating()
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::info( std::ostream& _sstream )
+void SQIOSelector::info( std::ostream& _sstream )
 {
     // Update message
-    _sstream << "SIOSelector";
+    _sstream << "SQIOSelector";
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::setIOMode( IOMode _mode )
+void SQIOSelector::setIOMode( IOMode _mode )
 {
     m_mode = _mode;
 }
 
 //------------------------------------------------------------------------------
 
-void SIOSelector::forwardJob(::fwJobs::IJob::sptr iJob)
+void SQIOSelector::forwardJob(::fwJobs::IJob::sptr iJob)
 {
-    m_sigJobCreated->emit(iJob);
+    jobCreated();
 }
 
 //------------------------------------------------------------------------------

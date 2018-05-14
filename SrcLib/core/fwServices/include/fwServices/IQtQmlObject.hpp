@@ -1,13 +1,13 @@
 #pragma once
 
-#include "fwGuiQt/config.hpp"
+#include "fwServices/config.hpp"
 
 #include <QObject>
 
-namespace fwGuiQt
+namespace fwServices
 {
 
-class FWGUIQT_CLASS_API IQtQmlObject
+class FWSERVICES_CLASS_API IQtQmlObject
 {
 public:
 	IQtQmlObject(std::string const& cType);

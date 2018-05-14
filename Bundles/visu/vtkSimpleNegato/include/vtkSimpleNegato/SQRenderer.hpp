@@ -19,7 +19,7 @@
 #include <fwData/Image.hpp>
 
 #include <fwGuiQt/container/QtContainer.hpp>
-#include <fwGuiQt/QtObjectHolder.hpp>
+#include <fwServices/QtObjectHolder.hpp>
 
 #include  <vtkImagePlaneWidget.h>
 #include  <vtkOutlineFilter.h>
@@ -47,13 +47,11 @@ class VTKSIMPLENEGATO_CLASS_API SQRenderer : public ::fwServices::IQmlService
 {
     Q_OBJECT
 
-    Q_PROPERTY(fwGuiQt::QtObjectHolder *image MEMBER m_image NOTIFY imageChanged)
+    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image NOTIFY imageChanged)
     Q_PROPERTY(fwRenderVTK::FrameBufferItem *target MEMBER m_target)
 
 
 public:
-//    fwCoreServiceClassDefinitionsMacro( (SRenderer)(::fwRender::IRender) );
-
     /// Constructor
     VTKSIMPLENEGATO_API SQRenderer() noexcept;
 
@@ -106,7 +104,7 @@ protected:
     VTKSIMPLENEGATO_API virtual void destroying() override;
 
 Q_SIGNALS:
-    void    imageChanged(::fwGuiQt::QtObjectHolder *);
+    void    imageChanged(::fwServices::QtObjectHolder *);
 
 
 
@@ -150,7 +148,7 @@ private:
 
 //    ::fwGuiQt::container::QtContainer::sptr m_container;
 
-    ::fwGuiQt::QtObjectHolder *m_image;
+    ::fwServices::QtObjectHolder *m_image;
     fwRenderVTK::FrameBufferItem  *m_target;
 };
 
