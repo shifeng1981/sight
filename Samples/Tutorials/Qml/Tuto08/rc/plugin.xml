@@ -10,6 +10,8 @@
     <requirement id="ioVTK" />
     <requirement id="visuVTKAdaptor"/>
     <requirement id="uiIO" />
+    <requirement id="uiImageQt" />
+    <requirement id="uiVisuQt" />
 
 
 

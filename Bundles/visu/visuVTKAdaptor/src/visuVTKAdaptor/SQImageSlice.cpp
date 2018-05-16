@@ -127,6 +127,8 @@ void SQImageSlice::updating()
 
 void SQImageSlice::updateSliceIndex(int axial, int frontal, int sagittal)
 {
+    std::cout << "Values = {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
+
     m_axialIndex->value()    = axial;
     m_frontalIndex->value()  = frontal;
     m_sagittalIndex->value() = sagittal;
@@ -197,6 +199,7 @@ void SQImageSlice::updateImage( ::fwData::Image::sptr image  )
 
 void SQImageSlice::updateSImageSliceIndex( ::fwData::Image::sptr image )
 {
+
     int axialIndex    = m_axialIndex->value();
     int frontalIndex  = m_frontalIndex->value();
     int sagittalIndex = m_sagittalIndex->value();
@@ -244,6 +247,7 @@ void SQImageSlice::buildPipeline( )
     SLM_ASSERT("Invalid vtk image source", algorithm||imageData );
     if (algorithm)
     {
+        std::cout << "m_imageActor is setted with algorithm" << std::endl;
         SLM_TRACE("Input is a vtkImageAlgorithm");
         m_imageActor->GetMapper()->SetInputConnection(algorithm->GetOutputPort());
         //if (imageBlend)
@@ -255,6 +259,7 @@ void SQImageSlice::buildPipeline( )
     else if (imageData)
     {
         SLM_TRACE("Input is a vtkImageData");
+        std::cout << "m_imageActor is setted with imageData" << std::endl;
         m_imageActor->SetInputData(imageData);
     }
 

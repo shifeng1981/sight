@@ -2,14 +2,34 @@
 
 #include <fwServices/QtQmlType.hxx>
 #include <fwServices/QtQmlInstancier.hxx>
+#include <fwServices/IQmlService.hpp>
 
 #include <QCoreApplication>
 #include <QQuickWindow>
 #include <QFileInfo>
 #include <QQmlContext>
+#include <QQuickItem>
 
 namespace fwGuiQt
 {
+
+class   QmlAppEventFilter: public QObject
+{
+public:
+    QmlAppEventFilter() = default;
+    ~QmlAppEventFilter() = default;
+
+protected:
+    bool    eventFilter(QObject *obj, QEvent *event)
+    {
+        if (event->type() == QEvent::DeferredDelete)
+        {
+            QtQmlEngine::getEngine().stopServices();
+        }
+        return QObject::eventFilter(obj, event);
+    }
+
+};
 
 QtQmlEngine	*QtQmlEngine::m_qtQmlEngine = nullptr;
 
@@ -29,7 +49,9 @@ void	QtQmlEngine::loadFile(std::string const& scriptFile)
     m_rootWindow = new QQuickWidget;
 
     QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
-
+    m_rootWindow->setAttribute( Qt::WA_DeleteOnClose );
+    m_rootWindow->installEventFilter(new QmlAppEventFilter);
+    connect(m_rootWindow, SIGNAL(destroyed(QObject *)), this, SLOT(cleanApp(QObject *)));
     m_rootWindow->setSource(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
 
 }
@@ -54,6 +76,11 @@ void	QtQmlEngine::addCtx(std::string const& uid, std::string const& type)
 QQuickWidget	*QtQmlEngine::getWindow() const
 {
 	return m_rootWindow;
+}
+
+void    QtQmlEngine::stopServices()
+{
+    QMetaObject::invokeMethod(m_rootWindow->rootObject(), "cleanUp");
 }
 
 QtQmlEngine::~QtQmlEngine()

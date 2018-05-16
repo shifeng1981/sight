@@ -19,7 +19,7 @@ class FWSERVICES_CLASS_API IQHasServices
 {
 public:
 
-    typedef std::vector < WPTR(::fwServices::IQmlService) > ServiceVector;
+    typedef std::vector < SPTR(::fwServices::IQmlService) > ServiceVector;
     using ServiceVectorGlobal = std::vector< SPTR(::fwServices::IQmlService) >;
 
     /**
@@ -81,7 +81,7 @@ private:
     /// Sub services linked to this service
     ServiceVector m_subServices;
 
-    static ServiceVectorGlobal s_servicesList;
+    //static ServiceVectorGlobal s_servicesList;
 };
 
 //------------------------------------------------------------------------------
@@ -98,13 +98,14 @@ SPTR(T) IQHasServices::registerService(const std::string& _implType, const std::
 {
     auto srv = QtQmlInstancier::instanciate<T>(_implType);
 
+    SLM_ASSERT("Service with type : <" + _implType + "> not found.", srv);
     if(!_id.empty())
     {
         SLM_ASSERT( "Try to set ID: " + _id + " but already has an ID: " + srv->getID(), !srv->hasID() );
         srv->setID( _id );
     }
+
     m_subServices.push_back(srv);
-    s_servicesList.push_back(srv);
     return srv;
 }
 

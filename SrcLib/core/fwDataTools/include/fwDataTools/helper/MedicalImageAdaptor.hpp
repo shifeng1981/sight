@@ -46,8 +46,8 @@ public:
     typedef enum
     {
         X_AXIS = 0,
-        Y_AXIS,
-        Z_AXIS
+        Y_AXIS = 1,
+        Z_AXIS = 2
     } Orientation;
 
     /// Destructor. Do nothing.

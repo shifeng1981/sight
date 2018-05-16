@@ -52,6 +52,8 @@ public:
 	 */
 	virtual void FWSERVICES_API 	addCtx(std::string const& uid, std::string const& type);
 
+    void    stopServices();
+
 private:
 	std::string	m_scriptFile;
 	std::unique_ptr<QQmlComponent>	m_component;

@@ -40,7 +40,6 @@ IQAdaptor::IQAdaptor() noexcept :
 
 IQAdaptor::~IQAdaptor() noexcept
 {
-    std::cout << "Adaptor deleted" << std::endl;
     m_propCollection->Delete();
 }
 
@@ -102,7 +101,6 @@ void IQAdaptor::requestRender()
     {
         if ( !this->getRenderService()->getPendingRenderRequest())
         {
-            std::cout << "Worker : " << m_associatedWorker << std::endl;
             this->getRenderService()->setPendingRenderRequest(true);
             this->getRenderService()->slot(SQRender::s_RENDER_SLOT)->run();
         }

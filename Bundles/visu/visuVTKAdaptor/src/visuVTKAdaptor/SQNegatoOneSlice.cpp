@@ -213,6 +213,15 @@ void SQNegatoOneSlice::updateSliceType(int from, int to)
     {
         setOrientation( static_cast< Orientation >( to ));
     }
+    for (auto& srv : this->getRegisteredServices())
+    {
+        auto imgSliceAdaptor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQImageSlice>(srv);
+
+        if (imgSliceAdaptor)
+        {
+            imgSliceAdaptor->updateSliceType(from, to);
+        }
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -259,6 +268,20 @@ void SQNegatoOneSlice::configuring()
 
     m_actorOpacity = config.get<double>("actorOpacity", 1.);*/
 }
+
+void SQNegatoOneSlice::updateSliceIndex(int axial, int frontal, int sagittal)
+{
+    for (auto& srv : this->getRegisteredServices())
+    {
+        auto imgSliceAdaptor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQImageSlice>(srv);
+
+        if (imgSliceAdaptor)
+        {
+            imgSliceAdaptor->updateSliceIndex(axial, frontal, sagittal);
+        }
+    }
+}
+
 
 //------------------------------------------------------------------------------
 

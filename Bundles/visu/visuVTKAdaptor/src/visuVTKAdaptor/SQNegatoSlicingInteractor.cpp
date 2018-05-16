@@ -384,9 +384,9 @@ void SQNegatoSlicingInteractor::stopping()
 
 void SQNegatoSlicingInteractor::updateSliceIndex(int axial, int frontal, int sagittal)
 {
-    m_axialIndex->value()    = axial;
+    /*m_axialIndex->value()    = axial;
     m_frontalIndex->value()  = frontal;
-    m_sagittalIndex->value() = sagittal;
+    m_sagittalIndex->value() = sagittal;*/
 }
 
 //-----------------------------------------------------------------------------

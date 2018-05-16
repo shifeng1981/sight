@@ -9,7 +9,9 @@
 #include "visuVTKAdaptor/SQNegatoOneSlice.hpp"
 #include "visuVTKAdaptor/SQNegatoSlicingInteractor.hpp"
 #include "visuVTKAdaptor/SQNegatoWindowingInteractor.hpp"
-#include "visuVTKAdaptor/SSlicesCursor.hpp"
+#include "visuVTKAdaptor/SQSlicesCursor.hpp"
+#include "visuVTKAdaptor/SQImageSlice.hpp"
+#include "visuVTKAdaptor/SQProbeCursor.hpp"
 
 #include <fwCom/Slot.hpp>
 #include <fwCom/Slot.hxx>
@@ -68,11 +70,6 @@ SQNegatoMPR::SQNegatoMPR() noexcept :
     m_image(nullptr)
 {
 
-    newSlot(s_UPDATE_SLICE_TYPE_SLOT, &SQNegatoMPR::updateSliceType, this);
-    newSlot(s_UPDATE_SLICE_MODE_SLOT, &SQNegatoMPR::updateSliceMode, this);
-    newSlot(s_SHOW_SLICE_SLOT, &SQNegatoMPR::showSlice, this);
-    newSlot(s_SET_CROSS_SCALE_SLOT, &SQNegatoMPR::setCrossScale, this);
-    newSlot(S_CHANGE_IMAGE_SOURCE_SLOT, &SQNegatoMPR::changeImageSource, this);
     ::fwCom::HasSlots::m_slots.setWorker( m_associatedWorker );
 }
 
@@ -80,6 +77,7 @@ SQNegatoMPR::SQNegatoMPR() noexcept :
 
 SQNegatoMPR::~SQNegatoMPR() noexcept
 {
+
 }
 
 //------------------------------------------------------------------------------
@@ -99,27 +97,29 @@ void SQNegatoMPR::stopping()
     //disconnect proxy
     ::fwServices::registry::Proxy::sptr proxy = ::fwServices::registry::Proxy::getDefault();
 
- /*   for (auto srv : this->getRegisteredServices())
+    for (auto srv : this->getRegisteredServices())
     {
-        SNegatoSlicingInteractor::sptr negatoSlicingInteractor = SNegatoSlicingInteractor::dynamicCast(srv.lock());
-        SSlicesCursor::sptr sliceCursor                        = SSlicesCursor::dynamicCast(srv.lock());
+        std::shared_ptr<SQNegatoSlicingInteractor> negatoSlicingInteractor = std::dynamic_pointer_cast<SQNegatoSlicingInteractor>(srv);
+        std::shared_ptr<SQSlicesCursor> sliceCursor                        = std::dynamic_pointer_cast<SQSlicesCursor>(srv);
         if (negatoSlicingInteractor)
         {
+            std::cout << "Disconnect negatoSlicingInteractor" << std::endl;
             proxy->disconnect(m_slicingStartingProxy, negatoSlicingInteractor->signal(
-                                  SNegatoSlicingInteractor::s_SLICING_STARTED_SIG));
+                                  SQNegatoSlicingInteractor::s_SLICING_STARTED_SIG));
             proxy->disconnect(m_slicingStoppingProxy, negatoSlicingInteractor->signal(
-                                  SNegatoSlicingInteractor::s_SLICING_STOPPED_SIG));
+                                  SQNegatoSlicingInteractor::s_SLICING_STOPPED_SIG));
         }
 
         if (sliceCursor)
         {
+            std::cout << "Disconnect sliceCursor" << std::endl;
             proxy->disconnect(m_slicingStartingProxy, sliceCursor->slot(
-                                  SSlicesCursor::s_SHOW_FULL_CROSS_SLOT));
+                                  SQSlicesCursor::s_SHOW_FULL_CROSS_SLOT));
 
             proxy->disconnect(m_slicingStoppingProxy, sliceCursor->slot(
-                                  SSlicesCursor::s_SHOW_NORMAL_CROSS_SLOT));
+                                  SQSlicesCursor::s_SHOW_NORMAL_CROSS_SLOT));
         }
-    }*/
+    }
 
     this->unregisterServices();
     this->requestRender();
@@ -129,6 +129,10 @@ void SQNegatoMPR::stopping()
 
 void SQNegatoMPR::updating()
 {
+    if (!m_image || !m_image->getObject())
+    {
+        return ;
+    }
     this->stopping();
 
     SLM_ASSERT("Missing image", m_image || m_image->getObject());
@@ -152,25 +156,25 @@ void SQNegatoMPR::updating()
 
             std::shared_ptr<::fwRenderVTK::IQAdaptor> sliceCursor;
             std::shared_ptr<::fwRenderVTK::IQAdaptor> negatoSlicingInteractor;
-            //this->addAdaptor("::visuVTKAdaptor::SNegatoWindowingInteractor");
-            //negatoSlicingInteractor = this->addAdaptor("::visuVTKAdaptor::SNegatoSlicingInteractor", m_orientation);
-            //sliceCursor             = this->addAdaptor("::visuVTKAdaptor::SSlicesCursor", m_orientation);
-            //this->addAdaptor("::visuVTKAdaptor::SProbeCursor", m_orientation);
+            this->addAdaptor("::visuVTKAdaptor::SNegatoWindowingInteractor");
+            negatoSlicingInteractor = this->addAdaptor("::visuVTKAdaptor::SNegatoSlicingInteractor", m_orientation);
+            sliceCursor             = this->addAdaptor("::visuVTKAdaptor::SSlicesCursor", m_orientation);
+            this->addAdaptor("::visuVTKAdaptor::SProbeCursor", m_orientation);
 
             // Connect slicing signals/slots from NegatoSlicingInteractor to SlicesCursor using the image slicing proxy
-            /*::fwServices::registry::Proxy::sptr proxy = ::fwServices::registry::Proxy::getDefault();
+            ::fwServices::registry::Proxy::sptr proxy = ::fwServices::registry::Proxy::getDefault();
             m_slicingStartingProxy                    = image->getID() + s_slicingStartingProxy;
             m_slicingStoppingProxy                    = image->getID() + s_slicingStoppingProxy;
             proxy->connect(m_slicingStartingProxy, negatoSlicingInteractor->signal(
-                               SNegatoSlicingInteractor::s_SLICING_STARTED_SIG));
+                               SQNegatoSlicingInteractor::s_SLICING_STARTED_SIG));
             proxy->connect(m_slicingStartingProxy, sliceCursor->slot(
-                               SSlicesCursor::s_SHOW_FULL_CROSS_SLOT));
+                               SQSlicesCursor::s_SHOW_FULL_CROSS_SLOT));
 
             proxy->connect(m_slicingStoppingProxy, negatoSlicingInteractor->signal(
-                               SNegatoSlicingInteractor::s_SLICING_STOPPED_SIG));
+                               SQNegatoSlicingInteractor::s_SLICING_STOPPED_SIG));
             proxy->connect(m_slicingStoppingProxy, sliceCursor->slot(
-                               SSlicesCursor::s_SHOW_NORMAL_CROSS_SLOT));
-            m_sliceCursor = sliceCursor;*/
+                               SQSlicesCursor::s_SHOW_NORMAL_CROSS_SLOT));
+            m_sliceCursor = sliceCursor;
         }
         if(this->is3dModeEnabled())
         {
@@ -227,6 +231,26 @@ void SQNegatoMPR::updateSliceType(int from, int to)
     {
         setOrientation( static_cast< Orientation >( to ));
     }
+    for (auto& srv : this->getRegisteredServices())
+    {
+        auto imageSlice = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
+        auto negatoSlicingInteractor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoSlicingInteractor>(srv);
+        auto sliceCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
+
+        if (imageSlice)
+        {
+            imageSlice->updateSliceType(from, to);
+        }
+        if (negatoSlicingInteractor)
+        {
+            negatoSlicingInteractor->updateSliceType(from, to);
+        }
+        if (sliceCursor)
+        {
+             sliceCursor->updateSliceType(from, to);
+        }
+    }
+
 }
 
 //-----------------------------------------------------------------------------
@@ -281,6 +305,7 @@ void SQNegatoMPR::setCrossScale(double scale)
     if (m_sliceCursor)
     {
         ::fwCom::SlotBase::sptr slot = m_sliceCursor->slot(s_SET_CROSS_SCALE_SLOT);
+        std::cout << "Here" << std::endl;
         slot->asyncRun(scale);
     }
 }
@@ -445,6 +470,38 @@ std::shared_ptr<::fwRenderVTK::IQAdaptor> SQNegatoMPR::addAdaptor(const std::str
     service->update();
 
     return service;
+}
+
+void    SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
+{
+    std::cout << "Values = BEFORE {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
+
+    for (auto& srv : this->getRegisteredServices())
+    {
+        auto imageSlice = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
+        auto negatoSlicingInteractor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoSlicingInteractor>(srv);
+        auto probeCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQProbeCursor>(srv);
+        auto sliceCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
+
+        if (imageSlice)
+        {
+            imageSlice->updateSliceIndex(axial, frontal, sagittal);
+        }
+        if (negatoSlicingInteractor)
+        {
+            negatoSlicingInteractor->updateSliceIndex(axial, frontal, sagittal);
+        }
+        if (probeCursor)
+        {
+            probeCursor->updateSliceIndex(axial, frontal, sagittal);
+        }
+        if (sliceCursor)
+        {
+             sliceCursor->updateSliceIndex(axial, frontal, sagittal);
+        }
+    }
+    std::cout << "Values END = {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
+
 }
 
 //------------------------------------------------------------------------------

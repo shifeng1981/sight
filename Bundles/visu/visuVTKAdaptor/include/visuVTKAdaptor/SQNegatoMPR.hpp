@@ -143,7 +143,7 @@ protected:
 
     std::shared_ptr<::fwRenderVTK::IQAdaptor> addAdaptor(const std::string& adaptor, int axis = -1);
 
-private:
+public Q_SLOTS:
 
     /**
      * @name Slots
@@ -154,6 +154,8 @@ private:
 
     /// Slot: update Slice mode (0: NO_SLICE, 1: ONE_SLICE, 3: THREE_SLICES)
     void updateSliceMode(int mode);
+
+    void updateSliceIndex(int axial, int frontal, int sagittal);
 
     /// Slot: show/hide slice
     void showSlice(bool isShown);
@@ -168,6 +170,7 @@ private:
      * @}
      */
 
+private:
     bool m_allowAlphaInTF;
     bool m_interpolation;
     double m_actorOpacity;
@@ -182,7 +185,7 @@ private:
     SliceMode m_backupedSliceMode;
     ::fwCom::helper::SigSlotConnection m_connections; /// store subservices connections
 
-    ::fwRenderVTK::IAdaptor::sptr m_sliceCursor;
+    std::shared_ptr<::fwRenderVTK::IQAdaptor> m_sliceCursor;
 
     /**
      * @{

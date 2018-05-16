@@ -53,8 +53,6 @@ SQMedical3DCamera::SQMedical3DCamera() noexcept :
 
 SQMedical3DCamera::~SQMedical3DCamera() noexcept
 {
-    std::cout << "Deleted CameraMedical" << std::endl;
-
 }
 
 //------------------------------------------------------------------------------
@@ -82,6 +80,7 @@ void SQMedical3DCamera::starting()
 
     m_camera = this->getRenderer()->GetActiveCamera();
 
+    this->getRenderer()->ResetCamera();
     if(m_resetAtStart)
     {
         this->updateView();

@@ -2,6 +2,7 @@
 #include "fwRenderVTK/FrameBufferItem.hpp"
 
 #include <chrono>
+#include <QQuickWindow>
 
 namespace fwRenderVTK
 {
@@ -18,17 +19,16 @@ vtkInternalOpenGLRenderWindow::~vtkInternalOpenGLRenderWindow()
 
 void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
 {
+    this->MakeCurrent();
+    initializeOpenGLFunctions();
+
     Superclass::OpenGLInitState();
 
     // Before any of the gl* functions in QOpenGLFunctions are called for a
     // given OpenGL context, an initialization must be run within that context
-    this->MakeCurrent();
-    initializeOpenGLFunctions();
     glUseProgram(0); // Shouldn't Superclass::OpenGLInitState() handle this?
     glDisable(GL_DEPTH_TEST); // depth buffer fighting between the cone and the backround without this
     glDisable(GL_BLEND); // doesn't seem crucial (?) but it is one of the differnces that showed up in apitrace analysis
-    glClearColor(1.0,0.0,0.0,0.0);
-    glClear(GL_COLOR_BUFFER_BIT);
     GLfloat texcoords[] =
     {
         0,  0,
@@ -42,12 +42,6 @@ void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
 void    vtkInternalOpenGLRenderWindow::internalRender()
 {
     Superclass::Render();
-
-    if (this->m_qtParentRenderer)
-    {
-        this->m_qtParentRenderer->update();
-    }
-
 }
 
 void    vtkInternalOpenGLRenderWindow::Render()

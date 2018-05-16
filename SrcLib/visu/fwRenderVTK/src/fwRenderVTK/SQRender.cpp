@@ -90,7 +90,6 @@ SQRender::SQRender() noexcept :
 
 SQRender::~SQRender() noexcept
 {
-    std::cout << "/!\ RENDER DELETED !!!" << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -330,7 +329,6 @@ void SQRender::starting()
     if(m_timer)
     {
         m_timer->start();
-        std::cout << "Started" << std::endl;
     }
     std::cout << m_target->getRenderWindow()->GetSize()[0] << " " << m_target->getRenderWindow()->GetSize()[1] << std::endl;
 }
@@ -362,12 +360,7 @@ void SQRender::updating()
 
 void SQRender::render()
 {
-    std::cout << "CAAAA" << std::endl;
-
-    for(auto iterator = m_renderers.begin(); iterator != m_renderers.end(); iterator++)
-    {
-        (*iterator).second->ResetCamera();
-    }
+    m_target->getRenderWindow()->GetInteractor()->Render();
     this->setPendingRenderRequest(false);
 }
 
@@ -395,7 +388,7 @@ void SQRender::requestRender()
     if ( this->isShownOnScreen() && !this->getPendingRenderRequest())
     {
         this->setPendingRenderRequest(true);
-        this->slot(SQRender::s_RENDER_SLOT)->asyncRun();
+        this->slot(SQRender::s_RENDER_SLOT)->run();
     }
 }
 

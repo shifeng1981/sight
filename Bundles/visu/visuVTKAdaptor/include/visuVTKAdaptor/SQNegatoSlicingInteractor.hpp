@@ -87,7 +87,7 @@ public:
      * @}
      */
 
-protected:
+public:
 
     /**
      * @name Slots

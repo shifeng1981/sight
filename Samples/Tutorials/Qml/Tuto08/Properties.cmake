@@ -3,8 +3,6 @@ set( VERSION 0.1 ) # Version of the application
 set( TYPE APP ) # Type APP represent "Application"
 set( DEPENDENCIES  ) # For an application we have no dependencies (libraries to link)
 set( REQUIREMENTS # The bundles used by this application
-    dataReg
-    servicesReg
     gui
     guiQt
     ioVTK
@@ -16,6 +14,8 @@ set( REQUIREMENTS # The bundles used by this application
     fwlauncher
     fwGuiQt
     appQml
+    uiImageQt
+    uiVisuQt
     )
 
 # Set the configuration to use : 'tutoBasicConfig'

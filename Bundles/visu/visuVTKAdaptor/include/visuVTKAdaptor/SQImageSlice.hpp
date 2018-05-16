@@ -133,7 +133,9 @@ protected:
     vtkPolyDataMapper* m_planeOutlineMapper;
     vtkActor* m_planeOutlineActor;
 
-private:
+public:
+    void updateSliceIndex(int axial, int frontal, int sagittal);
+
 
     /**
      * @name Slots
@@ -141,13 +143,13 @@ private:
      */
 
     /// Slot: update image slice index
-    void updateSliceIndex(int axial, int frontal, int sagittal);
 
     /// Slot: update image slice type
     void updateSliceType(int from, int to);
     /**
      * @}
      */
+private:
 
     ::fwServices::QtObjectHolder  *m_image = nullptr;
 

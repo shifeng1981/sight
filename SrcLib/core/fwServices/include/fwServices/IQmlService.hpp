@@ -60,6 +60,7 @@ public:
 
     ServiceState 	getStatus() const;
 
+
     /**
      * @brief This class is a helper to define the connections of a service and its data.
      */
@@ -165,6 +166,8 @@ public Q_SLOTS:
      */
     void FWSERVICES_API configure();
 
+    FWSERVICES_API bool isStarted() const;
+
 
     /**
      * Configuration parsing helpers
@@ -200,6 +203,7 @@ Q_SIGNALS:
 private:
     ServiceState	m_serviceState = STOPPED;
     ConfigurationState  m_configurationState = NOT_CONFIGURED;
+
 };
 
 } // fwServices

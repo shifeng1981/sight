@@ -51,7 +51,7 @@ QOpenGLFramebufferObject    *FrameBufferRenderer::createFramebufferObject(const 
     QOpenGLFramebufferObjectFormat  format;
 
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
-    format.setSamples(4);
+    format.setSamples(0);
 
     m_framebufferObject = new QOpenGLFramebufferObject(size, format);
     m_vtkRenderWindow->setFrameBufferObject(m_framebufferObject);
@@ -64,11 +64,14 @@ QOpenGLFramebufferObject    *FrameBufferRenderer::createFramebufferObject(const 
 void    FrameBufferRenderer::render()
 {
     m_vtkRenderWindow->PushState();
-    m_vtkRenderWindow->Start();
-    m_vtkRenderWindow->internalRender();
+    m_vtkRenderWindow->internalRender(); // vtkXOpenGLRenderWindow renders the scene to the FBO
     m_vtkRenderWindow->PopState();
     update();
-    m_item->QQuickFramebufferObject::window()->resetOpenGLState();
+}
+
+FrameBufferItem const   *FrameBufferRenderer::getItem() const
+{
+    return m_item;
 }
 
 //-----------------------------------------------------------------------------
@@ -84,7 +87,8 @@ void    FrameBufferRenderer::synchronize(QQuickFramebufferObject * item)
 
 //------------------------------------------------------------------------------------------
 
-FrameBufferItem::FrameBufferItem() :
+FrameBufferItem::FrameBufferItem(QQuickItem *parent) :
+    QQuickFramebufferObject(parent),
     m_win(nullptr),
     m_interactorAdapter(nullptr)
 {

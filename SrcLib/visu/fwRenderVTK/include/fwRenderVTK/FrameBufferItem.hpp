@@ -49,6 +49,8 @@ public:
      */
     virtual void FWRENDERVTK_API synchronize(QQuickFramebufferObject *);
 
+    FrameBufferItem const   *getItem() const;
+
 Q_SIGNALS:
     /**
      * @brief ready
@@ -70,7 +72,7 @@ class FWRENDERVTK_CLASS_API  FrameBufferItem : public QQuickFramebufferObject
     Q_OBJECT
 
 public:
-    FWRENDERVTK_API FrameBufferItem();
+    FWRENDERVTK_API FrameBufferItem(QQuickItem *parent = nullptr);
     FWRENDERVTK_API ~FrameBufferItem();
 
     /**

@@ -5,6 +5,8 @@ import QtQuick.Dialogs 1.0
 import com.fw4spl.uiIO 1.0
 import com.fw4spl.vtk 1.0
 import com.fw4spl.vtk.adaptors 1.0
+import com.fw4spl 1.0
+import com.fw4spl.uiVisuQt 1.0
 
 Rectangle {
     id: rootWindow
@@ -55,6 +57,9 @@ Rectangle {
             imageAdaptor.image = inout
             imageAdaptor.configure()
             imageAdaptor.start()
+            genericRenderer.update()
+            sliceSelector.image = inout
+            sliceSelector.enabled = true
         }
     }
 
@@ -63,6 +68,15 @@ Rectangle {
         mode: "reader"
         dataClassName: "::fwData::Mesh"
         selectionMode: "exclude"
+        onDone: {
+            console.log("Mesh readed");
+            console.log(inout);
+            meshAdaptor.mesh = inout
+            meshAdaptor.configure();
+            meshAdaptor.start();
+            genericRenderer.update();
+
+        }
     }
 
     SIOSelector {
@@ -70,6 +84,11 @@ Rectangle {
         mode: "reader"
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
+        onDone: {
+            console.log("Texture readed");
+            textureAdaptor.texture = inout;
+            textureAdaptor.update();
+        }
     }
 
     SRender {
@@ -77,7 +96,7 @@ Rectangle {
         target: vtkRenderWindow
 
         scene: ({
-            "renderMode": "timer",
+            "renderMode": "auto",
             "rendererList": [{
                 "id": "default",
             }],
@@ -95,9 +114,60 @@ Rectangle {
 
         config: ({
             "mode": "3d",
-            "slices": "1",
+            "slices": "3",
             "renderer": "default",
             "picker": "myPicker"
+        })
+    }
+
+    SSnapshot {
+        id: snapshotAdaptor
+        renderService: genericRenderer
+
+        config: ({
+            "renderer": "default"
+        })
+    }
+
+    SnapshotEditor {
+        id: snapshotEditor
+        Component.onCompleted: {
+            configure()
+            start();
+        }
+        onSnapped: {
+            console.log(filepath);
+            snapshotAdaptor.configure();
+            snapshotAdaptor.start();
+            snapshotAdaptor.snap(filepath);
+        }
+    }
+
+    SMesh {
+        id: meshAdaptor
+        mesh: meshReader.inout
+        renderService: genericRenderer
+
+        config: ({
+            "renderer": "default",
+            "picker": "",
+            "uvgen": "sphere"
+        })
+        onTextureApplied: {
+            console.log("Texture applied");
+            textureAdaptor.applyTexture(material);
+        }
+    }
+
+    STexture {
+        id: textureAdaptor
+        texture: textureReader.inout
+        renderService: genericRenderer
+        config: ({
+            "renderer": "default",
+            "picker": "",
+            "filtering": "linear",
+            "wrapping": "repeat"
         })
     }
 
@@ -118,7 +188,6 @@ Rectangle {
                 anchors.fill: parent
 
                 onReady: {
-                    console.log("Started")
                     imageReader.configure()
                     imageReader.start()
                     meshReader.configure()
@@ -127,16 +196,104 @@ Rectangle {
                     textureReader.start()
                     genericRenderer.configure()
                     genericRenderer.start()
-                    genericRenderer.update()
+                    textureAdaptor.configure()
+                    textureAdaptor.start()
                 }
             }
         }
 
-        Rectangle {
+        RowLayout {
             Layout.fillWidth: true
             Layout.minimumWidth: parent.width
-            Layout.preferredHeight: 50
-            color: "red"
+            Layout.maximumHeight: 50
+            spacing: 4
+
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.preferredWidth: 125
+                ComboBox {
+                    id: sliderIndexEditor
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    model: ["One slice", "Three slice"]
+
+                    currentIndex: 1
+                    onActivated: {
+                        imageAdaptor.updateSliceMode((index == 0) ? 1 : 3)
+                    }
+                }
+            }
+
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.preferredWidth: 50
+                Button {
+                    checkable: true
+                    checked: false
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+
+                    iconSource: "sliceShow.png"
+                    onCheckedChanged: {
+                        sliceSelector.enabled = !checked && imageAdaptor.image
+                        iconSource = (checked ? "sliceHide.png" : "sliceShow.png")
+
+                    }
+                }
+            }
+
+            SliceSelector {
+                id: sliceSelector
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                enabled: false
+
+                onUpdatedSliceIndex: {
+                    imageAdaptor.updateSliceIndex(axial, frontal, sagittal);
+                }
+
+                onUpdatedSliceType: {
+                    imageAdaptor.updateSliceType(from, to);
+                }
+            }
+
+
+            Rectangle {
+                Layout.fillHeight: true
+                Layout.preferredWidth: 30
+
+                Button {
+                    text: "Snap"
+                    anchors.fill: parent
+                    onClicked: {
+                        snapshotEditor.onSnapButton()
+                    }
+                }
+            }
+        }
+    }
+
+    // Automatic called function
+    function cleanUp()
+    {
+        console.log("Cleaning up...");
+        if (imageReader.isStarted()) {
+            imageReader.stop();
+        }
+        if (meshReader.isStarted()) {
+            meshReader.stop();
+        }
+        if (textureReader.isStarted()) {
+            textureReader.stop();
+        }
+        if (imageAdaptor.isStarted()) {
+            imageAdaptor.stop();
+        }
+        if (genericRenderer.isStarted()) {
+            genericRenderer.stop();
         }
     }
 }

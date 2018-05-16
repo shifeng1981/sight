@@ -123,13 +123,18 @@ protected:
     std::weak_ptr<::fwRenderVTK::IQAdaptor> m_imageAdaptor;
     std::weak_ptr<::fwRenderVTK::IQAdaptor> m_imageSliceAdaptor;
 
-private:
+public:
+    void updateSliceIndex(int axial, int frontal, int sagittal);
+
+
     /**
      * @name Slots
      * @{
      */
     /// Slot: update image slice type
     void updateSliceType(int from, int to);
+
+private:
 
     /// Slot: update image
     void updateImage();

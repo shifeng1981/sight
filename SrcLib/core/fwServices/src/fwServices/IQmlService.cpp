@@ -11,11 +11,17 @@ IQmlService::IQmlService() : m_serviceState(STOPPED)
 
 IQmlService::~IQmlService()
 {
+    if (m_serviceState == STARTED)
+    {
+        this->stop();
+    }
 }
 
 void	IQmlService::start()
 {
 	m_serviceState = STARTED;
+    ::fwCom::HasSlots::m_slots.setWorker( m_associatedWorker );
+
     this->starting();
     started();
 }
@@ -84,6 +90,11 @@ void    IQmlService::reconfiguring()
 
 void    IQmlService::destroying()
 {
+}
+
+bool    IQmlService::isStarted() const
+{
+    return m_serviceState == STARTED;
 }
 
 void    IQmlService::setProperty(const std::string& name, const QVariant& value)
