@@ -43,7 +43,6 @@ class FWRENDERVTK_CLASS_API IQAdaptor : public ::fwServices::IQmlService,
 {
     Q_OBJECT
 
-    Q_PROPERTY(QVariantMap config MEMBER m_configMap)
     Q_PROPERTY(SQRender *renderService MEMBER m_renderService)
     Q_PROPERTY(QVariantList services MEMBER m_serviceList)
 
@@ -187,7 +186,6 @@ protected:
      *  Qml exposure variables
      *  @{
      */
-    QVariantMap m_configMap;
     QVariantList m_serviceList;
     SQRender    *m_renderService;
     /**

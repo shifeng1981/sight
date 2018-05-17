@@ -295,5 +295,11 @@ Rectangle {
         if (genericRenderer.isStarted()) {
             genericRenderer.stop();
         }
+        if (snapshotEditor.isStarted()) {
+            snapshotEditor.stop();
+        }
+        if (snapshotAdaptor.isStarted()) {
+            snapshotAdaptor.start();
+        }
     }
 }

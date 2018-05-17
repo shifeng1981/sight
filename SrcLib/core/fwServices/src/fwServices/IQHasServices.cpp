@@ -26,7 +26,7 @@ IQHasServices::~IQHasServices() noexcept
 
 //------------------------------------------------------------------------------
 
-std::shared_ptr<const ::fwServices::IQmlService> IQHasServices::getRegisteredService(const fwTools::fwID::IDType& _id) const
+::fwServices::IQmlService::csptr IQHasServices::getRegisteredService(const fwTools::fwID::IDType& _id) const
 {
     std::shared_ptr<::fwServices::IQmlService> srv;
     for(const auto& wService : m_subServices)
@@ -60,7 +60,7 @@ void IQHasServices::unregisterService(const fwTools::fwID::IDType& _id)
 
 //------------------------------------------------------------------------------
 
-void IQHasServices::unregisterService(const std::shared_ptr<IQmlService>& _service)
+void IQHasServices::unregisterService(IQmlService::sptr _service)
 {
     auto iter = std::find_if(m_subServices.begin(), m_subServices.end(),
                              [ = ](const std::shared_ptr<::fwServices::IQmlService>& adaptor)
@@ -76,7 +76,7 @@ void IQHasServices::unregisterService(const std::shared_ptr<IQmlService>& _servi
 
 //------------------------------------------------------------------------------
 
-std::shared_ptr<::fwServices::IQmlService> IQHasServices::registerService(const std::string& _implType, const std::string& _id )
+::fwServices::IQmlService::sptr IQHasServices::registerService(const std::string& _implType, const std::string& _id )
 {
     auto srv = QtQmlInstancier::instanciate<::fwServices::IQmlService>(_implType);
 

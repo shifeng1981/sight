@@ -1,6 +1,8 @@
 #pragma once
 
 # include "fwServices/config.hpp"
+# include "fwServices/macros.hpp"
+
 
 #include <fwThread/Worker.hpp>
 
@@ -26,7 +28,19 @@ class FWSERVICES_CLASS_API IQmlService : public QObject,
 {
 	Q_OBJECT
 
+    /**
+     *  Exposure of C++ property to QML
+     *  @{
+     */
+    Q_PROPERTY(QVariantMap config MEMBER m_configMap)
+    /**
+     * }@
+     */
+
 public:
+
+    fwQmlTypeMacro(IQmlService);
+
 	enum ServiceState
 	{
         STARTED,    /**< state after start */
@@ -60,78 +74,31 @@ public:
 
     ServiceState 	getStatus() const;
 
-
-    /**
-     * @brief This class is a helper to define the connections of a service and its data.
-     */
-    class KeyConnectionsMap
-    {
-    public:
-        //------------------------------------------------------------------------------
-
-        void push (const KeyType& key,
-                   const ::fwCom::Signals::SignalKeyType& sig,
-                   const ::fwCom::Slots::SlotKeyType& slot)
-        {
-            m_keyConnectionsMap[key].push_back(std::make_pair(sig, slot));
-        }
-
-        typedef std::map< KeyType, KeyConnectionsType> KeyConnectionsMapType;
-
-
-        //------------------------------------------------------------------------------
-
-        KeyConnectionsMapType::const_iterator find(const KeyType& key) const
-        {
-            return m_keyConnectionsMap.find(key);
-        }
-        //------------------------------------------------------------------------------
-
-        KeyConnectionsMapType::const_iterator end() const
-        {
-            return m_keyConnectionsMap.cend();
-        }
-        //------------------------------------------------------------------------------
-
-        bool empty() const
-        {
-            return m_keyConnectionsMap.empty();
-        }
-        //------------------------------------------------------------------------------
-
-        size_t size() const
-        {
-            return m_keyConnectionsMap.size();
-        }
-    private:
-        std::map< KeyType, KeyConnectionsType> m_keyConnectionsMap;
-    };
-
 protected:
     /**
      *  @brief: This function should be override by children. It's called after a start()
      */
-    virtual void FWSERVICES_API starting();
+    virtual FWSERVICES_API void starting();
     /**
      *  @brief: This function should be override by children. It's called after a stop()
      */
-    virtual void FWSERVICES_API stopping();
+    virtual FWSERVICES_API void stopping();
     /**
      *  @brief: This function should be override by children. It's called after a update()
      */
-    virtual void FWSERVICES_API updating();
+    virtual FWSERVICES_API void updating();
     /**
      *  @brief: This function should be override by children. It's called after a destroy()
      */
-    virtual void FWSERVICES_API destroying();
+    virtual FWSERVICES_API void destroying();
     /**
      *  @brief: This function should be override by children. It's called after a configure()
      */
-    virtual void FWSERVICES_API configuring();
+    virtual FWSERVICES_API void configuring();
     /**
      *  @brief: This function should be override by children. It's called after a reconfigure()
      */
-    virtual void FWSERVICES_API reconfiguring();
+    virtual FWSERVICES_API void reconfiguring();
 
     SPTR(::fwThread::Worker) m_associatedWorker;
 
@@ -144,28 +111,32 @@ public Q_SLOTS:
 	 *	This function must be call from subclasses
 	 *	@post: emit started
 	 */
-    void FWSERVICES_API	start();
+    FWSERVICES_API void start();
 	/**
 	 *	@brief: stop the service
 	 *	@post: emit stopped
 	 */
-    void FWSERVICES_API	stop();
+    FWSERVICES_API void stop();
 	/**
 	 *	@brief: release service data (thread, etc.)
 	 *	@post: emit destroyed()
 	 */
-    void FWSERVICES_API	destroy();
+    FWSERVICES_API void destroy();
 	/**
 	 *	@brief: call to update service data
 	 *	@post: emit updated() for service chain
 	 */
-    void FWSERVICES_API update();
+    FWSERVICES_API void update();
     /**
      *  @brief: Used to configure service
      *  Call "configuring" or "reconfiguring" function depend of current configuration state
      */
-    void FWSERVICES_API configure();
+    FWSERVICES_API void configure();
 
+    /**
+     *  @brief: Check if the service is currently started.
+     *  m_serviceStatus == STARTED
+     */
     FWSERVICES_API bool isStarted() const;
 
 
@@ -173,16 +144,43 @@ public Q_SLOTS:
      * Configuration parsing helpers
      */
 protected:
+    /**
+     *  @brief: get helper to retrieve parameters from a QVariantMap (e.g m_configMap)
+     *
+     *  Config map in qml looks like :
+     *  SService {
+     *      config: ({
+     *          "property": "value"
+     *          "anotherProperty": 23
+     *      })
+     *  }
+     */
+
+    /**
+     *  @brief: In case of `key` is not found, defaultValue is returned.
+     */
     template<typename T>
     T const FWSERVICES_API   get(QVariantMap const& target, std::string const& key, T const& defaultValue);
+    /**
+     *  @brief: In case of `key` is not found, a T instance is returned.
+     */
     template<typename T>
     T const  FWSERVICES_API  get(QVariantMap const& target, std::string const& key);
 
-
+    /**
+     *  Qml properties
+     *  @{
+     */
+    QVariantMap m_configMap;
+    /**
+     * }@
+     */
 
 public:
     /**
      *  @brief: Exposition of generic qml's properties
+     *  This method allows us to set property at runtime without having a reference to the variable.
+     *  If the property `name` doesn't exists, do nothing.
      */
     void    FWSERVICES_API setProperty(const std::string& name, const QVariant& value);
 

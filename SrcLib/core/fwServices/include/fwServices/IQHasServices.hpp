@@ -13,11 +13,12 @@ namespace fwServices
 class IQmlService;
 
 /**
- * @brief   Interface for objects that need to manage services.
+ * @brief   Interface for objects that need to manage QServices.
  */
 class FWSERVICES_CLASS_API IQHasServices
 {
 public:
+    fwQmlTypeMacro(IQHasServices);
 
     typedef std::vector < SPTR(::fwServices::IQmlService) > ServiceVector;
     using ServiceVectorGlobal = std::vector< SPTR(::fwServices::IQmlService) >;
@@ -68,7 +69,7 @@ protected:
      * @brief Unregister a specific service
      * @param service Pointer to the service
      */
-    FWSERVICES_API void unregisterService(const std::shared_ptr<::fwServices::IQmlService>& _service);
+    FWSERVICES_API void unregisterService(SPTR(::fwServices::IQmlService) _service);
 
     /**
      * @brief Unregister all services linked to this service, optionally matches only a given type of services

@@ -24,12 +24,12 @@ QtObjectHolder::QtObjectHolder(QObject *parent): QObject(parent)
     m_object = nullptr;
 }
 
-std::shared_ptr<::fwData::Object>&    QtObjectHolder::getObject()
+::fwData::Object::sptr&    QtObjectHolder::getObject()
 {
     return m_object;
 }
 
-std::shared_ptr<::fwData::Object> const& QtObjectHolder::getObject() const
+::fwData::Object::csptr const& QtObjectHolder::getObject() const
 {
     return m_object;
 }

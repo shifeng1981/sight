@@ -3,11 +3,11 @@
 
 #include "fwServices/config.hpp"
 #include "fwServices/QtQmlType.hxx"
+#include "fwServices/macros.hpp"
 
 #include <fwData/Object.hpp>
 
 #include <QObject>
-#include <QSharedPointer>
 
 #include <memory>
 
@@ -17,11 +17,9 @@ namespace fwServices
 class FWSERVICES_CLASS_API   QtObjectHolder: public QObject
 {
     Q_OBJECT
-public:
-    using sptr = QSharedPointer<QtObjectHolder>;
-    using csptr = const QSharedPointer<QtObjectHolder>;
 
 public:
+    fwQmlTypeMacro(QtObjectHolder);
     /**
      * @brief QtObjectHolder: constructor
      * @param object: object to hold
@@ -48,12 +46,12 @@ public:
      *
      * If the data is not set and used, the behavior is undefined.
      */
-    std::shared_ptr<::fwData::Object>& FWSERVICES_API getObject();
+    FWSERVICES_API ::fwData::Object::sptr& getObject();
 
     /**
      *  @brief: same as above but with constness
      */
-    std::shared_ptr<::fwData::Object> const& FWSERVICES_API  getObject() const;
+    FWSERVICES_API const ::fwData::Object::csptr&  getObject() const;
 
     /**
      * @brief ~QtObjectHolder: Destructor, do nothing, use RAII to clean objects
@@ -63,15 +61,15 @@ public:
     /**
      * @brief: Compare the data stored inside this object with another.
      */
-    bool FWSERVICES_API operator!=(QtObjectHolder const& other);
+    FWSERVICES_API bool  operator!=(QtObjectHolder const& other);
 
     /**
      * @brief: = operator, used to pass value in QML
      */
-    QtObjectHolder& FWSERVICES_API operator=(QtObjectHolder const& other);
+    FWSERVICES_API QtObjectHolder& operator=(QtObjectHolder const& other);
 
 private:
-    std::shared_ptr<::fwData::Object> m_object;
+    ::fwData::Object::sptr m_object;
 
 };
 

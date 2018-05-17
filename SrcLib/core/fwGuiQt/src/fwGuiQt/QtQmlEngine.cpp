@@ -51,7 +51,6 @@ void	QtQmlEngine::loadFile(std::string const& scriptFile)
     QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
     m_rootWindow->setAttribute( Qt::WA_DeleteOnClose );
     m_rootWindow->installEventFilter(new QmlAppEventFilter);
-    connect(m_rootWindow, SIGNAL(destroyed(QObject *)), this, SLOT(cleanApp(QObject *)));
     m_rootWindow->setSource(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
 
 }
