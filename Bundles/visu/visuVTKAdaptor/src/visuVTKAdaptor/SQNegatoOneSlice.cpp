@@ -65,7 +65,6 @@ SQNegatoOneSlice::~SQNegatoOneSlice() noexcept
 {
     this->unregisterServices();
     this->cleanImageSource();
-    std::cout << "Deleted OneSlice" << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -83,7 +82,6 @@ vtkObject* SQNegatoOneSlice::getImageSource()
         {
             m_imageSource       = vtkImageMapToColors::New();
             m_manageImageSource = true;
-            std::cout << "Image source = " << m_imageSource << std::endl;
         }
     }
 
@@ -94,7 +92,6 @@ vtkObject* SQNegatoOneSlice::getImageSource()
 
 void SQNegatoOneSlice::cleanImageSource()
 {
-    std::cout << m_manageImageSource << " " << m_imageSource << std::endl;
     if (m_manageImageSource && m_imageSource)
     {
         m_imageSource->Delete();

@@ -49,7 +49,6 @@ Item {
                         return ;
                     }
 
-                    console.log("Index == " + currentIndex)
                     backend.orientationChanged(currentIndex);
                 }
             }

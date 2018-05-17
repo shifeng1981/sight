@@ -8,6 +8,7 @@
 #include <fwData/Object.hpp>
 
 #include <QObject>
+#include <QString>
 
 #include <memory>
 
@@ -17,6 +18,8 @@ namespace fwServices
 class FWSERVICES_CLASS_API   QtObjectHolder: public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QString objectType MEMBER m_objectType NOTIFY objectTypeChanged)
 
 public:
     fwQmlTypeMacro(QtObjectHolder);
@@ -68,8 +71,19 @@ public:
      */
     FWSERVICES_API QtObjectHolder& operator=(QtObjectHolder const& other);
 
+private Q_SLOTS:
+    /**
+     *  @brief: create slot, used when type is specified in QML file
+     */
+    FWSERVICES_API  void    create();
+
+Q_SIGNALS:
+    void    objectTypeChanged(QString const& newType);
+
 private:
     ::fwData::Object::sptr m_object;
+
+    QString m_objectType;
 
 };
 

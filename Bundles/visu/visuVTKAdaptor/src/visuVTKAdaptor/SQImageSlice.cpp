@@ -54,11 +54,6 @@ SQImageSlice::SQImageSlice() noexcept :
     m_planeOutlineMapper(vtkPolyDataMapper::New()),
     m_planeOutlineActor(vtkActor::New())
 {
-    std::cout << "m_imageActor: " << m_imageActor << std::endl;
-    std::cout << "m_planeOutlinePolyData: " << m_planeOutlinePolyData << std::endl;
-    std::cout << "m_planeOutlineMapper: " << m_planeOutlineMapper << std::endl;
-    std::cout << "m_planeOutlineActor: " << m_planeOutlineActor << std::endl;
-
     newSlot(s_UPDATE_SLICE_INDEX_SLOT, &SQImageSlice::updateSliceIndex, this);
     newSlot(s_UPDATE_SLICE_TYPE_SLOT, &SQImageSlice::updateSliceType, this);
 }
@@ -78,7 +73,6 @@ SQImageSlice::~SQImageSlice() noexcept
 
     m_planeOutlinePolyData->Delete();
     m_planeOutlinePolyData = nullptr;
-    std::cout << "Deleted ImageSlice" << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -127,8 +121,6 @@ void SQImageSlice::updating()
 
 void SQImageSlice::updateSliceIndex(int axial, int frontal, int sagittal)
 {
-    std::cout << "Values = {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
-
     m_axialIndex->value()    = axial;
     m_frontalIndex->value()  = frontal;
     m_sagittalIndex->value() = sagittal;
@@ -247,7 +239,6 @@ void SQImageSlice::buildPipeline( )
     SLM_ASSERT("Invalid vtk image source", algorithm||imageData );
     if (algorithm)
     {
-        std::cout << "m_imageActor is setted with algorithm" << std::endl;
         SLM_TRACE("Input is a vtkImageAlgorithm");
         m_imageActor->GetMapper()->SetInputConnection(algorithm->GetOutputPort());
         //if (imageBlend)
@@ -259,7 +250,6 @@ void SQImageSlice::buildPipeline( )
     else if (imageData)
     {
         SLM_TRACE("Input is a vtkImageData");
-        std::cout << "m_imageActor is setted with imageData" << std::endl;
         m_imageActor->SetInputData(imageData);
     }
 

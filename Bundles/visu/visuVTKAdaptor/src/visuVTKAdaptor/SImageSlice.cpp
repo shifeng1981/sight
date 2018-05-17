@@ -229,7 +229,6 @@ void SImageSlice::buildPipeline( )
     {
         m_imageSource = this->getVtkObject(m_imageSourceId);
     }
-    std::cout << "Image source = " <<  m_imageSource << std::endl;
 
     vtkImageAlgorithm* algorithm = vtkImageAlgorithm::SafeDownCast(m_imageSource);
     vtkImageData* imageData      = vtkImageData::SafeDownCast(m_imageSource);

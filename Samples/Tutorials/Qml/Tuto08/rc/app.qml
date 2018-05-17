@@ -52,8 +52,6 @@ Rectangle {
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
         onDone: {
-            console.log("Image readed")
-            console.log(inout)
             imageAdaptor.image = inout
             imageAdaptor.configure()
             imageAdaptor.start()
@@ -69,8 +67,6 @@ Rectangle {
         dataClassName: "::fwData::Mesh"
         selectionMode: "exclude"
         onDone: {
-            console.log("Mesh readed");
-            console.log(inout);
             meshAdaptor.mesh = inout
             meshAdaptor.configure();
             meshAdaptor.start();
@@ -85,7 +81,6 @@ Rectangle {
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
         onDone: {
-            console.log("Texture readed");
             textureAdaptor.texture = inout;
             textureAdaptor.update();
         }
@@ -106,6 +101,7 @@ Rectangle {
             }]
         })
     }
+
 
     SNegatoMPR {
         id: imageAdaptor
@@ -136,7 +132,7 @@ Rectangle {
             start();
         }
         onSnapped: {
-            console.log(filepath);
+
             snapshotAdaptor.configure();
             snapshotAdaptor.start();
             snapshotAdaptor.snap(filepath);
@@ -154,7 +150,6 @@ Rectangle {
             "uvgen": "sphere"
         })
         onTextureApplied: {
-            console.log("Texture applied");
             textureAdaptor.applyTexture(material);
         }
     }
@@ -273,33 +268,6 @@ Rectangle {
                     }
                 }
             }
-        }
-    }
-
-    // Automatic called function
-    function cleanUp()
-    {
-        console.log("Cleaning up...");
-        if (imageReader.isStarted()) {
-            imageReader.stop();
-        }
-        if (meshReader.isStarted()) {
-            meshReader.stop();
-        }
-        if (textureReader.isStarted()) {
-            textureReader.stop();
-        }
-        if (imageAdaptor.isStarted()) {
-            imageAdaptor.stop();
-        }
-        if (genericRenderer.isStarted()) {
-            genericRenderer.stop();
-        }
-        if (snapshotEditor.isStarted()) {
-            snapshotEditor.stop();
-        }
-        if (snapshotAdaptor.isStarted()) {
-            snapshotAdaptor.start();
         }
     }
 }

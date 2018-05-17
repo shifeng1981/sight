@@ -298,12 +298,9 @@ void SQProbeCursor::stopping()
 
 void SQProbeCursor::updateSliceIndex(int axial, int frontal, int sagittal)
 {
-    std::cout << "News values = " << axial << " " << frontal << " " << sagittal << std::endl;
-    std::cout << "Values before = {" << m_axialIndex->value() <<"," <<m_frontalIndex->value() <<"," << m_sagittalIndex->value() << "}" << std::endl;
     m_axialIndex->value()    = axial;
     m_frontalIndex->value()  = frontal;
     m_sagittalIndex->value() = sagittal;
-    std::cout << "Values after = {" << m_axialIndex->value() <<"," <<m_frontalIndex->value() <<"," << m_sagittalIndex->value() << "}" << std::endl;
 }
 
 //------------------------------------------------------------------------------

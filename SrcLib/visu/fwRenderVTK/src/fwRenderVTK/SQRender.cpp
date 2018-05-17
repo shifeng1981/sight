@@ -330,7 +330,6 @@ void SQRender::starting()
     {
         m_timer->start();
     }
-    std::cout << m_target->getRenderWindow()->GetSize()[0] << " " << m_target->getRenderWindow()->GetSize()[1] << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -384,7 +383,6 @@ bool SQRender::isShownOnScreen()
 
 void SQRender::requestRender()
 {
-    std::cout << "Request rendering" << std::endl;
     if ( this->isShownOnScreen() && !this->getPendingRenderRequest())
     {
         this->setPendingRenderRequest(true);

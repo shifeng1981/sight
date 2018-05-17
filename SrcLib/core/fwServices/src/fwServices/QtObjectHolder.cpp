@@ -12,6 +12,7 @@ QtObjectHolder::QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, 
     QObject(parent),
     m_object(object)
 {
+    QObject::connect(this, SIGNAL(objectTypeChanged(QString const&)), this, SLOT(create()));
 }
 
 QtObjectHolder::QtObjectHolder(QtObjectHolder const& other) : QObject(nullptr)
@@ -47,6 +48,11 @@ QtObjectHolder&  QtObjectHolder::operator=(QtObjectHolder const& other)
 
 QtObjectHolder::~QtObjectHolder()
 {
+}
+
+void    QtObjectHolder::create()
+{
+    SLM_ASSERT("Property objectType must be initialize before call to create()", !m_objectType.isEmpty());
 }
 
 } // typeReg

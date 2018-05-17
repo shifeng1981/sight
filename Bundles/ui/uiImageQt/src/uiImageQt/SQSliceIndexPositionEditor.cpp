@@ -47,7 +47,6 @@ void    SQSliceIndexPositionEditor::configuring()
 {
     SLM_ASSERT("Missing image.", m_image && m_image->getObject());
 
-    std::cout << "M_orientation = " << m_qOrientation.toStdString() << std::endl;
     if(m_qOrientation == "axial" )
     {
         m_orientation = Z_AXIS;
@@ -128,10 +127,7 @@ void    SQSliceIndexPositionEditor::sliderChanged(int newValue)
         ::fwData::Image::s_SLICE_INDEX_MODIFIED_SIG);
     ::fwCom::Connection::Blocker block(sig->getConnection(this->slot(s_UPDATE_SLICE_INDEX_SLOT)));
     sig->asyncEmit(m_axialIndex->value(), m_frontalIndex->value(), m_sagittalIndex->value());
-    std::cout << "BEFORE EMITING = " << m_axialIndex->value() << " " << m_frontalIndex->value() << " " << m_sagittalIndex->value() << std::endl;
     updatedSliceIndex(m_axialIndex->value(), m_frontalIndex->value(), m_sagittalIndex->value());
-    std::cout << "AFTER EMITING = " << m_axialIndex->value() << " " << m_frontalIndex->value() << " " << m_sagittalIndex->value() << std::endl;
-
 }
 
 void    SQSliceIndexPositionEditor::orientationChanged(int orientation)
@@ -140,7 +136,6 @@ void    SQSliceIndexPositionEditor::orientationChanged(int orientation)
     OSLM_ASSERT("Bad slice type "<<type, type == X_AXIS ||
                 type == Y_AXIS ||
                 type == Z_AXIS );
-    std::cout << "Type = " << type << " " << m_orientation << std::endl;
     int oldType = static_cast< int > ( m_orientation );
     // Change slice type
     m_orientation = type;

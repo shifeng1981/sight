@@ -1,4 +1,5 @@
 #include "fwGuiQt/QtQmlEngine.hpp"
+#include "fwGuiQt/QtQmlHelper.hpp"
 
 #include <fwServices/QtQmlType.hxx>
 #include <fwServices/QtQmlInstancier.hxx>
@@ -22,7 +23,7 @@ public:
 protected:
     bool    eventFilter(QObject *obj, QEvent *event)
     {
-        if (event->type() == QEvent::DeferredDelete)
+        if (event->type() == QEvent::HideToParent)
         {
             QtQmlEngine::getEngine().stopServices();
         }
@@ -49,7 +50,7 @@ void	QtQmlEngine::loadFile(std::string const& scriptFile)
     m_rootWindow = new QQuickWidget;
 
     QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
-    m_rootWindow->setAttribute( Qt::WA_DeleteOnClose );
+    //m_rootWindow->setAttribute( Qt::WA_DeleteOnClose );
     m_rootWindow->installEventFilter(new QmlAppEventFilter);
     m_rootWindow->setSource(QFileInfo(QString::fromStdString(m_scriptFile)).filePath());
 
@@ -79,7 +80,16 @@ QQuickWidget	*QtQmlEngine::getWindow() const
 
 void    QtQmlEngine::stopServices()
 {
-    QMetaObject::invokeMethod(m_rootWindow->rootObject(), "cleanUp");
+    auto srvList = QtQmlHelper::getRootObject()->findChildren<::fwServices::IQmlService *>();
+
+    std::reverse(srvList.begin(), srvList.end());
+    for (auto& srv : srvList)
+    {
+        if (srv->isStarted())
+        {
+            srv->stop();
+        }
+    }
 }
 
 QtQmlEngine::~QtQmlEngine()

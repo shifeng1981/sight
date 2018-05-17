@@ -103,7 +103,6 @@ void SQNegatoMPR::stopping()
         std::shared_ptr<SQSlicesCursor> sliceCursor                        = std::dynamic_pointer_cast<SQSlicesCursor>(srv);
         if (negatoSlicingInteractor)
         {
-            std::cout << "Disconnect negatoSlicingInteractor" << std::endl;
             proxy->disconnect(m_slicingStartingProxy, negatoSlicingInteractor->signal(
                                   SQNegatoSlicingInteractor::s_SLICING_STARTED_SIG));
             proxy->disconnect(m_slicingStoppingProxy, negatoSlicingInteractor->signal(
@@ -112,7 +111,6 @@ void SQNegatoMPR::stopping()
 
         if (sliceCursor)
         {
-            std::cout << "Disconnect sliceCursor" << std::endl;
             proxy->disconnect(m_slicingStartingProxy, sliceCursor->slot(
                                   SQSlicesCursor::s_SHOW_FULL_CROSS_SLOT));
 
@@ -305,7 +303,6 @@ void SQNegatoMPR::setCrossScale(double scale)
     if (m_sliceCursor)
     {
         ::fwCom::SlotBase::sptr slot = m_sliceCursor->slot(s_SET_CROSS_SCALE_SLOT);
-        std::cout << "Here" << std::endl;
         slot->asyncRun(scale);
     }
 }
@@ -341,7 +338,6 @@ void SQNegatoMPR::configuring()
     {
         const std::string value = get<QString>(m_configMap, "slices").toStdString();
 
-        std::cout << "Value = " << value << std::endl;
         if(value == "0")
         {
             this->setSliceMode(NO_SLICE);
@@ -424,7 +420,6 @@ void SQNegatoMPR::set3dMode( bool enabled )
 
 std::shared_ptr<::fwRenderVTK::IQAdaptor> SQNegatoMPR::addAdaptor(const std::string& adaptorType, int axis)
 {
-    std::cout << "Add adaptor: " << adaptorType << std::endl;
     SLM_ASSERT("Missing image", m_image || m_image->getObject());
 
     // create the srv configuration for objects auto-connection
@@ -474,8 +469,6 @@ std::shared_ptr<::fwRenderVTK::IQAdaptor> SQNegatoMPR::addAdaptor(const std::str
 
 void    SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
 {
-    std::cout << "Values = BEFORE {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
-
     for (auto& srv : this->getRegisteredServices())
     {
         auto imageSlice = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
@@ -500,8 +493,6 @@ void    SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
              sliceCursor->updateSliceIndex(axial, frontal, sagittal);
         }
     }
-    std::cout << "Values END = {" << axial << " " << frontal << " " << sagittal << "}" << std::endl;
-
 }
 
 //------------------------------------------------------------------------------

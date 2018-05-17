@@ -93,7 +93,6 @@ void SQTexture::stopping()
 
 void    SQTexture::applyTexture(QObject *material)
 {
-    std::cout << "Applying texture : " << material << std::endl;
     auto objectHolder = qobject_cast<::fwServices::QtObjectHolder *>(material);
 
     SLM_ASSERT("Unknown type passed as signal parameter", objectHolder);

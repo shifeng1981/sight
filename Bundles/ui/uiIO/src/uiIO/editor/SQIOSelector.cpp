@@ -273,7 +273,6 @@ void SQIOSelector::updating()
                     obj = ::fwData::factory::New(m_qDataClassname.toStdString());
                     SLM_ASSERT("Cannot create object with classname='" + m_qDataClassname.toStdString() + "'", obj);
                 }
-                std::cout << obj << std::endl;
                 ::fwIO::IReader::sptr reader = ::fwServices::add< ::fwIO::IReader >( extensionId );
                 reader->registerInOut(obj, ::fwIO::s_DATA_KEY);
                 reader->setWorker(m_associatedWorker);
@@ -306,7 +305,6 @@ void SQIOSelector::updating()
 
                     if (createOutput)
                     {
-                        std::cout << "Created" << std::endl;
                         m_qInOut = new ::fwServices::QtObjectHolder(obj);
                     }
                     done();

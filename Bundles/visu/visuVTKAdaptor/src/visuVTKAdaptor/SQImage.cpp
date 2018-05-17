@@ -52,10 +52,6 @@ SQImage::SQImage() noexcept :
     m_map2colors(vtkImageMapToColors::New()),
     m_imageData(vtkImageData::New())
 {
-    std::cout << "m_lut : " << m_lut << std::endl;
-    std::cout << "m_map2colors : " << m_map2colors << std::endl;
-    std::cout << "m_imageData : " << m_imageData << std::endl;
-
     this->installTFSlots(this);
     newSlot(s_UPDATE_IMAGE_OPACITY_SLOT, &SQImage::updateImageOpacity, this);
 }
@@ -70,20 +66,15 @@ SQImage::~SQImage() noexcept
 
 void SQImage::starting()
 {
-    std::cout << "1. Image register == " << m_imageRegister << std::endl;
     this->initialize();
-    std::cout << "2. Image register == " << m_imageRegister << std::endl;
 
     ::fwData::TransferFunction::sptr tf = this->getInOut< ::fwData::TransferFunction >(s_TF_INOUT);
     ::fwData::Image::sptr image         = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     SLM_ASSERT("Missing image", image);
-    std::cout << "3. Image register == " << m_imageRegister << std::endl;
 
     this->setOrCreateTF(tf, image);
-    std::cout << "4. Image register == " << m_imageRegister << std::endl;
 
     this->updating();
-    std::cout << "5. Image register == " << m_imageRegister << std::endl;
 }
 
 //------------------------------------------------------------------------------
@@ -229,7 +220,6 @@ void SQImage::buildPipeline( )
     vtkImageBlend* imageBlend          = vtkImageBlend::SafeDownCast(m_imageRegister);
     vtkImageCheckerboard* imageChecker = vtkImageCheckerboard::SafeDownCast(m_imageRegister);
 
-    std::cout << "Image register = " << m_imageRegister << std::endl;
     SLM_ASSERT("Invalid vtk image register", algorithm||imageData||imageBlend||imageChecker );
     if (imageBlend)
     {
@@ -254,7 +244,6 @@ void SQImage::buildPipeline( )
     else if (algorithm)
     {
         SLM_TRACE("Register is a vtkImageAlgorithm");
-        std::cout << "Algorithm setted" << std::endl;
         algorithm->SetInputConnection(m_map2colors->GetOutputPort());
     }
     else if (imageData)
@@ -276,7 +265,6 @@ void SQImage::destroyPipeline( )
     vtkImageBlend* imageBlend          = vtkImageBlend::SafeDownCast(m_imageRegister);
     vtkImageCheckerboard* imageChecker = vtkImageCheckerboard::SafeDownCast(m_imageRegister);
 
-    std::cout << "2Image register = " << m_imageRegister << std::endl;
     if (imageBlend)
     {
         if (m_imagePortId >= 0)
