@@ -26,33 +26,33 @@ private:
 
 public:
 	FWGUIQT_API QtQmlEngine();
-	~QtQmlEngine();
+    FWGUIQT_API ~QtQmlEngine();
 
-	static QtQmlEngine&	getEngine();
+    static FWGUIQT_API QtQmlEngine&	getEngine();
 	
 	/**
 	 *	@brief: This function load file specified by scriptFile
 	 *		This call can throw if the file contain a error or if it can't be found
 	 */
-	void	loadFile(std::string const& scriptFile);
+    FWGUIQT_API void	loadFile(std::string const& scriptFile);
 	/**
 	 *	@brief: Run script file
 	 */
-	void	launch();
+    FWGUIQT_API void	launch();
 
 	/**
 	 *	@brief: return root window
 	 */
-    QQuickWidget	*getWindow() const;
+    FWGUIQT_API QQuickWidget	*getWindow() const;
 
 	/**
 	 * @brief: This function will instanciate a class derived of QObject
 	 * @uid: Name of the context (to be used in QML)
 	 * @type: Class name
 	 */
-	virtual void FWSERVICES_API 	addCtx(std::string const& uid, std::string const& type);
+    virtual FWGUIQT_API void 	addCtx(std::string const& uid, std::string const& type);
 
-    void    stopServices();
+    FWGUIQT_API void    stopServices();
 
 private:
 	std::string	m_scriptFile;

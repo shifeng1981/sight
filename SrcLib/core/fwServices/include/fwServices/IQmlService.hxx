@@ -35,7 +35,10 @@ typename T::sptr IQmlService::getInOut(const std::string& propertyName) const
     {
         auto propertyHolder = propertyVariant.value<QtObjectHolder *>();
 
-        return std::dynamic_pointer_cast<T>(propertyHolder->getObject());
+        if (propertyHolder)
+        {
+            return std::dynamic_pointer_cast<T>(propertyHolder->getObject());
+        }
     }
     return typename T::sptr();
 }
