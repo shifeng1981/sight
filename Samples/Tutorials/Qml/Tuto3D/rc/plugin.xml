@@ -1,0 +1,18 @@
+<!-- Application name and version (the version is automatically replaced by CMake
+     using the version defined in the Properties.cmake) -->
+<plugin id="TutoQml3D" version="@PROJECT_VERSION@">
+
+    <!-- The bundles in requirements are automatically started when this 
+         Application is launched. -->
+
+
+    <!-- Defines the App-config -->
+    <extension implements="::fwServices::registry::AppConfig">
+        <id>tutoBasicConfig</id>
+        <config>
+            <qml>
+                <file>share/TutoQml3D-@PROJECT_VERSION@/app.qml</file>
+            </qml>
+        </config>
+    </extension>
+</plugin>
