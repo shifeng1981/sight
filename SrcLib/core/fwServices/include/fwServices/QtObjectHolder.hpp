@@ -54,7 +54,7 @@ public:
     /**
      *  @brief: same as above but with constness
      */
-    FWSERVICES_API const ::fwData::Object::csptr&  getObject() const;
+    FWSERVICES_API const ::fwData::Object::csptr  getObject() const;
 
     /**
      * @brief ~QtObjectHolder: Destructor, do nothing, use RAII to clean objects

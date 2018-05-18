@@ -2,6 +2,7 @@
 #include "fwServices/QtQmlType.hxx"
 
 #include <fwData/Object.hpp>
+#include <fwData/factory/new.hpp>
 
 
 namespace fwServices
@@ -12,7 +13,6 @@ QtObjectHolder::QtObjectHolder(std::shared_ptr<::fwData::Object> const& object, 
     QObject(parent),
     m_object(object)
 {
-    QObject::connect(this, SIGNAL(objectTypeChanged(QString const&)), this, SLOT(create()));
 }
 
 QtObjectHolder::QtObjectHolder(QtObjectHolder const& other) : QObject(nullptr)
@@ -23,6 +23,7 @@ QtObjectHolder::QtObjectHolder(QtObjectHolder const& other) : QObject(nullptr)
 QtObjectHolder::QtObjectHolder(QObject *parent): QObject(parent)
 {
     m_object = nullptr;
+    QObject::connect(this, SIGNAL(objectTypeChanged(QString const&)), this, SLOT(create()));
 }
 
 ::fwData::Object::sptr&    QtObjectHolder::getObject()
@@ -30,7 +31,7 @@ QtObjectHolder::QtObjectHolder(QObject *parent): QObject(parent)
     return m_object;
 }
 
-::fwData::Object::csptr const& QtObjectHolder::getObject() const
+const ::fwData::Object::csptr QtObjectHolder::getObject() const
 {
     return m_object;
 }
@@ -53,6 +54,7 @@ QtObjectHolder::~QtObjectHolder()
 void    QtObjectHolder::create()
 {
     SLM_ASSERT("Property objectType must be initialize before call to create()", !m_objectType.isEmpty());
+    m_object = ::fwData::factory::New(m_objectType.toStdString());
 }
 
 } // typeReg
