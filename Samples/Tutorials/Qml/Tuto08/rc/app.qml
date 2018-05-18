@@ -42,12 +42,17 @@ Rectangle {
         }
     }
 
+    TypeHolder {
+        objectType: "::fwData::Image"
+    }
+
     /**
      * Service IO list
      * @{
      */
     SIOSelector {
         id: imageReader
+        autoStart: true
         mode: "reader"
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
@@ -63,6 +68,7 @@ Rectangle {
 
     SIOSelector {
         id: meshReader
+        autoStart: true
         mode: "reader"
         dataClassName: "::fwData::Mesh"
         selectionMode: "exclude"
@@ -78,6 +84,7 @@ Rectangle {
     SIOSelector {
         id: textureReader
         mode: "reader"
+        autoStart: true
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
         onDone: {
@@ -183,12 +190,6 @@ Rectangle {
                 anchors.fill: parent
 
                 onReady: {
-                    imageReader.configure()
-                    imageReader.start()
-                    meshReader.configure()
-                    meshReader.start()
-                    textureReader.configure()
-                    textureReader.start()
                     genericRenderer.configure()
                     genericRenderer.start()
                     textureAdaptor.configure()

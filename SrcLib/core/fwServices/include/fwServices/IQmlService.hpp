@@ -33,6 +33,7 @@ class FWSERVICES_CLASS_API IQmlService : public QObject,
      *  @{
      */
     Q_PROPERTY(QVariantMap config MEMBER m_configMap)
+    Q_PROPERTY(bool autoStart MEMBER m_autoStart)
     /**
      * }@
      */
@@ -139,6 +140,11 @@ public Q_SLOTS:
      */
     FWSERVICES_API bool isStarted() const;
 
+    /**
+     *  @brief: Check if the service is configured with autoStart mode
+     */
+    FWSERVICES_API bool isAutoStart() const;
+
 
     /**
      * Configuration parsing helpers
@@ -172,6 +178,7 @@ protected:
      *  @{
      */
     QVariantMap m_configMap;
+    bool    m_autoStart = false;
     /**
      * }@
      */

@@ -52,7 +52,19 @@ public:
 	 */
     virtual FWGUIQT_API void 	addCtx(std::string const& uid, std::string const& type);
 
+    /**
+     *  @brief: Call IQmlService::stop() method
+     */
     FWGUIQT_API void    stopServices();
+
+
+private:
+
+    /**
+     * @brief: Run autoStarted service
+     * Call IQmlService::configure() then IQmlService::start()
+     */
+    FWGUIQT_API void    runServices();
 
 private:
 	std::string	m_scriptFile;

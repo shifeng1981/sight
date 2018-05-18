@@ -58,6 +58,7 @@ void	QtQmlEngine::loadFile(std::string const& scriptFile)
 
 void	QtQmlEngine::launch()
 {
+    runServices();
     // Get window dimension (suggested by QML file)
     m_rootWindow->setResizeMode(QQuickWidget::SizeRootObjectToView);
 
@@ -88,6 +89,20 @@ void    QtQmlEngine::stopServices()
         if (srv->isStarted())
         {
             srv->stop();
+        }
+    }
+}
+
+void    QtQmlEngine::runServices()
+{
+    auto srvList = QtQmlHelper::getRootObject()->findChildren<::fwServices::IQmlService *>();
+
+    for (auto& srv : srvList)
+    {
+        if (srv->isAutoStart())
+        {
+            srv->configure();
+            srv->start();
         }
     }
 }

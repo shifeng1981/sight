@@ -97,6 +97,11 @@ bool    IQmlService::isStarted() const
     return m_serviceState == STARTED;
 }
 
+bool    IQmlService::isAutoStart() const
+{
+    return m_autoStart;
+}
+
 void    IQmlService::setProperty(const std::string& name, const QVariant& value)
 {
     QObject::setProperty(name.c_str(), value);
