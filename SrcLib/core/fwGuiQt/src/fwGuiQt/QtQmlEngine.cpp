@@ -107,6 +107,11 @@ void    QtQmlEngine::runServices()
     }
 }
 
+void    QtQmlEngine::stop(int status)
+{
+    this->exit(status);
+}
+
 QtQmlEngine::~QtQmlEngine()
 {
 }

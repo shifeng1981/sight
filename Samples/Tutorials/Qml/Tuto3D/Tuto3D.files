@@ -1,0 +1,4 @@
+CMakeLists.txt
+Properties.cmake
+rc/app.qml
+rc/plugin.xml

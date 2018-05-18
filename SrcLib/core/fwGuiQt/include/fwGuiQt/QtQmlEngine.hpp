@@ -57,6 +57,8 @@ public:
      */
     FWGUIQT_API void    stopServices();
 
+    FWGUIQT_API void    stop(int status) override;
+
 
 private:
 

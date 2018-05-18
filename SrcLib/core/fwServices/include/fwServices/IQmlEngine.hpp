@@ -27,6 +27,11 @@ public:
      *  This method is not recommanded to use. Please prefer to create your object directly from QML.
      */
 	virtual void FWSERVICES_API 	addCtx(std::string const& uid, std::string const& type) = 0;
+
+    /**
+     *  @brief: This method stop the application and QApplication will exit with "status" code.
+     */
+    virtual void FWSERVICES_API     stop(int status) = 0;
 };
 
 }

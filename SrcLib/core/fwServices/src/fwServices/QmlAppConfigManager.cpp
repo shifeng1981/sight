@@ -120,6 +120,7 @@ void	fwServices::QmlAppConfigManager::stop()
 {
     SLM_ASSERT("Manager is not started, cannot stop.", m_state == STATE_STARTED);
     m_state = STATE_STOPPED;
+    m_qmlEngine->stop(1);
 }
 
 // -----------------------------------------------------------
