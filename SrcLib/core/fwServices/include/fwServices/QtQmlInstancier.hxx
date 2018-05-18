@@ -59,7 +59,7 @@ private:
 	/**
 	 *	@brief: this vector store all qml registered class
 	 */
-	static std::vector<std::shared_ptr<IQtQmlObject> >	m_classList;
+    static std::vector<IQtQmlObject::sptr >	m_classList;
 };
 
 } // fwGuiQt
