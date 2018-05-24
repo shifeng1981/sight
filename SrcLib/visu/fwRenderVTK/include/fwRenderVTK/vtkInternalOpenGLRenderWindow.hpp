@@ -42,30 +42,30 @@ public:
     /**
      *  @brief: initialize openGL context/functions
      */
-    virtual void FWRENDERVTK_API OpenGLInitState();
+    virtual FWRENDERVTK_API void OpenGLInitState();
 
-    virtual void FWRENDERVTK_API OpenGLEndState();
+    virtual FWRENDERVTK_API void OpenGLEndState();
 
     /**
      * @brief: Call render method of the window
      */
-    virtual void FWRENDERVTK_API Render();
+    virtual FWRENDERVTK_API void Render();
     /**
      *  @brief: render into the framebuffer
      */
-    void  FWRENDERVTK_API internalRender();
+    FWRENDERVTK_API void  internalRender();
     /**
      *  @brief: set frame buffer to the window
      */
-    void FWRENDERVTK_API setFrameBufferObject(QOpenGLFramebufferObject *);
+    FWRENDERVTK_API void setFrameBufferObject(QOpenGLFramebufferObject *);
     /**
      * @brief: configure renderer
      */
-    void FWRENDERVTK_API setRenderer(FrameBufferRenderer *);
+    FWRENDERVTK_API void setRenderer(FrameBufferRenderer *);
     /**
      * @brief: return renderer
      */
-    FrameBufferRenderer FWRENDERVTK_API *getRenderer() const;
+    FWRENDERVTK_API FrameBufferRenderer *getRenderer() const;
 
 private:
      FrameBufferRenderer *m_qtParentRenderer;
