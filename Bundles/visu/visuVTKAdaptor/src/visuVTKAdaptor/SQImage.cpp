@@ -22,6 +22,7 @@
 
 #include <fwServices/macros.hpp>
 #include <fwServices/QtQmlRegistar.hxx>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwVtkIO/helper/TransferFunction.hpp>
 #include <fwVtkIO/vtk.hpp>
@@ -35,6 +36,7 @@ namespace visuVTKAdaptor
 {
 
 static ::fwServices::QtQmlRegistar<SQImage>    registar("::visuVTKAdaptor::SImage");
+static ::fwServices::QtQmlType<SQImage>    registarType("com.fw4spl.vtk.adaptors", 1, 0, "SImage");
 
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_IMAGE_OPACITY_SLOT = "updateImageOpacity";
 

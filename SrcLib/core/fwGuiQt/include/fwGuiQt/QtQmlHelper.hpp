@@ -24,7 +24,7 @@ public:
     /**
      *	@brief: private helper to retrieve the first object of the app i.e the window
 	 */
-    static FWGUIQT_API QQuickItem *getRootObject();
+    static FWGUIQT_API QQuickWindow *getRootObject();
 };
 
 } // fwGuiQt

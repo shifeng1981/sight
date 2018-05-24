@@ -43,6 +43,7 @@
             <xs:element name="file" type="xs:string" minOccurs="1" maxOccurs="1" />
             <xs:element name="ctx" type="ContextType" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
+        <xs:attribute name='style' type='xs:string'/>
     </xs:complexType>
 
     <!-- ContextType -->

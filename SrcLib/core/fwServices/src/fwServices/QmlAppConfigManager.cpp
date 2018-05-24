@@ -11,6 +11,8 @@
 #include <fwRuntime/Bundle.hpp>
 #include <fwRuntime/operations.hpp>
 
+#include <QQuickStyle>
+
 std::string	fwServices::QmlAppConfigManager::QmlEntryPoint = "qml";
 std::string	fwServices::QmlAppConfigManager::File = "file";
 std::string	fwServices::QmlAppConfigManager::Context = "ctx";
@@ -50,6 +52,7 @@ void	fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
 
 ::fwData::Object::sptr	fwServices::QmlAppConfigManager::getConfigRoot() const
 {
+    return nullptr;
 }
 
 // -----------------------------------------------------------
@@ -88,7 +91,11 @@ void	fwServices::QmlAppConfigManager::create()
 	for (const auto& elem : m_cfgElem->getElements())
 	{
 		if (elem->getName() == ::fwServices::QmlAppConfigManager::QmlEntryPoint)
-		{
+        {
+            if (elem->hasAttribute("style"))
+            {
+                QQuickStyle::setStyle(elem->getAttributeValue("style").c_str());
+            }
 			this->createContext(elem);
 			this->loadQMLFile(elem);
 			qmlFound = true;

@@ -10,6 +10,7 @@ namespace fwRenderVTK
 vtkInternalOpenGLRenderWindow::vtkInternalOpenGLRenderWindow() :
     m_qtParentRenderer(0)
 {
+    this->OffScreenRenderingOn();
 }
 
 vtkInternalOpenGLRenderWindow::~vtkInternalOpenGLRenderWindow()
@@ -23,7 +24,6 @@ void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
     initializeOpenGLFunctions();
 
     Superclass::OpenGLInitState();
-
     // Before any of the gl* functions in QOpenGLFunctions are called for a
     // given OpenGL context, an initialization must be run within that context
     glUseProgram(0); // Shouldn't Superclass::OpenGLInitState() handle this?
@@ -37,6 +37,12 @@ void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
         1,  0
     };
     glTexCoordPointer(2, GL_FLOAT, 0, texcoords);
+
+}
+
+void    vtkInternalOpenGLRenderWindow::OpenGLEndState()
+{
+    glDepthMask(GL_TRUE);
 }
 
 void    vtkInternalOpenGLRenderWindow::internalRender()
@@ -62,25 +68,24 @@ FrameBufferRenderer    *vtkInternalOpenGLRenderWindow::getRenderer() const
     return m_qtParentRenderer;
 }
 
-void    vtkInternalOpenGLRenderWindow::setFrameBufferObject(QOpenGLFramebufferObject *frameBuffer)
+void    vtkInternalOpenGLRenderWindow::setFrameBufferObject(QOpenGLFramebufferObject *fbo)
 {
-    this->BackLeftBuffer = this->FrontLeftBuffer = this->BackBuffer = this->FrontBuffer =
-          static_cast<unsigned int>(GL_COLOR_ATTACHMENT0);
+    this->SetFrontBuffer(GL_COLOR_ATTACHMENT0);
+    this->SetFrontRightBuffer(GL_COLOR_ATTACHMENT0);
+    this->SetBackLeftBuffer(GL_COLOR_ATTACHMENT0);
+    this->SetBackRightBuffer(GL_COLOR_ATTACHMENT0);
 
-    // Save GL objects by static casting to standard C types. GL* types
-    // are not allowed in VTK header files.
-    QSize fboSize = frameBuffer->size();
-    this->SetSize(static_cast<int>(fboSize.width()), static_cast<int>(fboSize.height()));
-    this->NumberOfFrameBuffers = 1;
-    this->FrameBufferObject       = static_cast<unsigned int>(frameBuffer->handle());
-    this->DepthRenderBufferObject = 0; // static_cast<unsigned int>(depthRenderBufferObject);
-    this->TextureObjects[0]       = static_cast<unsigned int>(frameBuffer->texture());
-    this->OffScreenRendering = 1;
-    this->OffScreenUseFrameBuffer = 1;
-    this->SetAlphaBitPlanes(1);
-    this->SetMultiSamples(0);
+    auto size = fbo->size();
+
+    this->Size[0]                 = size.width();
+    this->Size[1]                 = size.height();
+    this->NumberOfFrameBuffers    = 1;
+    this->FrameBufferObject       = static_cast<unsigned int>(fbo->handle());
+    this->DepthRenderBufferObject = 0;
+    this->TextureObjects[0]       = static_cast<unsigned int>(fbo->texture());
+    this->OffScreenRendering      = true;
+    this->OffScreenUseFrameBuffer = true;
     this->Modified();
-
 }
 
 vtkInternalOpenGLRenderWindow   *vtkInternalOpenGLRenderWindow::New()

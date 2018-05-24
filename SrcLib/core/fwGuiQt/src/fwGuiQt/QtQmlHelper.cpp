@@ -15,9 +15,9 @@ QObject	*QtQmlHelper::getObjectByName(std::string const& id)
     return getRootObject()->findChild<QObject *>(id.c_str());
 }
 
-QQuickItem	*QtQmlHelper::getRootObject()
+QQuickWindow	*QtQmlHelper::getRootObject()
 {
-    return QtQmlEngine::getEngine().getWindow()->rootObject();
+    return QtQmlEngine::getEngine().getWindow();
 }
 
 QtQmlHelper::~QtQmlHelper()

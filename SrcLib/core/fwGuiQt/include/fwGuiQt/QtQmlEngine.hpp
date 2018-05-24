@@ -7,7 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlComponent>
 #include <QObject>
-#include <QQuickWidget>
+#include <QQuickWindow>
 
 #include <memory>
 #include <vector>
@@ -43,7 +43,7 @@ public:
 	/**
 	 *	@brief: return root window
 	 */
-    FWGUIQT_API QQuickWidget	*getWindow() const;
+    FWGUIQT_API QQuickWindow	*getWindow() const;
 
 	/**
 	 * @brief: This function will instanciate a class derived of QObject
@@ -72,7 +72,7 @@ private:
 	std::string	m_scriptFile;
 	std::unique_ptr<QQmlComponent>	m_component;
 	std::vector<std::unique_ptr<QObject> >	m_context;
-    QQuickWidget	*m_rootWindow;
+    QQuickWindow	*m_rootWindow;
 };
 
 } // fwGuiQt

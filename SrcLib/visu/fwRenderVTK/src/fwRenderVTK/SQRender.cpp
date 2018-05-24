@@ -517,6 +517,11 @@ void    SQRender::setScene(QVariantMap const& scene)
     m_sceneConf = scene;
 }
 
+FrameBufferItem *SQRender::getTarget() const
+{
+    return m_target;
+}
+
 //-----------------------------------------------------------------------------
 
 } //namespace fwRenderVTK

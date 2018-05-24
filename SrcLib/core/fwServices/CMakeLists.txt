@@ -11,26 +11,28 @@ configure_file("${CMAKE_CURRENT_LIST_DIR}/bin/qt.conf" "${CMAKE_BINARY_DIR}/bin/
 
 target_compile_definitions(${FWPROJECT_NAME} PUBLIC "-DQT_NO_KEYWORDS")
 
-find_package(Qt5 QUIET COMPONENTS Core Gui Widgets Concurrent Qml Quick REQUIRED)
+find_package(Qt5 QUIET COMPONENTS Core Gui Widgets Concurrent Qml Quick QuickControls2 REQUIRED)
 
 fwForwardInclude(
-	${Boost_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Gui_INCLUDE_DIRS}
     ${Qt5Widgets_INCLUDE_DIRS}
     ${Qt5Concurrent_INCLUDE_DIRS}
     ${Qt5Qml_INCLUDE_DIRS}
     ${Qt5Quick_INCLUDE_DIRS}
+    ${Qt5QuickControls2_INCLUDE_DIRS}
 )
 
 fwLink(
-	${Boost_REGEX_LIBRARY}
+    ${Boost_REGEX_LIBRARY}
     ${Qt5Core_LIBRARIES}
     ${Qt5Gui_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${Qt5Qml_LIBRARIES}
     ${Qt5Quick_LIBRARIES}
+    ${Qt5QuickControls2_LIBRARIES}
 )
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)

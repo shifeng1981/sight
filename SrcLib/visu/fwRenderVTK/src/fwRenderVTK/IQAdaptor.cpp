@@ -289,8 +289,10 @@ void IQAdaptor::unregisterProps()
 
 void IQAdaptor::addToRenderer(vtkProp* prop)
 {
+    this->m_renderService->getTarget()->lockRenderer();
     this->registerProp(prop);
     this->getRenderer()->AddViewProp(prop);
+    this->m_renderService->getTarget()->unlockRenderer();
     this->setVtkPipelineModified();
 }
 

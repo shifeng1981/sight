@@ -6,7 +6,7 @@ import QtQuick.Dialogs 1.0
 import com.fw4spl 1
 import com.fw4spl.vtk 1
 
-Rectangle {
+ApplicationWindow {
     objectName: "mainWindow"
     id: mainWindow
     //title: qsTr("TutoGUI")
@@ -36,6 +36,7 @@ Rectangle {
         id : vtkRenderWindowContainer
         anchors.fill: parent
         border.width: 4
+        color: "black"
 
         FrameBuffer {
             id: vtkRenderWindow

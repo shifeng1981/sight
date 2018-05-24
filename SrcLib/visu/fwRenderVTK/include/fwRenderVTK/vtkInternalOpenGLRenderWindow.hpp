@@ -44,6 +44,8 @@ public:
      */
     virtual void FWRENDERVTK_API OpenGLInitState();
 
+    virtual void FWRENDERVTK_API OpenGLEndState();
+
     /**
      * @brief: Call render method of the window
      */

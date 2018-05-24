@@ -1,44 +1,45 @@
-import QtQuick 2.1
-import QtQuick.Controls 1.4
+import QtQuick 2.7
 import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.0
+import QtQuick.Controls 2.3
+import QtQuick.Controls.Material 2.0
 import com.fw4spl.uiIO 1.0
 import com.fw4spl.vtk 1.0
 import com.fw4spl.vtk.adaptors 1.0
-import com.fw4spl 1.0
 import com.fw4spl.uiVisuQt 1.0
+import com.fw4spl 1.0
 
-Rectangle {
+
+ApplicationWindow {
     id: rootWindow
     width: 800
     height: 600
 
-    /**
-     *  TopBar wrapper
-     */
-    Item {
-        id: menuWrapper
-        anchors.fill: parent
 
-        TopBar {
-          id: myTopMenu
-        }
+    Material.theme: Material.Dark
+    Material.accent: Material.color(Material.Purple)
+    visible: true
 
-        states: State {
-          name: "hasMenuBar"
-          when: myTopMenu && !myTopMenu.__isNative
+    Button {
+        text: "Stop"
+        highlighted: true
+    }
 
-          ParentChange {
-              target: myTopMenu.__contentItem
-              parent: rootWindow
-          }
+    menuBar: MenuBar {
+        Menu {
+            title: "File"
 
-          PropertyChanges {
-              target: myTopMenu.__contentItem
-              x: 0
-              y: 0
-              width: menuWrapper.width
-          }
+            MenuItem {
+                text: "Open image"
+                onTriggered: imageReader.update()
+            }
+            MenuItem {
+                text: "Open mesh"
+                onTriggered: meshReader.update()
+            }
+            MenuItem {
+                text: "Open texture"
+                onTriggered: textureReader.update()
+            }
         }
     }
 
@@ -57,10 +58,12 @@ Rectangle {
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
         onDone: {
+            console.log("IMAGE READED");
             imageAdaptor.image = inout
             imageAdaptor.configure()
             imageAdaptor.start()
             genericRenderer.update()
+            console.log("Generic render is updated")
             sliceSelector.image = inout
             sliceSelector.enabled = true
         }
@@ -77,7 +80,6 @@ Rectangle {
             meshAdaptor.configure();
             meshAdaptor.start();
             genericRenderer.update();
-
         }
     }
 
@@ -190,6 +192,7 @@ Rectangle {
                 anchors.fill: parent
 
                 onReady: {
+                    console.log("READY");
                     genericRenderer.configure()
                     genericRenderer.start()
                     textureAdaptor.configure()
@@ -232,10 +235,10 @@ Rectangle {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
 
-                    iconSource: "sliceShow.png"
+                    icon.source: "sliceShow.png"
                     onCheckedChanged: {
                         sliceSelector.enabled = !checked && imageAdaptor.image
-                        iconSource = (checked ? "sliceHide.png" : "sliceShow.png")
+                        icon.source = (checked ? "sliceHide.png" : "sliceShow.png")
 
                     }
                 }

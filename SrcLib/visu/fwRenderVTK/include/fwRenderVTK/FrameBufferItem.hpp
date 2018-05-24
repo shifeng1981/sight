@@ -19,6 +19,7 @@
 // same compilation unit
 #include <QOpenGLFunctions>
 #include <qqmlapplicationengine.h>
+#include <QMutex>
 
 namespace fwRenderVTK
 {
@@ -30,7 +31,7 @@ class  FWRENDERVTK_CLASS_API FrameBufferRenderer : public QObject,
 {
     Q_OBJECT
 public:
-    FWRENDERVTK_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow *, FrameBufferItem const*);
+    FWRENDERVTK_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow *, FrameBufferItem *);
     FWRENDERVTK_API ~FrameBufferRenderer();
     /**
      * @brief createFramebufferObject: initialize a framebuffer
@@ -62,7 +63,8 @@ Q_SIGNALS:
 private:
     vtkInternalOpenGLRenderWindow   *m_vtkRenderWindow;
     QOpenGLFramebufferObject    *m_framebufferObject;
-    FrameBufferItem const *m_item;
+    FrameBufferItem  *m_item;
+    bool    m_readyToRender;
 
     friend class vtkInternalOpenGLRenderWindow;
 };
@@ -95,6 +97,9 @@ public:
      */
     vtkSmartPointer<vtkRenderer>    getRenderer() const;
 
+    void    lockRenderer();
+    void    unlockRenderer();
+
 
 protected:
     /**
@@ -124,6 +129,7 @@ private:
     QVTKInteractorAdapter   *m_interactorAdapter;
     vtkSmartPointer<vtkRenderer>    m_renderer;
     vtkRenderWindowInteractor *m_interactor;
+    QMutex  m_viewLock;
 
     friend class FrameBufferRenderer;
 };

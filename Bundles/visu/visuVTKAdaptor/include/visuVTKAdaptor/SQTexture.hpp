@@ -28,7 +28,7 @@ namespace visuVTKAdaptor
  *
  * To use this adaptor, you need to connect it to the SMesh::textureApplied signal
  *
- * @code{.xml}
+ * @code{.qml}
     <connect>
         <signal>meshAdaptor/textureApplied</signal>
         <slot>textureAdaptor/applyTexture</slot>

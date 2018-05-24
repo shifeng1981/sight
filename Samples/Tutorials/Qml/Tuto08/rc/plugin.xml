@@ -19,7 +19,7 @@
     <extension implements="::fwServices::registry::AppConfig">
         <id>tutoBasicConfig</id>
         <config>
-            <qml>
+            <qml style="material">
                 <file>share/Tuto08-@PROJECT_VERSION@/app.qml</file>
             </qml>
         </config>

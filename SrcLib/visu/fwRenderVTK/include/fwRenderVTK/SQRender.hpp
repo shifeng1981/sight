@@ -152,6 +152,8 @@ public:
 
     bool getPendingRenderRequest() const;
 
+    FrameBufferItem *getTarget() const;
+
     void setPendingRenderRequest(bool b);
 
     enum class RenderMode
