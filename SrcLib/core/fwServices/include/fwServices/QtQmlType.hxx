@@ -1,6 +1,7 @@
 #pragma once
 
-# include "fwServices/config.hpp"
+#include "fwServices/config.hpp"
+#include "fwServices/IQtQmlType.hpp"
 
 #include <QQmlEngine>
 
@@ -8,14 +9,13 @@
 
 namespace fwServices
 {
-
 /**
  *	@brief: QtQmlType represent a Type in QML like a Button
  *		These type aren't define in .xml file.
  *
  */
 template<typename Type>
-class FWSERVICES_CLASS_API QtQmlType
+class FWSERVICES_CLASS_API QtQmlType: public IQtQmlType
 {
 public:
 	/**
@@ -23,21 +23,31 @@ public:
 	 */
     FWSERVICES_API QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
 	{
-		qmlRegisterType<Type>(packageName.c_str(), versionMajor, versionMinor, objectName.c_str());
+        m_packageName = packageName;
+        m_versionMajor = versionMajor;
+        m_versionMinor = versionMinor;
+        m_objectName = objectName;
 	}
 
-    FWSERVICES_API QtQmlType(std::string const& typeName)
-    	{
-        	qmlRegisterInterface<Type>(typeName.c_str());
-	}
+    void    registar() const
+    {
+        std::cout << "Registar : " << m_packageName.c_str() << " " << m_versionMajor << " " << m_versionMinor << " " << m_objectName << std::endl;
+        qmlRegisterType<Type>(m_packageName.c_str(), m_versionMajor, m_versionMinor, m_objectName.c_str());
+    }
 
 	/**
 	 *	@brief: destructor, do nothing.
 	 */
     FWSERVICES_API ~QtQmlType()
 	{
-	}
+    }
+
+private:
+    std::string m_packageName = "";
+    int m_versionMajor = -1;
+    int m_versionMinor = -1;
+    std::string m_objectName = "";
 
 };
 
-} // fwGuiQt
+} // fwServices

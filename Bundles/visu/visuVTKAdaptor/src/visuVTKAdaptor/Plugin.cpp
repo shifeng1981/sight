@@ -9,6 +9,7 @@
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
 
 #include <fwServices/macros.hpp>
+#include <fwServices/IQtQmlType.hpp>
 
 namespace visuVTKAdaptor
 {
@@ -17,6 +18,7 @@ static ::fwRuntime::utils::GenericExecutableFactoryRegistrar<Plugin> registrar("
 
 Plugin::~Plugin() noexcept
 {
+    ::fwServices::IQtQmlType::registarAllClasses();
 }
 
 //------------------------------------------------------------------------------

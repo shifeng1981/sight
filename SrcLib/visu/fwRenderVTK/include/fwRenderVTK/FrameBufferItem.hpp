@@ -43,7 +43,7 @@ public:
     /**
      * @brief render: perform open GL command
      */
-    void FWRENDERVTK_API   render();
+    FWRENDERVTK_API void    render();
 
     /**
      * @brief: synchronize m_item when frame is ready

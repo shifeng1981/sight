@@ -2,6 +2,7 @@
 #include "fwGuiQt/QtQmlHelper.hpp"
 
 #include <fwServices/QtQmlType.hxx>
+#include <fwServices/IQtQmlType.hpp>
 #include <fwServices/QtQmlInstancier.hxx>
 #include <fwServices/IQmlService.hpp>
 
@@ -48,6 +49,7 @@ void	QtQmlEngine::loadFile(std::string const& scriptFile)
 {
     m_scriptFile = scriptFile;
     m_component = std::unique_ptr<QQmlComponent>(new QQmlComponent(this));
+    ::fwServices::IQtQmlType::registarAllClasses();
 
     QObject::connect(this, SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 

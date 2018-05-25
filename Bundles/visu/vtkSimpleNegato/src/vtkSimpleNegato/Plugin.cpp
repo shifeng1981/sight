@@ -6,6 +6,8 @@
 
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
 
+#include <fwServices/IQtQmlType.hpp>
+
 #include "vtkSimpleNegato/Plugin.hpp"
 
 namespace vtkSimpleNegato
@@ -15,6 +17,7 @@ static ::fwRuntime::utils::GenericExecutableFactoryRegistrar<Plugin> registrar("
 
 Plugin::~Plugin() noexcept
 {
+    ::fwServices::IQtQmlType::registarAllClasses();
 }
 
 void Plugin::start()
