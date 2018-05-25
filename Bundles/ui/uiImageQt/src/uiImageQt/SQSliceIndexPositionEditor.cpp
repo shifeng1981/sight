@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #include "uiImageQt/SQSliceIndexPositionEditor.hpp"
 
 #include <fwCom/Signal.hpp>
@@ -36,14 +42,18 @@ SQSliceIndexPositionEditor::~SQSliceIndexPositionEditor()
 {
 }
 
-void    SQSliceIndexPositionEditor::starting()
+//------------------------------------------------------------------------------
+
+void SQSliceIndexPositionEditor::starting()
 {
     ::fwData::Image::sptr image = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
     this->updateImageInfos(image);
     this->updateSliceTypeFromImg(m_orientation);
 }
 
-void    SQSliceIndexPositionEditor::configuring()
+//------------------------------------------------------------------------------
+
+void SQSliceIndexPositionEditor::configuring()
 {
     SLM_ASSERT("Missing image.", m_image && m_image->getObject());
 
@@ -65,11 +75,15 @@ void    SQSliceIndexPositionEditor::configuring()
     }
 }
 
-void    SQSliceIndexPositionEditor::stopping()
+//------------------------------------------------------------------------------
+
+void SQSliceIndexPositionEditor::stopping()
 {
 }
 
-void    SQSliceIndexPositionEditor::updating()
+//------------------------------------------------------------------------------
+
+void SQSliceIndexPositionEditor::updating()
 {
     ::fwData::Image::sptr image = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
     bool imageIsValid = ::fwDataTools::fieldHelper::MedicalImageHelpers::checkImageValidity( image );
@@ -82,6 +96,8 @@ void    SQSliceIndexPositionEditor::updating()
     }
 }
 
+//------------------------------------------------------------------------------
+
 void SQSliceIndexPositionEditor::updateSliceTypeFromImg(Orientation type )
 {
     // Update Type Choice
@@ -89,6 +105,8 @@ void SQSliceIndexPositionEditor::updateSliceTypeFromImg(Orientation type )
     ::fwData::Image::sptr image = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
     this->updateSliceIndexFromImg();
 }
+
+//------------------------------------------------------------------------------
 
 void SQSliceIndexPositionEditor::updateSliceIndexFromImg()
 {
@@ -113,9 +131,9 @@ void SQSliceIndexPositionEditor::updateSliceIndexFromImg()
     }
 }
 
+//------------------------------------------------------------------------------
 
-
-void    SQSliceIndexPositionEditor::sliderChanged(int newValue)
+void SQSliceIndexPositionEditor::sliderChanged(int newValue)
 {
     ::fwData::Image::sptr image = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
 
@@ -130,7 +148,9 @@ void    SQSliceIndexPositionEditor::sliderChanged(int newValue)
     updatedSliceIndex(m_axialIndex->value(), m_frontalIndex->value(), m_sagittalIndex->value());
 }
 
-void    SQSliceIndexPositionEditor::orientationChanged(int orientation)
+//------------------------------------------------------------------------------
+
+void SQSliceIndexPositionEditor::orientationChanged(int orientation)
 {
     Orientation type = static_cast< Orientation >( orientation );
     OSLM_ASSERT("Bad slice type "<<type, type == X_AXIS ||

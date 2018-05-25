@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #pragma once
 
 #include "fwServices/config.hpp"
@@ -8,27 +14,27 @@
 namespace fwServices
 {
 
-class FWSERVICES_CLASS_API IQtQmlObject
+class FWSERVICES_CLASS_QT_API IQtQmlObject
 {
 public:
     fwQmlTypeMacro(::fwServices::IQtQmlObject);
 
-	IQtQmlObject(std::string const& cType);
-	virtual ~IQtQmlObject();
+    FWSERVICES_QT_API IQtQmlObject(std::string const& cType);
+    FWSERVICES_QT_API virtual ~IQtQmlObject();
 
-	/**
-	 *	@brief: This method create a new object derived of QObject
+    /**
+     *  @brief: This method create a new object derived of QObject
      *  This method must be override.
-	 */
-    virtual QObject *instanciate() const = 0;
+     */
+    FWSERVICES_QT_API virtual QObject* instanciate() const = 0;
 
-	/**
-	 *	@brief: This method return the classType
-	 */
-	std::string const&	getClassType() const;
+    /**
+     *  @brief: This method return the classType
+     */
+    FWSERVICES_QT_API std::string const& getClassType() const;
 
 private:
-	std::string	m_cType;
+    std::string	m_cType;
 };
 
 } // fwGuiQt

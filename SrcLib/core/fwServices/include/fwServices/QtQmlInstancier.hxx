@@ -14,23 +14,23 @@ namespace fwServices
 /**
  * @brief: This class is a manager for holding registered class and instanciate new objects
  */
-class FWSERVICES_CLASS_API QtQmlInstancier
+class FWSERVICES_CLASS_QT_API QtQmlInstancier
 {
 public:
-	// Cannot be instancied
-    FWSERVICES_API QtQmlInstancier() = delete;
-    FWSERVICES_API ~QtQmlInstancier() = delete;
-	
+    // Cannot be instancied
+    FWSERVICES_QT_API QtQmlInstancier() = delete;
+    FWSERVICES_QT_API ~QtQmlInstancier() = delete;
+
 public:
-	/**
-	 *	@brief: This method add IQmlObject to the current list of object (m_classList)
-	 */
-    static FWSERVICES_API void	addClass(std::shared_ptr<IQtQmlObject> const&);
-	/**
-	 *	@brief: This method take a classType as parameters (stored in IQtQmlObject::m_cType) 
-	 *		and create an instance the related object.
-	 */
-    static FWSERVICES_API QObject *instanciate(std::string const& cType);
+    /**
+     *	@brief: This method add IQmlObject to the current list of object (m_classList)
+     */
+    static FWSERVICES_QT_API void	addClass(std::shared_ptr<IQtQmlObject> const&);
+    /**
+     *	@brief: This method take a classType as parameters (stored in IQtQmlObject::m_cType)
+     *		and create an instance the related object.
+     */
+    static FWSERVICES_QT_API QObject *instanciate(std::string const& cType);
 
     /**
      *  @brief: This method take a classType as parameters (stored in IQtQmlObject::m_cType)
@@ -56,10 +56,10 @@ public:
     }
 
 private:
-	/**
-	 *	@brief: this vector store all qml registered class
-	 */
-    static std::vector<IQtQmlObject::sptr >	m_classList;
+    /**
+     *	@brief: this vector store all qml registered class
+     */
+    FWSERVICES_QT_API static std::vector<IQtQmlObject::sptr >	m_classList;
 };
 
 } // fwGuiQt

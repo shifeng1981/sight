@@ -1,3 +1,11 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
 #ifndef IQMLSERVICE_HXX
 #define IQMLSERVICE_HXX
 
@@ -6,8 +14,10 @@
 namespace fwServices
 {
 
+//------------------------------------------------------------------------------
+
 template<typename T>
-T const    IQmlService::get(QVariantMap const& target, std::string const& key, T const& defaultValue)
+T const IQmlService::get(QVariantMap const& target, std::string const& key, T const& defaultValue)
 {
     if (target.find(key.c_str()) != target.end())
     {
@@ -16,8 +26,10 @@ T const    IQmlService::get(QVariantMap const& target, std::string const& key, T
     return defaultValue;
 }
 
+//------------------------------------------------------------------------------
+
 template<typename T>
-T const    IQmlService::get(QVariantMap const& target, std::string const& key)
+T const IQmlService::get(QVariantMap const& target, std::string const& key)
 {
     if (target.find(key.c_str()) != target.end())
     {
@@ -26,14 +38,16 @@ T const    IQmlService::get(QVariantMap const& target, std::string const& key)
     return T();
 }
 
+//------------------------------------------------------------------------------
+
 template<typename T>
 typename T::sptr IQmlService::getInOut(const std::string& propertyName) const
 {
     auto propertyVariant = this->property(propertyName.c_str());
 
-    if (!propertyVariant.isNull() && propertyVariant.canConvert<QtObjectHolder *>())
+    if (!propertyVariant.isNull() && propertyVariant.canConvert<QtObjectHolder*>())
     {
-        auto propertyHolder = propertyVariant.value<QtObjectHolder *>();
+        auto propertyHolder = propertyVariant.value<QtObjectHolder*>();
 
         if (propertyHolder)
         {
@@ -44,6 +58,5 @@ typename T::sptr IQmlService::getInOut(const std::string& propertyName) const
 }
 
 }
-
 
 #endif // IQMLSERVICE_HXX

@@ -1,3 +1,11 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
 #ifndef QVTKFRAMEBUFFER_H
 #define QVTKFRAMEBUFFER_H
 
@@ -26,31 +34,31 @@ namespace fwRenderVTK
 
 class FrameBufferItem;
 
-class  FWRENDERVTK_CLASS_API FrameBufferRenderer : public QObject,
-                                                   public QQuickFramebufferObject::Renderer
+class FWRENDERVTK_CLASS_QT_API FrameBufferRenderer : public QObject,
+                                                     public QQuickFramebufferObject::Renderer
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    FWRENDERVTK_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow *, FrameBufferItem *);
-    FWRENDERVTK_API ~FrameBufferRenderer();
+    FWRENDERVTK_QT_API FrameBufferRenderer(vtkInternalOpenGLRenderWindow*, FrameBufferItem*);
+    FWRENDERVTK_QT_API ~FrameBufferRenderer();
     /**
      * @brief createFramebufferObject: initialize a framebuffer
      * @param size: size of the framebuffer
      * @return QOpenGLFrameBufferObject: View where will be perform openGL command (VTK)
      */
-    QOpenGLFramebufferObject FWRENDERVTK_API    *createFramebufferObject(const QSize& size);
+    QOpenGLFramebufferObject FWRENDERVTK_QT_API* createFramebufferObject(const QSize& size);
 
     /**
      * @brief render: perform open GL command
      */
-    FWRENDERVTK_API void    render();
+    void FWRENDERVTK_QT_API   render();
 
     /**
      * @brief: synchronize m_item when frame is ready
      */
-    virtual void FWRENDERVTK_API synchronize(QQuickFramebufferObject *);
+    virtual void FWRENDERVTK_QT_API synchronize(QQuickFramebufferObject*);
 
-    FrameBufferItem const   *getItem() const;
+    FrameBufferItem const* getItem() const;
 
 Q_SIGNALS:
     /**
@@ -59,47 +67,45 @@ Q_SIGNALS:
      */
     void    ready();
 
-
 private:
-    vtkInternalOpenGLRenderWindow   *m_vtkRenderWindow;
-    QOpenGLFramebufferObject    *m_framebufferObject;
-    FrameBufferItem  *m_item;
-    bool    m_readyToRender;
+    vtkInternalOpenGLRenderWindow* m_vtkRenderWindow;
+    QOpenGLFramebufferObject* m_framebufferObject;
+    FrameBufferItem* m_item;
+    bool m_readyToRender;
 
     friend class vtkInternalOpenGLRenderWindow;
 };
 
-class FWRENDERVTK_CLASS_API  FrameBufferItem : public QQuickFramebufferObject
+class FWRENDERVTK_CLASS_QT_API FrameBufferItem : public QQuickFramebufferObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
-    FWRENDERVTK_API FrameBufferItem(QQuickItem *parent = nullptr);
-    FWRENDERVTK_API ~FrameBufferItem();
+    FWRENDERVTK_QT_API FrameBufferItem(QQuickItem* parent = nullptr);
+    FWRENDERVTK_QT_API ~FrameBufferItem();
 
     /**
      *  @brief: create a FrameBufferRenderer instance
      */
-    FWRENDERVTK_API QQuickFramebufferObject::Renderer  *createRenderer() const;
+    FWRENDERVTK_QT_API QQuickFramebufferObject::Renderer* createRenderer() const;
     /**
      *  @brief: return m_win
      */
-    FWRENDERVTK_API vtkInternalOpenGLRenderWindow    *getRenderWindow() const;
+    FWRENDERVTK_QT_API vtkInternalOpenGLRenderWindow* getRenderWindow() const;
 
     /**
      *  @brief: initialize variables
      */
-    FWRENDERVTK_API void  initialize();
+    FWRENDERVTK_QT_API void  initialize();
 
     /**
      * @brief getRenderer
      * @return current renderer
      */
-    FWRENDERVTK_API vtkSmartPointer<vtkRenderer>    getRenderer() const;
+    FWRENDERVTK_QT_API vtkSmartPointer<vtkRenderer>    getRenderer() const;
 
-    FWRENDERVTK_API void    lockRenderer();
-    FWRENDERVTK_API void    unlockRenderer();
-
+    FWRENDERVTK_QT_API void    lockRenderer();
+    FWRENDERVTK_QT_API void    unlockRenderer();
 
 protected:
     /**
@@ -107,12 +113,12 @@ protected:
      * Theses events are transmit to VTK by QVTKAdapter
      * @{
      */
-    FWRENDERVTK_API bool event(QEvent* evt) Q_DECL_OVERRIDE;
+    FWRENDERVTK_QT_API bool event(QEvent* evt) Q_DECL_OVERRIDE;
 
-    FWRENDERVTK_API void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    FWRENDERVTK_API void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    FWRENDERVTK_API void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    FWRENDERVTK_API void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    FWRENDERVTK_QT_API void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    FWRENDERVTK_QT_API void mouseMoveEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    FWRENDERVTK_QT_API void mouseReleaseEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
+    FWRENDERVTK_QT_API void mouseDoubleClickEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
     /**
      * }@
@@ -125,11 +131,11 @@ Q_SIGNALS:
     void    ready();
 
 private:
-    vtkInternalOpenGLRenderWindow    *m_win;
-    QVTKInteractorAdapter   *m_interactorAdapter;
+    vtkInternalOpenGLRenderWindow* m_win;
+    QVTKInteractorAdapter* m_interactorAdapter;
     vtkSmartPointer<vtkRenderer>    m_renderer;
-    vtkRenderWindowInteractor *m_interactor;
-    QMutex  m_viewLock;
+    vtkRenderWindowInteractor* m_interactor;
+    QMutex m_viewLock;
 
     friend class FrameBufferRenderer;
 };

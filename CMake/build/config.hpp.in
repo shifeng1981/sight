@@ -12,28 +12,41 @@
         #include "spyLogLevel.hpp"
     #endif
 
-    #ifdef _WIN32
+#ifdef _WIN32
 
-        #ifdef @PROJECT_NAME_UPCASE@_EXPORTS
-            #define @PROJECT_NAME_UPCASE@_API __declspec(dllexport)
-        #else
-            #define @PROJECT_NAME_UPCASE@_API __declspec(dllimport)
-        #endif
+#ifdef @PROJECT_NAME_UPCASE@_EXPORTS
+    #define @PROJECT_NAME_UPCASE@_API __declspec(dllexport)
+#else
+    #define @PROJECT_NAME_UPCASE@_API __declspec(dllimport)
+#endif
 
-        #define @PROJECT_NAME_UPCASE@_CLASS_API
+#define @PROJECT_NAME_UPCASE@_CLASS_API
 
-        #pragma warning(disable: 4290)
+#ifdef @PROJECT_NAME_UPCASE@_EXPORTS
+    #define @PROJECT_NAME_UPCASE@_CLASS_QT_API __declspec(dllexport)
+#else
+    #define @PROJECT_NAME_UPCASE@_CLASS_QT_API __declspec(dllimport)
+#endif
 
-    #elif defined(__GNUC__) && (__GNUC__>=4)
+#define @PROJECT_NAME_UPCASE@_QT_API
 
-        #define @PROJECT_NAME_UPCASE@_API __attribute__ ((visibility("default")))
-        #define @PROJECT_NAME_UPCASE@_CLASS_API __attribute__ ((visibility("default")))
+#pragma warning(disable: 4290)
 
-    #else
+#elif defined(__GNUC__) && (__GNUC__>=4)
 
-        #define @PROJECT_NAME_UPCASE@_API
-        #define @PROJECT_NAME_UPCASE@_CLASS_API
+#define @PROJECT_NAME_UPCASE@_API __attribute__ ((visibility("default")))
+#define @PROJECT_NAME_UPCASE@_CLASS_API __attribute__ ((visibility("default")))
 
-    #endif
+#define @PROJECT_NAME_UPCASE@_QT_API __attribute__ ((visibility("default")))
+#define @PROJECT_NAME_UPCASE@_CLASS_QT_API __attribute__ ((visibility("default")))
+
+#else
+
+#define @PROJECT_NAME_UPCASE@_API
+#define @PROJECT_NAME_UPCASE@_CLASS_API
+#define @PROJECT_NAME_UPCASE@_QT_API
+#define @PROJECT_NAME_UPCASE@_CLASS_QT_API
+
+#endif
 
 #endif // __@PROJECT_NAME_UPCASE@_CONFIG_HPP__

@@ -1,12 +1,20 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
 #ifndef SQRENDER_HPP
 #define SQRENDER_HPP
 
 #include "fwRenderVTK/config.hpp"
 #include "fwRenderVTK/FrameBufferItem.hpp"
 
-#include <fwCom/helper/SigSlotConnection.hpp>
 #include <fwCom/HasSignals.hpp>
 #include <fwCom/HasSlots.hpp>
+#include <fwCom/helper/SigSlotConnection.hpp>
 
 #include <fwRender/IRender.hpp>
 
@@ -14,11 +22,10 @@
 
 #include <fwServices/helper/Config.hpp>
 #include <fwServices/IQmlService.hpp>
-
 #include <fwServices/QtObjectHolder.hpp>
 
-#include <QVariantMap>
 #include <QMap>
+#include <QVariantMap>
 #include <QVector>
 
 #include <map>
@@ -103,16 +110,15 @@ class IVtkRenderWindowInteractorManager;
  */
 class FWRENDERVTK_CLASS_API SQRender : public ::fwServices::IQmlService
 {
-    Q_OBJECT
-    Q_PROPERTY(QVariantMap scene READ scene WRITE setScene)
-    Q_PROPERTY(unsigned int width MEMBER m_width)
-    Q_PROPERTY(unsigned int height MEMBER m_height)
-    Q_PROPERTY(bool offScreen MEMBER m_offScreen)
-    Q_PROPERTY(bool flip MEMBER m_flip)
-    Q_PROPERTY(unsigned int targetFrameRate MEMBER m_targetFrameRate)
-    Q_PROPERTY(fwServices::QtObjectHolder *inout MEMBER m_inout)
-    Q_PROPERTY(FrameBufferItem *target MEMBER m_target)
-
+Q_OBJECT
+Q_PROPERTY(QVariantMap scene READ scene WRITE setScene)
+Q_PROPERTY(unsigned int width MEMBER m_width)
+Q_PROPERTY(unsigned int height MEMBER m_height)
+Q_PROPERTY(bool offScreen MEMBER m_offScreen)
+Q_PROPERTY(bool flip MEMBER m_flip)
+Q_PROPERTY(unsigned int targetFrameRate MEMBER m_targetFrameRate)
+Q_PROPERTY(fwServices::QtObjectHolder* inout MEMBER m_inout)
+Q_PROPERTY(FrameBufferItem *target MEMBER m_target)
 
 public:
 
@@ -152,7 +158,7 @@ public:
 
     bool getPendingRenderRequest() const;
 
-    FrameBufferItem *getTarget() const;
+    FrameBufferItem* getTarget() const;
 
     void setPendingRenderRequest(bool b);
 
@@ -196,8 +202,6 @@ protected:
     FWRENDERVTK_API void addVtkObject( const VtkObjectIdType& _id, vtkObject* _vtkObj );
 
 private:
-
-
 
     /// Slot: called when on each timer update
     void requestRender();
@@ -261,8 +265,8 @@ private:
     unsigned int m_targetFrameRate;
     bool m_offScreen; ///< if true, scene is render in off screen
     bool m_flip; ///< if true, flip off screen render scene
-    ::fwServices::QtObjectHolder *m_inout;
-    FrameBufferItem *m_target;
+    ::fwServices::QtObjectHolder* m_inout;
+    FrameBufferItem* m_target;
     /**
      * }@
      */
@@ -290,6 +294,5 @@ inline SQRender::RenderMode SQRender::getRenderMode() const
 }
 
 }
-
 
 #endif // SQRENDER_HPP

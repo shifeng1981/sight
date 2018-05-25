@@ -3,7 +3,7 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.0
-import com.fw4spl 1
+import com.fw4spl 1.0
 
 Rectangle {
     objectName: "mainWindow"

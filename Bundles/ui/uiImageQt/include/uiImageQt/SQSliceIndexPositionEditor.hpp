@@ -1,3 +1,11 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
 #ifndef SQSLICEINDEXPOSITIONEDITOR_HPP
 #define SQSLICEINDEXPOSITIONEDITOR_HPP
 
@@ -13,23 +21,23 @@
 namespace uiImageQt
 {
 
-class UIIMAGEQT_CLASS_API   SQSliceIndexPositionEditor : public ::fwServices::IQmlService,
-                                                         public ::fwDataTools::helper::MedicalImageAdaptor
+class UIIMAGEQT_CLASS_API SQSliceIndexPositionEditor : public ::fwServices::IQmlService,
+                                                       public ::fwDataTools::helper::MedicalImageAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
-    Q_PROPERTY(QString  orientation MEMBER m_qOrientation)
-    Q_PROPERTY(QQuickItem *slider MEMBER m_slider)
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
+Q_PROPERTY(QString orientation MEMBER m_qOrientation)
+Q_PROPERTY(QQuickItem *slider MEMBER m_slider)
 
 public:
-    UIIMAGEQT_API   SQSliceIndexPositionEditor();
-    UIIMAGEQT_API   ~SQSliceIndexPositionEditor();
+    UIIMAGEQT_API SQSliceIndexPositionEditor();
+    UIIMAGEQT_API virtual ~SQSliceIndexPositionEditor();
 
-    UIIMAGEQT_API void    starting() override;
-    UIIMAGEQT_API void    stopping() override;
-    UIIMAGEQT_API void    configuring() override;
-    UIIMAGEQT_API void    updating() override;
+    UIIMAGEQT_API void starting() override;
+    UIIMAGEQT_API void stopping() override;
+    UIIMAGEQT_API void configuring() override;
+    UIIMAGEQT_API void updating() override;
 
 private:
     using ::fwDataTools::helper::MedicalImageAdaptor::Orientation;
@@ -42,8 +50,6 @@ protected:
     /// Update the editor slider from the image slice index.
     UIIMAGEQT_API void updateSliceIndexFromImg();
 
-
-
 public Q_SLOTS:
     UIIMAGEQT_API void  orientationChanged(int);
     UIIMAGEQT_API void  sliderChanged(int);
@@ -52,12 +58,10 @@ Q_SIGNALS:
     void updatedSliceIndex(int axial, int sagittal, int frontal);
     void updatedSliceType(int from, int to);
 
-
-
 private:
-    ::fwServices::QtObjectHolder    *m_image = nullptr;
+    ::fwServices::QtObjectHolder* m_image = nullptr;
     QString m_qOrientation = "axial";
-    QQuickItem  *m_slider = nullptr;
+    QQuickItem* m_slider   = nullptr;
 
     static const std::string* SLICE_INDEX_FIELDID[ 3 ];
 

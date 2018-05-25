@@ -80,7 +80,7 @@ protected:
 private:
 
     /// Sub services linked to this service
-    FWSERVICES_API ServiceVector m_subServices;
+    ServiceVector m_subServices;
 
     //static ServiceVectorGlobal s_servicesList;
 };

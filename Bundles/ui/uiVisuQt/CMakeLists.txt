@@ -1,7 +1,7 @@
 fwLoadProperties()
 
 find_package(Boost QUIET COMPONENTS regex REQUIRED)
-find_package(Qt5 QUIET COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt5 QUIET COMPONENTS Core Gui Widgets Qml REQUIRED)
 find_package(glm QUIET REQUIRED)
 
 fwForwardInclude(
@@ -14,8 +14,9 @@ fwForwardInclude(
 
 fwLink(
     ${Boost_REGEX_LIBRARY}
-    ${Qt5Core_LIBRARIES} 
-    ${Qt5Gui_LIBRARIES} 
+    ${Qt5Core_LIBRARIES}
+    ${Qt5Gui_LIBRARIES}
+    ${Qt5Qml_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
 )
 

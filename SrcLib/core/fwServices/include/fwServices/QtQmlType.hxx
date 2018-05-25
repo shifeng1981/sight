@@ -15,19 +15,19 @@ namespace fwServices
  *
  */
 template<typename Type>
-class FWSERVICES_CLASS_API QtQmlType: public IQtQmlType
+class QtQmlType: public IQtQmlType
 {
 public:
-	/**
-	 *	@brief: constructor, call qmlRegisterType<Type> that precise to QML which class is used for this typename
-	 */
-    FWSERVICES_API QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
-	{
+    /**
+     *	@brief: constructor, call qmlRegisterType<Type> that precise to QML which class is used for this typename
+     */
+    QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
+    {
         m_packageName = packageName;
         m_versionMajor = versionMajor;
         m_versionMinor = versionMinor;
         m_objectName = objectName;
-	}
+    }
 
     void    registar() const
     {
@@ -35,11 +35,11 @@ public:
         qmlRegisterType<Type>(m_packageName.c_str(), m_versionMajor, m_versionMinor, m_objectName.c_str());
     }
 
-	/**
-	 *	@brief: destructor, do nothing.
-	 */
-    FWSERVICES_API ~QtQmlType()
-	{
+    /**
+     *	@brief: destructor, do nothing.
+     */
+    ~QtQmlType()
+    {
     }
 
 private:

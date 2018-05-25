@@ -1,6 +1,6 @@
 fwLoadProperties()
 
-find_package(Qt5 QUIET COMPONENTS Core Gui Widgets REQUIRED)
+find_package(Qt5 QUIET COMPONENTS Core Gui Widgets Qml Quick REQUIRED)
 
 fwForwardInclude(
     ${Qt5Core_INCLUDE_DIRS}
@@ -11,6 +11,8 @@ fwForwardInclude(
 fwLink(
     ${Qt5Core_LIBRARIES}
     ${Qt5Gui_LIBRARIES}
+    ${Qt5Qml_LIBRARIES}
+    ${Qt5Quick_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
 )
 
