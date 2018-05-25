@@ -62,6 +62,7 @@ ApplicationWindow {
             imageAdaptor.image = inout
             imageAdaptor.configure()
             imageAdaptor.start()
+            imageAdaptor.update()
             genericRenderer.update()
             console.log("Generic render is updated")
             sliceSelector.image = inout
@@ -100,7 +101,7 @@ ApplicationWindow {
         target: vtkRenderWindow
 
         scene: ({
-            "renderMode": "timer",
+            "renderMode": "auto",
             "rendererList": [{
                 "id": "default",
             }],

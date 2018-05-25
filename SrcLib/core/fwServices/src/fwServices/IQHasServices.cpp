@@ -28,7 +28,7 @@ IQHasServices::~IQHasServices() noexcept
 
 ::fwServices::IQmlService::csptr IQHasServices::getRegisteredService(const fwTools::fwID::IDType& _id) const
 {
-    std::shared_ptr<::fwServices::IQmlService> srv;
+    std::shared_ptr< ::fwServices::IQmlService> srv;
     for(const auto& wService : m_subServices)
     {
         if(wService && (wService->getID() == _id))

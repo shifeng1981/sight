@@ -166,6 +166,7 @@ void FrameBufferItem::initialize()
     std::cout << "Initialize" << std::endl;
     m_win->SetSize(width(), height());
     m_interactor->SetSize(m_win->GetSize());
+    m_win->OpenGLInit();
 }
 
 //-----------------------------------------------------------------------------
@@ -249,16 +250,13 @@ void FrameBufferItem::mouseDoubleClickEvent(QMouseEvent* event)
 
 void FrameBufferItem::lockRenderer()
 {
-    std::cout << "<" << std::this_thread::get_id() << "> " << "ASK to Lock renderer" << std::endl;
     m_viewLock.lock();
-    std::cout << "<" << std::this_thread::get_id() << "> " << "Lock renderer" << std::endl;
 }
 
 //------------------------------------------------------------------------------
 
 void FrameBufferItem::unlockRenderer()
 {
-    std::cout << "<" << std::this_thread::get_id() << "> " << "unlock renderer" << std::endl;
     m_viewLock.unlock();
 }
 

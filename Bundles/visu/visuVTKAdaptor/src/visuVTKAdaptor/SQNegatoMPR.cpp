@@ -153,7 +153,7 @@ void SQNegatoMPR::updating()
                 this->addAdaptor("::visuVTKAdaptor::SNegatoOneSlice", Z_AXIS);
             }
 
-            /*std::shared_ptr<::fwRenderVTK::IQAdaptor> sliceCursor;
+            std::shared_ptr<::fwRenderVTK::IQAdaptor> sliceCursor;
             std::shared_ptr<::fwRenderVTK::IQAdaptor> negatoSlicingInteractor;
             this->addAdaptor("::visuVTKAdaptor::SNegatoWindowingInteractor");
             negatoSlicingInteractor = this->addAdaptor("::visuVTKAdaptor::SNegatoSlicingInteractor", m_orientation);
@@ -173,7 +173,7 @@ void SQNegatoMPR::updating()
                                SQNegatoSlicingInteractor::s_SLICING_STOPPED_SIG));
             proxy->connect(m_slicingStoppingProxy, sliceCursor->slot(
                                SQSlicesCursor::s_SHOW_NORMAL_CROSS_SLOT));
-            m_sliceCursor = sliceCursor;*/
+            m_sliceCursor = sliceCursor;
         }
         if(this->is3dModeEnabled())
         {

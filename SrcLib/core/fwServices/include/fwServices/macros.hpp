@@ -15,6 +15,8 @@
 #include <boost/preprocessor/facilities/empty.hpp>
 #include <boost/preprocessor/facilities/overload.hpp>
 
+#include <memory>
+
 namespace fwServices
 {
 

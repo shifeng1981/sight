@@ -24,9 +24,9 @@ public:
 protected:
     bool    eventFilter(QObject *obj, QEvent *event)
     {
-        if (event->type() == QEvent::HideToParent)
+        if (event->type() == QEvent::Close)
         {
-            QtQmlEngine::getEngine().stopServices();
+            QtQmlEngine::getEngine().stopServices(nullptr);
         }
         return QObject::eventFilter(obj, event);
     }
@@ -89,7 +89,7 @@ QQuickWindow	*QtQmlEngine::getWindow() const
 	return m_rootWindow;
 }
 
-void    QtQmlEngine::stopServices()
+void    QtQmlEngine::stopServices(QQuickCloseEvent *event)
 {
     auto srvList = QtQmlHelper::getRootObject()->findChildren<::fwServices::IQmlService *>();
 

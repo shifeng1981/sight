@@ -55,7 +55,7 @@ public:
     /**
      *  @brief: Call IQmlService::stop() method
      */
-    FWGUIQT_API void    stopServices();
+    FWGUIQT_API void    stopServices(QQuickCloseEvent *event);
 
     FWGUIQT_API void    stop(int status) override;
 
