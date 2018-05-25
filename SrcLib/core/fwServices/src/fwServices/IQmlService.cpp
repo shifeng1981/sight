@@ -6,7 +6,7 @@ namespace fwServices
 
 IQmlService::IQmlService() : m_serviceState(STOPPED)
 {
-    m_associatedWorker = ::fwThread::Worker::New();
+    m_associatedWorker = ::fwServices::registry::ActiveWorkers::getDefaultWorker();
 }
 
 IQmlService::~IQmlService()
@@ -19,7 +19,7 @@ IQmlService::~IQmlService()
 
 void	IQmlService::start()
 {
-	m_serviceState = STARTED;
+    m_serviceState = STARTED;
     ::fwCom::HasSlots::m_slots.setWorker( m_associatedWorker );
 
     this->starting();
@@ -50,22 +50,22 @@ void    IQmlService::configure()
 
 void	IQmlService::stop()
 {
-	SLM_ASSERT("Service isn't running", m_serviceState == STARTED);
-	m_serviceState = STOPPED;
+    SLM_ASSERT("Service isn't running", m_serviceState == STARTED);
+    m_serviceState = STOPPED;
     this->stopping();
     stopped();
 }
 
 void	IQmlService::destroy()
 {
-	m_serviceState = DESTROYED;
+    m_serviceState = DESTROYED;
     this->destroying();
     destroyed();
 }
 
 IQmlService::ServiceState 	IQmlService::getStatus() const
 {
-	return m_serviceState;
+    return m_serviceState;
 }
 
 void    IQmlService::starting()

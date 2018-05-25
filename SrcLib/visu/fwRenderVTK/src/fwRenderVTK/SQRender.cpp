@@ -12,11 +12,8 @@
 #include "fwRenderVTK/registry/adaptors.hpp"
 #include "fwRenderVTK/vtk/InteractorStyle3DForNegato.hpp"
 
-#include <fwCom/Signal.hpp>
 #include <fwCom/Signal.hxx>
-#include <fwCom/Slot.hpp>
 #include <fwCom/Slot.hxx>
-#include <fwCom/Slots.hpp>
 #include <fwCom/Slots.hxx>
 
 #include <fwData/Color.hpp>
@@ -105,9 +102,8 @@ void SQRender::configureRenderer( const ConfigType& rendererConf )
 
 //vtk depth peeling not available on android (Offscreen rendering issues)
 #ifndef ANDROID
-        m_renderers[id]->SetUseDepthPeeling( 1  );
+        m_renderers[id]->SetUseDepthPeeling( 1 );
         m_renderers[id]->SetMaximumNumberOfPeels( 8  );
-        m_renderers[id]->SetOcclusionRatio( 0. );
 #endif
 
         const int layer = get<int>(rendererConf, "layer", m_renderers[id]->GetLayer());
@@ -416,11 +412,6 @@ void SQRender::startContext()
     SLM_ASSERT("Can't instantiate interactor", interactor);
     interactor->setAutoRender(m_renderMode == RenderMode::AUTO);
     m_target->getRenderWindow()->GetInteractor()->SetInteractorStyle( interactor );
-
-#ifndef __linux
-    m_target->getRenderWindow()->SetAlphaBitPlanes(1);
-    m_target->getRenderWindow()->SetMultiSamples(0);
-#endif
 }
 
 //-----------------------------------------------------------------------------

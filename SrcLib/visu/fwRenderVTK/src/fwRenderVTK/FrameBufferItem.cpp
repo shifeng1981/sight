@@ -1,33 +1,38 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #include "fwRenderVTK/FrameBufferItem.hpp"
+
 #include "fwRenderVTK/vtkInternalOpenGLRenderWindow.hpp"
 
+#include <fwGuiQt/QtQmlHelper.hpp>
+
+#include <QMimeData>
+#include <QOpenGLFramebufferObject>
 #include <QQuickFramebufferObject>
 #include <QQuickWindow>
-#include <QOpenGLFramebufferObject>
-#include <QMimeData>
-#include <QVTKInteractorAdapter.h>
 #include <QVTKInteractor.h>
-
-#include <vtkRenderWindowInteractor.h>
-#include <vtkObjectFactory.h>
-
-#include <vtkSmartPointer.h>
+#include <QVTKInteractorAdapter.h>
 #include <vtkCamera.h>
-#include <vtkProperty.h>
 #include <vtkConeSource.h>
 #include <vtkImageActor.h>
 #include <vtkImageMapper.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkNew.h>
-
-#include <fwGuiQt/QtQmlHelper.hpp>
+#include <vtkObjectFactory.h>
+#include <vtkProperty.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkSmartPointer.h>
 
 namespace fwRenderVTK
 {
 
 static ::fwServices::QtQmlType<FrameBufferItem>    registar("com.fw4spl.vtk", 1, 0, "FrameBuffer");
 
-FrameBufferRenderer::FrameBufferRenderer(vtkInternalOpenGLRenderWindow *rw, FrameBufferItem *item) :
+FrameBufferRenderer::FrameBufferRenderer(vtkInternalOpenGLRenderWindow* rw, FrameBufferItem* item) :
     m_vtkRenderWindow(rw),
     m_framebufferObject(0),
     m_item(item),
@@ -47,12 +52,12 @@ FrameBufferRenderer::~FrameBufferRenderer()
 
 //-----------------------------------------------------------------------------
 
-QOpenGLFramebufferObject    *FrameBufferRenderer::createFramebufferObject(const QSize& size)
+QOpenGLFramebufferObject* FrameBufferRenderer::createFramebufferObject(const QSize& size)
 {
     QOpenGLFramebufferObjectFormat format;
     format.setAttachment(QOpenGLFramebufferObject::CombinedDepthStencil);
     format.setTextureTarget(GL_TEXTURE_2D);
-    format.setInternalTextureFormat(GL_RGBA32F_ARB);
+    format.setInternalTextureFormat(GL_RGBA);
     format.setSamples(0);
     m_framebufferObject = new QOpenGLFramebufferObject(size, format);
     m_vtkRenderWindow->setFrameBufferObject(m_framebufferObject);
@@ -62,35 +67,34 @@ QOpenGLFramebufferObject    *FrameBufferRenderer::createFramebufferObject(const 
 
 //------------------------------------------------------------------------------------------
 
-void    FrameBufferRenderer::render()
+void FrameBufferRenderer::render()
 {
     if (!m_readyToRender)
     {
-        return ;
+        return;
     }
+
     m_item->lockRenderer();
-    m_vtkRenderWindow->OpenGLInitState();
     m_vtkRenderWindow->Start();
-    m_vtkRenderWindow->PushState();
     m_vtkRenderWindow->internalRender(); // vtkXOpenGLRenderWindow renders the scene to the FBO
-    m_vtkRenderWindow->OpenGLEndState();
-    m_vtkRenderWindow->PopState();
-    m_item->window()->resetOpenGLState();
+
     m_item->unlockRenderer();
 }
 
-FrameBufferItem const   *FrameBufferRenderer::getItem() const
+//------------------------------------------------------------------------------
+
+FrameBufferItem const* FrameBufferRenderer::getItem() const
 {
     return m_item;
 }
 
 //-----------------------------------------------------------------------------
 
-void    FrameBufferRenderer::synchronize(QQuickFramebufferObject * item)
+void FrameBufferRenderer::synchronize(QQuickFramebufferObject* item)
 {
     if (!m_framebufferObject)
     {
-        FrameBufferItem *vtkItem = static_cast<FrameBufferItem*>(item);
+        FrameBufferItem* vtkItem = static_cast<FrameBufferItem*>(item);
         vtkItem->initialize();
         m_readyToRender = true;
 
@@ -99,7 +103,7 @@ void    FrameBufferRenderer::synchronize(QQuickFramebufferObject * item)
 
 //------------------------------------------------------------------------------------------
 
-FrameBufferItem::FrameBufferItem(QQuickItem *parent) :
+FrameBufferItem::FrameBufferItem(QQuickItem* parent) :
     QQuickFramebufferObject(parent),
     m_win(nullptr),
     m_interactorAdapter(nullptr)
@@ -115,7 +119,7 @@ FrameBufferItem::FrameBufferItem(QQuickItem *parent) :
     m_win->SetInteractor(m_interactor);
     m_interactorAdapter = new QVTKInteractorAdapter(this);
     vtkSmartPointer<vtkInteractorStyleTrackballCamera> style =
-            vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+        vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
     m_interactor->SetInteractorStyle(style);
 }
 
@@ -131,17 +135,18 @@ FrameBufferItem::~FrameBufferItem()
 
 //-----------------------------------------------------------------------------
 
-vtkInternalOpenGLRenderWindow    *FrameBufferItem::getRenderWindow() const
+vtkInternalOpenGLRenderWindow* FrameBufferItem::getRenderWindow() const
 {
     return m_win;
 }
 
 //-----------------------------------------------------------------------------
 
-QQuickFramebufferObject::Renderer   *FrameBufferItem::createRenderer() const
+QQuickFramebufferObject::Renderer* FrameBufferItem::createRenderer() const
 {
     std::cout << "CREATE AND CONNECT RENDERER" << std::endl;
-    auto renderer = new FrameBufferRenderer(static_cast<vtkInternalOpenGLRenderWindow *>(m_win), const_cast<FrameBufferItem *>(this));
+    auto renderer =
+        new FrameBufferRenderer(static_cast<vtkInternalOpenGLRenderWindow*>(m_win), const_cast<FrameBufferItem*>(this));
     connect(renderer, SIGNAL(ready()), this, SIGNAL(ready()));
     m_interactor->Initialize();
     return renderer;
@@ -156,10 +161,9 @@ vtkSmartPointer<vtkRenderer>    FrameBufferItem::getRenderer() const
 
 //-----------------------------------------------------------------------------
 
-void    FrameBufferItem::initialize()
+void FrameBufferItem::initialize()
 {
     std::cout << "Initialize" << std::endl;
-    m_win->OpenGLInitContext();
     m_win->SetSize(width(), height());
     m_interactor->SetSize(m_win->GetSize());
 }
@@ -170,25 +174,25 @@ bool FrameBufferItem::event(QEvent* evt)
 {
     switch (evt->type())
     {
-    case QEvent::MouseMove:
-    case QEvent::MouseButtonPress:
-    case QEvent::MouseButtonRelease:
-    case QEvent::MouseButtonDblClick:
-        break;
-    case QEvent::Resize:
-        break;
+        case QEvent::MouseMove:
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+            break;
+        case QEvent::Resize:
+            break;
 
-    default:
-        if (this->m_win && this->m_win->GetInteractor())
-        {
-            lockRenderer();
-            this->m_interactorAdapter->ProcessEvent(evt, this->m_win->GetInteractor());
-            unlockRenderer();
-            if (evt->isAccepted())
+        default:
+            if (this->m_win && this->m_win->GetInteractor())
             {
-                return true;
+                lockRenderer();
+                this->m_interactorAdapter->ProcessEvent(evt, this->m_win->GetInteractor());
+                unlockRenderer();
+                if (evt->isAccepted())
+                {
+                    return true;
+                }
             }
-        }
     }
     return QQuickFramebufferObject::event(evt);
 }
@@ -241,14 +245,18 @@ void FrameBufferItem::mouseDoubleClickEvent(QMouseEvent* event)
     }
 }
 
-void    FrameBufferItem::lockRenderer()
+//------------------------------------------------------------------------------
+
+void FrameBufferItem::lockRenderer()
 {
     std::cout << "<" << std::this_thread::get_id() << "> " << "ASK to Lock renderer" << std::endl;
     m_viewLock.lock();
     std::cout << "<" << std::this_thread::get_id() << "> " << "Lock renderer" << std::endl;
 }
 
-void    FrameBufferItem::unlockRenderer()
+//------------------------------------------------------------------------------
+
+void FrameBufferItem::unlockRenderer()
 {
     std::cout << "<" << std::this_thread::get_id() << "> " << "unlock renderer" << std::endl;
     m_viewLock.unlock();

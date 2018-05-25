@@ -100,7 +100,7 @@ ApplicationWindow {
         target: vtkRenderWindow
 
         scene: ({
-            "renderMode": "auto",
+            "renderMode": "timer",
             "rendererList": [{
                 "id": "default",
             }],
