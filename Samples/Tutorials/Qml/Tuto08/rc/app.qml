@@ -196,6 +196,10 @@ ApplicationWindow {
                     textureAdaptor.configure()
                     textureAdaptor.start()
                 }
+
+                onWidthChanged: initialize()
+
+                onHeightChanged: initialize()
             }
         }
 

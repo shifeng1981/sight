@@ -132,6 +132,7 @@ void SNegatoMPR::updating()
         {
             if(this->getSliceMode() == ONE_SLICE)
             {
+                std::cout << "Only one slice, mode = " << m_orientation << std::endl;
                 this->addAdaptor("::visuVTKAdaptor::SNegatoOneSlice", m_orientation);
             }
             else if(this->getSliceMode() == THREE_SLICES)

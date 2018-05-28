@@ -30,12 +30,18 @@ namespace visuVTKAdaptor
  * - \b setFrontal() : set the camera orientation to frontal
  * - \b setSagittal() : set the camera orientation to sagittal
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQMedical3DCamera">
-       <config renderer="default" sliceIndex"axial" resetAtStart="off">
-   </service>
+ * @code{.qml}
+   import com.fw4spl.vtk.adaptors
+
+   SMedical3DCamera {
+       config: ({
+            "renderer": "default",
+            "sliceIndex": "axial",
+            "resetAtStart": "off"
+       })
+   }
    @endcode
  * @subsection Configuration Configuration
  * - \b config(mandatory) : contains the adaptor configuration

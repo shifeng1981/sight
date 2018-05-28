@@ -26,21 +26,22 @@ namespace visuVTKAdaptor
 /**
  * @brief Render an image on the generic scene
  *
- * @section Slots Slots
- * - \b updateImageOpacity() : update the image opacity and visibility according to image fields
- * - \b updateTFPoints() : update the displayed transfer function according to the new points
- * - \b updateTFWindowing(double window, double level) : update the displayed transfer function according to the new
- *      window and level
+ * @section QML QML Configuration
  *
- * @section XML XML Configuration
- *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::Image">
-       <inout key="image" uid="..." autoConnect="yes" />
-       <inout key="tf" uid="..." optional="yes" />
-       <config renderer="default" picker="negatodefault" transform="trf" tfalpha="yes" vtkimageregister="imgSource"
-               opacity="1.0" />
-   </service>
+ * @code{.qml}
+   import com.fw4spl.vtk.adaptors 1.0
+
+   SImage {
+        image: ... // QtObjectHolder(::fwData::image::sptr)
+        tf: ... // QtObjectHolder(::fwData::tf::sptr)
+        config: ({
+            "renderer": "default",
+            "picker": "negatodefault",
+            "transform": "trf",
+            "tfalpha": "yes",
+            "vtkimageregister": "imgSource"
+        })
+   }
    @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

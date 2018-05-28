@@ -18,6 +18,7 @@
 
 #include <fwServices/macros.hpp>
 #include <fwServices/QtQmlRegistar.hxx>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwVtkIO/vtk.hpp>
 
@@ -37,6 +38,7 @@ namespace visuVTKAdaptor
 {
 
 static ::fwServices::QtQmlRegistar<SQImageSlice>    registar("::visuVTKAdaptor::SImageSlice");
+static ::fwServices::QtQmlType<SQImageSlice>    registarType("com.fw4spl.vtk.adaptors", 1, 0, "SImageSlice");
 
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_INDEX_SLOT = "updateSliceIndex";
 static const ::fwCom::Slots::SlotKeyType s_UPDATE_SLICE_TYPE_SLOT  = "updateSliceType";

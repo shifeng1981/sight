@@ -94,11 +94,6 @@ public:
     FWRENDERVTK_QT_API vtkInternalOpenGLRenderWindow* getRenderWindow() const;
 
     /**
-     *  @brief: initialize variables
-     */
-    FWRENDERVTK_QT_API void  initialize();
-
-    /**
      * @brief getRenderer
      * @return current renderer
      */
@@ -106,6 +101,12 @@ public:
 
     FWRENDERVTK_QT_API void    lockRenderer();
     FWRENDERVTK_QT_API void    unlockRenderer();
+
+public Q_SLOTS:
+    /**
+     *  @brief: initialize variables
+     */
+    FWRENDERVTK_QT_API void  initialize();
 
 protected:
     /**

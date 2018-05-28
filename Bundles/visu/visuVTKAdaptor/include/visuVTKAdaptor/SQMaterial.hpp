@@ -26,12 +26,14 @@ namespace visuVTKAdaptor
 /**
  * @brief Manage material representation of meshes
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQMaterial">
-       <in key="material" uid="..." />
-   </service>
+ * @code{.qml}
+   import com.fw4spl.vtk.adaptors 1.0
+
+   SMaterial {
+        material: ... // QtObjectHolder(::fwData::Material::sptr)
+   }
    @endcode
  * @subsection Input Input
  * - \b input [::fwData::Material]: material applied on the mesh.

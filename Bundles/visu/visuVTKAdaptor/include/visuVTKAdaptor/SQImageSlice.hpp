@@ -37,15 +37,24 @@ namespace visuVTKAdaptor
  * - \b updateSliceIndex() : update image slice index
  * - \b updateSliceType() : update image slice type
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SImageSlice" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <config renderer="default" picker="negatodefault" sliceIndex="axial"
-               transform="trf" ctrlimage="imageKey" interpolation="off" vtkimagesource="imgSource"
-               actorOpacity="1.0" />
-   </service>
+ * @code{.qml}
+    import com.fw4spl.vtk.adaptors
+
+    SImageSlice {
+        image: ... // QtObjectHolder(::fwData::image::sptr)
+        config: ({
+            "renderer": "default",
+            "picker": "negatodefault",
+            "sliceIndex": "axial",
+            "tranform": "trf",
+            "ctrlimage": "imageKey",
+            "interpolation": "off",
+            "vtkimagesource": "imgSource",
+            "actorOpacity": 1.0
+        })
+    }
    @endcode
  *
  * @subsection In-Out In-Out
