@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQMaterial_HPP__
 #define __VISUVTKADAPTOR_SQMaterial_HPP__
@@ -36,9 +38,9 @@ namespace visuVTKAdaptor
  */
 class VISUVTKADAPTOR_CLASS_API SQMaterial : public ::fwRenderVTK::IQAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder   *material MEMBER m_material)
+Q_PROPERTY(fwServices::QtObjectHolder* material MEMBER m_material)
 
 public:
 
@@ -65,7 +67,7 @@ protected:
     bool m_manageProperty;
     bool m_lighting;
 
-    ::fwServices::QtObjectHolder    *m_material = nullptr;
+    ::fwServices::QtObjectHolder* m_material = nullptr;
 
 };
 

@@ -6,19 +6,17 @@
 
 #include "visuVTKAdaptor/SQNegatoMPR.hpp"
 
+#include "visuVTKAdaptor/SQImageSlice.hpp"
 #include "visuVTKAdaptor/SQNegatoOneSlice.hpp"
 #include "visuVTKAdaptor/SQNegatoSlicingInteractor.hpp"
 #include "visuVTKAdaptor/SQNegatoWindowingInteractor.hpp"
-#include "visuVTKAdaptor/SQSlicesCursor.hpp"
-#include "visuVTKAdaptor/SQImageSlice.hpp"
 #include "visuVTKAdaptor/SQProbeCursor.hpp"
+#include "visuVTKAdaptor/SQSlicesCursor.hpp"
 
 #include <fwCom/Slot.hpp>
 #include <fwCom/Slot.hxx>
 #include <fwCom/Slots.hpp>
 #include <fwCom/Slots.hxx>
-
-#include <fwVtkIO/vtk.hpp>
 
 #include <fwData/Boolean.hpp>
 #include <fwData/Image.hpp>
@@ -30,15 +28,16 @@
 
 #include <fwServices/macros.hpp>
 #include <fwServices/op/Add.hpp>
-#include <fwServices/registry/Proxy.hpp>
-#include <fwServices/registry/ActiveWorkers.hpp>
 #include <fwServices/QtQmlType.hxx>
+#include <fwServices/registry/ActiveWorkers.hpp>
+#include <fwServices/registry/Proxy.hpp>
 
 #include <fwTools/fwID.hpp>
 
-#include <vtkProperty.h>
-#include <vtkImageData.h>
+#include <fwVtkIO/vtk.hpp>
 
+#include <vtkImageData.h>
+#include <vtkProperty.h>
 
 #include <string>
 
@@ -100,8 +99,10 @@ void SQNegatoMPR::stopping()
 
     for (auto srv : this->getRegisteredServices())
     {
-        std::shared_ptr<SQNegatoSlicingInteractor> negatoSlicingInteractor = std::dynamic_pointer_cast<SQNegatoSlicingInteractor>(srv);
-        std::shared_ptr<SQSlicesCursor> sliceCursor                        = std::dynamic_pointer_cast<SQSlicesCursor>(srv);
+        std::shared_ptr<SQNegatoSlicingInteractor> negatoSlicingInteractor =
+            std::dynamic_pointer_cast<SQNegatoSlicingInteractor>(srv);
+        std::shared_ptr<SQSlicesCursor> sliceCursor = std::dynamic_pointer_cast<SQSlicesCursor>(
+            srv);
         if (negatoSlicingInteractor)
         {
             proxy->disconnect(m_slicingStartingProxy, negatoSlicingInteractor->signal(
@@ -130,12 +131,12 @@ void SQNegatoMPR::updating()
 {
     if (!m_image || !m_image->getObject())
     {
-        return ;
+        return;
     }
     this->stopping();
 
     SLM_ASSERT("Missing image", m_image || m_image->getObject());
-    auto image = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
+    auto image        = std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject());
     bool imageIsValid = ::fwDataTools::fieldHelper::MedicalImageHelpers::checkImageValidity( image );
 
     if ( imageIsValid)
@@ -232,9 +233,9 @@ void SQNegatoMPR::updateSliceType(int from, int to)
     }
     for (auto& srv : this->getRegisteredServices())
     {
-        auto imageSlice = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
+        auto imageSlice              = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
         auto negatoSlicingInteractor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoSlicingInteractor>(srv);
-        auto sliceCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
+        auto sliceCursor             = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
 
         if (imageSlice)
         {
@@ -246,7 +247,7 @@ void SQNegatoMPR::updateSliceType(int from, int to)
         }
         if (sliceCursor)
         {
-             sliceCursor->updateSliceType(from, to);
+            sliceCursor->updateSliceType(from, to);
         }
     }
 
@@ -468,14 +469,16 @@ std::shared_ptr<::fwRenderVTK::IQAdaptor> SQNegatoMPR::addAdaptor(const std::str
     return service;
 }
 
-void    SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
+//------------------------------------------------------------------------------
+
+void SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
 {
     for (auto& srv : this->getRegisteredServices())
     {
-        auto imageSlice = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
+        auto imageSlice              = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoOneSlice>(srv);
         auto negatoSlicingInteractor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQNegatoSlicingInteractor>(srv);
-        auto probeCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQProbeCursor>(srv);
-        auto sliceCursor = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
+        auto probeCursor             = std::dynamic_pointer_cast<::visuVTKAdaptor::SQProbeCursor>(srv);
+        auto sliceCursor             = std::dynamic_pointer_cast<::visuVTKAdaptor::SQSlicesCursor>(srv);
 
         if (imageSlice)
         {
@@ -491,7 +494,7 @@ void    SQNegatoMPR::updateSliceIndex(int axial, int frontal, int sagittal)
         }
         if (sliceCursor)
         {
-             sliceCursor->updateSliceIndex(axial, frontal, sagittal);
+            sliceCursor->updateSliceIndex(axial, frontal, sagittal);
         }
     }
 }

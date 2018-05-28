@@ -1,11 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWDATA_IMAGE_HPP__
-#define __FWDATA_IMAGE_HPP__
+#pragma once
 
 #include "fwData/Array.hpp"
 #include "fwData/factory/new.hpp"
@@ -68,7 +67,7 @@ public:
      */
     FWDATA_API Image(::fwData::Object::Key key);
 
-    FWDATA_API  Image();
+    FWDATA_API Image();
 
     /**
      * @brief Destructor
@@ -300,6 +299,3 @@ inline void Image::setNumberOfComponents(size_t val)
 //-----------------------------------------------------------------------------
 
 } // namespace fwData
-
-#endif // __FWDATA_IMAGE_HPP__
-

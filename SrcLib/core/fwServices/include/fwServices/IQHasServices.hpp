@@ -1,3 +1,11 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
+#pragma once
+
 #ifndef IQHASSERVICE_H
 #define IQHASSERVICE_H
 
@@ -49,7 +57,7 @@ protected:
      * @param[in] id Optional identifier of the service
      */
     FWSERVICES_API SPTR(::fwServices::IQmlService) registerService(const std::string& _implType,
-                                                                 const std::string& _id = "" );
+                                                                   const std::string& _id = "" );
 
     /**
      * @brief Register a new service linked to this service

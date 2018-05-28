@@ -77,10 +77,10 @@ namespace fwServices
 //@}
 
 #define fwQmlTypeMacro(QmlObject)                           \
-    using sptr = std::shared_ptr<QmlObject>;                \
+    using sptr  = std::shared_ptr<QmlObject>;                \
     using csptr = std::shared_ptr<const QmlObject>;         \
-    using uptr = std::unique_ptr<QmlObject>;                \
+    using uptr  = std::unique_ptr<QmlObject>;                \
     using cuptr = const std::unique_ptr<QmlObject>;         \
-    using wptr = std::weak_ptr<QmlObject>;                  \
+    using wptr  = std::weak_ptr<QmlObject>;                  \
     using cwptr = const std::weak_ptr<QmlObject>;
 }

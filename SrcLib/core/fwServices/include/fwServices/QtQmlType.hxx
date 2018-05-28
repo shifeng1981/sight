@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #pragma once
 
 #include "fwServices/config.hpp"
@@ -10,33 +16,36 @@
 namespace fwServices
 {
 /**
- *	@brief: QtQmlType represent a Type in QML like a Button
- *		These type aren't define in .xml file.
+ *  @brief: QtQmlType represent a Type in QML like a Button
+ *      These type aren't define in .xml file.
  *
  */
 template<typename Type>
-class QtQmlType: public IQtQmlType
+class QtQmlType : public IQtQmlType
 {
 public:
     /**
-     *	@brief: constructor, call qmlRegisterType<Type> that precise to QML which class is used for this typename
+     *  @brief: constructor, call qmlRegisterType<Type> that precise to QML which class is used for this typename
      */
     QtQmlType(std::string const& packageName, int versionMajor, int versionMinor, std::string const& objectName)
     {
-        m_packageName = packageName;
+        m_packageName  = packageName;
         m_versionMajor = versionMajor;
         m_versionMinor = versionMinor;
-        m_objectName = objectName;
+        m_objectName   = objectName;
     }
+
+    //------------------------------------------------------------------------------
 
     void    registar() const
     {
-        std::cout << "Registar : " << m_packageName.c_str() << " " << m_versionMajor << " " << m_versionMinor << " " << m_objectName << std::endl;
+        std::cout << "Registar : " << m_packageName.c_str() << " " << m_versionMajor << " " << m_versionMinor << " " <<
+            m_objectName << std::endl;
         qmlRegisterType<Type>(m_packageName.c_str(), m_versionMajor, m_versionMinor, m_objectName.c_str());
     }
 
     /**
-     *	@brief: destructor, do nothing.
+     *  @brief: destructor, do nothing.
      */
     ~QtQmlType()
     {
@@ -44,9 +53,9 @@ public:
 
 private:
     std::string m_packageName = "";
-    int m_versionMajor = -1;
-    int m_versionMinor = -1;
-    std::string m_objectName = "";
+    int m_versionMajor        = -1;
+    int m_versionMinor        = -1;
+    std::string m_objectName  = "";
 
 };
 

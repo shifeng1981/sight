@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -192,7 +192,7 @@ void SQSlicesCursor::barycenter( double ptA[3], double ptB[3], float scale, doub
 //-----------------------------------------------------------------------------
 
 void SQSlicesCursor::computeCrossPoints( double _ptA[3], double _ptB[3], double _ptP[3], double _scale,
-                                        double _ptAprime[3], double _ptBprime[3] )
+                                         double _ptAprime[3], double _ptBprime[3] )
 {
     double ptPBprime[3];
     double norm2PBprime = 0.0;

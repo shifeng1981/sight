@@ -33,9 +33,9 @@ namespace fwIO
  */
 class FWIO_CLASS_QT_API IQmlReader : public ::fwServices::IQmlService
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(QString filepath MEMBER m_filepath NOTIFY filepathChanged)
+Q_PROPERTY(QString filepath MEMBER m_filepath NOTIFY filepathChanged)
 public:
 
     /**

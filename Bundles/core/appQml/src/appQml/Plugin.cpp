@@ -1,17 +1,17 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
 #include "appQml/Plugin.hpp"
 
+#include <fwGuiQt/QtQmlEngine.hpp>
+
 #include <fwRuntime/utils/GenericExecutableFactoryRegistrar.hpp>
 
 #include <fwServices/registry/AppConfig.hpp>
 #include <fwServices/registry/AppConfigParameters.hpp>
-
-#include <fwGuiQt/QtQmlEngine.hpp>
 
 namespace appQml
 {
@@ -51,7 +51,7 @@ void Plugin::initialize()
     SLM_ASSERT("The OSR is already initialized.", !m_appConfigMng );
     SLM_ASSERT("The configuration name parameter is not initialized.", !m_configurationName.empty());
 
-    m_qmlEngine = std::shared_ptr<::fwServices::IQmlEngine>(new ::fwGuiQt::QtQmlEngine());
+    m_qmlEngine    = std::shared_ptr<::fwServices::IQmlEngine>(new ::fwGuiQt::QtQmlEngine());
     m_appConfigMng = ::fwServices::QmlAppConfigManager::New();
 
     m_appConfigMng->setEngine(m_qmlEngine);

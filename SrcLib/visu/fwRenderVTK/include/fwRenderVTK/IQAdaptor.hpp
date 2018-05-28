@@ -15,15 +15,14 @@
 
 #include <fwCom/helper/SigSlotConnection.hpp>
 
-#include <fwServices/IQmlService.hpp>
 #include <fwServices/IQHasServices.hpp>
+#include <fwServices/IQmlService.hpp>
 
-
-#include <QVariantMap>
 #include <QVariantList>
+#include <QVariantMap>
 
-#include <string>
 #include <memory>
+#include <string>
 
 class vtkProp;
 class vtkPropCollection;
@@ -38,13 +37,13 @@ namespace fwRenderVTK
  * @brief Base class for VTK adaptors
  */
 class FWRENDERVTK_CLASS_QT_API IQAdaptor : public ::fwServices::IQmlService,
-                                        public ::fwServices::IQHasServices,
-                                        public std::enable_shared_from_this<IQAdaptor>
+                                           public ::fwServices::IQHasServices,
+                                           public std::enable_shared_from_this<IQAdaptor>
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(SQRender *renderService MEMBER m_renderService)
-    Q_PROPERTY(QVariantList services MEMBER m_serviceList)
+Q_PROPERTY(SQRender *renderService MEMBER m_renderService)
+Q_PROPERTY(QVariantList services MEMBER m_serviceList)
 
 friend class SQRender;
 public:
@@ -53,10 +52,10 @@ public:
     typedef fwServices::IQmlService SuperClass;
 
     /// Sets the assiciated render service
-    FWRENDERVTK_QT_API void setRenderService( SQRender *service );
+    FWRENDERVTK_QT_API void setRenderService( SQRender* service );
 
     /// Returd the associated render service
-    FWRENDERVTK_QT_API SQRender *getRenderService() const;
+    FWRENDERVTK_QT_API SQRender* getRenderService() const;
 
     /// Sets the renderer identifier
     FWRENDERVTK_QT_API void setRendererId(SQRender::RendererIdType newID);
@@ -101,7 +100,7 @@ public:
      * @param prop vtkProp to find the associated adaptor
      * @param depth depth of reseach in sub-adaptors, if depth == 0 it only search in current prop collection
      */
-    FWRENDERVTK_QT_API IQAdaptor *getAssociatedAdaptor(vtkProp* prop, int depth);
+    FWRENDERVTK_QT_API IQAdaptor* getAssociatedAdaptor(vtkProp* prop, int depth);
 
     /**
      * @brief Gets all the vtkProp associated to this adaptor
@@ -187,7 +186,7 @@ protected:
      *  @{
      */
     QVariantList m_serviceList;
-    SQRender    *m_renderService;
+    SQRender* m_renderService;
     /**
      *  }@
      */

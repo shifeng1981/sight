@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQSlicesCursor_HPP__
 #define __VISUVTKADAPTOR_SQSlicesCursor_HPP__
@@ -57,9 +59,9 @@ namespace visuVTKAdaptor
 class VISUVTKADAPTOR_CLASS_API SQSlicesCursor : public ::fwRenderVTK::IQAdaptor,
                                                 public ::fwDataTools::helper::MedicalImageAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
 
 public:
 
@@ -87,7 +89,6 @@ protected:
     VISUVTKADAPTOR_API void starting() override;
     VISUVTKADAPTOR_API void updating() override;
     VISUVTKADAPTOR_API void stopping() override;
-
 
     /// Slot: set the scale for the cross : 1. means full cross, 0.5 half cross, 0. no cross
     void setCrossScale(double scale);
@@ -135,8 +136,7 @@ private:
     static void computeCrossPoints( double _ptA[3], double _ptB[3], double _ptP[3], double _scale, double _ptAprime[3],
                                     double _ptBprime[3] );
 
-
-    ::fwServices::QtObjectHolder    *m_image = nullptr;
+    ::fwServices::QtObjectHolder* m_image = nullptr;
 
 };
 

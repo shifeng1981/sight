@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #include "fwServices/QmlAppConfigManager.hpp"
 
 #include "fwServices/registry/AppConfig.hpp"
@@ -14,12 +20,12 @@
 #include <QQuickStyle>
 
 std::string	fwServices::QmlAppConfigManager::QmlEntryPoint = "qml";
-std::string	fwServices::QmlAppConfigManager::File = "file";
-std::string	fwServices::QmlAppConfigManager::Context = "ctx";
-std::string	fwServices::QmlAppConfigManager::Class = "class";
+std::string	fwServices::QmlAppConfigManager::File          = "file";
+std::string	fwServices::QmlAppConfigManager::Context       = "ctx";
+std::string	fwServices::QmlAppConfigManager::Class         = "class";
 
 fwServices::QmlAppConfigManager::QmlAppConfigManager() :
-	m_isUnitTest(false)
+    m_isUnitTest(false)
 {
 }
 
@@ -27,103 +33,105 @@ fwServices::QmlAppConfigManager::QmlAppConfigManager() :
 
 fwServices::QmlAppConfigManager::~QmlAppConfigManager()
 {
-	    SLM_ASSERT("Manager must be stopped before destruction.", m_state == STATE_DESTROYED);
+    SLM_ASSERT("Manager must be stopped before destruction.", m_state == STATE_DESTROYED);
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
-	                                          const FieldAdaptorType& replaceFields)
+void fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
+                                                const FieldAdaptorType& replaceFields)
 {
-	m_configId = configId;
-	m_cfgElem  = registry::AppConfig::getDefault()->getAdaptedTemplateConfig( configId, replaceFields, !m_isUnitTest );
+    m_configId = configId;
+    m_cfgElem  = registry::AppConfig::getDefault()->getAdaptedTemplateConfig( configId, replaceFields, !m_isUnitTest );
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
-	                                          const ::fwData::Composite::csptr& replaceFields)
+void fwServices::QmlAppConfigManager::setConfig(const std::string& configId,
+                                                const ::fwData::Composite::csptr& replaceFields)
 {
-	m_configId = configId;
-	m_cfgElem  = registry::AppConfig::getDefault()->getAdaptedTemplateConfig( configId, replaceFields, !m_isUnitTest );
+    m_configId = configId;
+    m_cfgElem  = registry::AppConfig::getDefault()->getAdaptedTemplateConfig( configId, replaceFields, !m_isUnitTest );
 }
 
 // -----------------------------------------------------------
 
-::fwData::Object::sptr	fwServices::QmlAppConfigManager::getConfigRoot() const
+::fwData::Object::sptr fwServices::QmlAppConfigManager::getConfigRoot() const
 {
     return nullptr;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::launch()
+void fwServices::QmlAppConfigManager::launch()
 {
-	FW_PROFILE("launch");
+    FW_PROFILE("launch");
 
-	this->startBundle();
-	this->create();
-	this->start();
-	this->update();
+    this->startBundle();
+    this->create();
+    this->start();
+    this->update();
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::stopAndDestroy()
+void fwServices::QmlAppConfigManager::stopAndDestroy()
 {
-	this->stop();
-	this->destroy();
+    this->stop();
+    this->destroy();
 }
 
-void	fwServices::QmlAppConfigManager::setEngine(SPTR(::fwServices::IQmlEngine) const& engine)
+//------------------------------------------------------------------------------
+
+void fwServices::QmlAppConfigManager::setEngine(SPTR(::fwServices::IQmlEngine) const& engine)
 {
-	m_qmlEngine = engine;
+    m_qmlEngine = engine;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::create()
+void fwServices::QmlAppConfigManager::create()
 {
-	SLM_ASSERT("Missing QML engine", m_qmlEngine);
-	SLM_ASSERT("Manager already running.", m_state == STATE_DESTROYED);
-	bool	qmlFound = false;
+    SLM_ASSERT("Missing QML engine", m_qmlEngine);
+    SLM_ASSERT("Manager already running.", m_state == STATE_DESTROYED);
+    bool qmlFound = false;
 
-	for (const auto& elem : m_cfgElem->getElements())
-	{
-		if (elem->getName() == ::fwServices::QmlAppConfigManager::QmlEntryPoint)
+    for (const auto& elem : m_cfgElem->getElements())
+    {
+        if (elem->getName() == ::fwServices::QmlAppConfigManager::QmlEntryPoint)
         {
             if (elem->hasAttribute("style"))
             {
                 QQuickStyle::setStyle(elem->getAttributeValue("style").c_str());
             }
-			this->createContext(elem);
-			this->loadQMLFile(elem);
-			qmlFound = true;
-		}
-	}
-	SLM_ASSERT("Can't find <qml> tag in xml", qmlFound);
-	m_state = STATE_CREATED;
+            this->createContext(elem);
+            this->loadQMLFile(elem);
+            qmlFound = true;
+        }
+    }
+    SLM_ASSERT("Can't find <qml> tag in xml", qmlFound);
+    m_state = STATE_CREATED;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::start()
+void fwServices::QmlAppConfigManager::start()
 {
-	SLM_ASSERT("Manager not created", m_state == STATE_CREATED);
-	m_qmlEngine->launch();
-	m_state = STATE_STARTED;
+    SLM_ASSERT("Manager not created", m_state == STATE_CREATED);
+    m_qmlEngine->launch();
+    m_state = STATE_STARTED;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::update()
+void fwServices::QmlAppConfigManager::update()
 {
 
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::stop()
+void fwServices::QmlAppConfigManager::stop()
 {
     SLM_ASSERT("Manager is not started, cannot stop.", m_state == STATE_STARTED);
     m_state = STATE_STOPPED;
@@ -132,24 +140,24 @@ void	fwServices::QmlAppConfigManager::stop()
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::destroy()
+void fwServices::QmlAppConfigManager::destroy()
 {
     m_state = STATE_DESTROYED;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::setIsUnitTest(bool isUnitTest)
+void fwServices::QmlAppConfigManager::setIsUnitTest(bool isUnitTest)
 {
-	m_isUnitTest = isUnitTest;
+    m_isUnitTest = isUnitTest;
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::startBundle()
+void fwServices::QmlAppConfigManager::startBundle()
 {
-	SLM_ERROR_IF("Bundle is not specified, it can not be started.", m_configId.empty());
-	if (!m_configId.empty() && !m_isUnitTest)
+    SLM_ERROR_IF("Bundle is not specified, it can not be started.", m_configId.empty());
+    if (!m_configId.empty() && !m_isUnitTest)
     {
         std::shared_ptr< ::fwRuntime::Bundle > bundle = registry::AppConfig::getDefault()->getBundle(m_configId);
         SLM_INFO_IF("Bundle '" + bundle->getIdentifier() + "' (used for '" + m_configId + "') is already started !",
@@ -163,36 +171,36 @@ void	fwServices::QmlAppConfigManager::startBundle()
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::loadQMLFile(::fwRuntime::ConfigurationElement::csptr const& qmlElement)
+void fwServices::QmlAppConfigManager::loadQMLFile(::fwRuntime::ConfigurationElement::csptr const& qmlElement)
 {
-	for (const auto& elem : qmlElement->getElements())
-	{
-		if (elem->getName() == ::fwServices::QmlAppConfigManager::File)
-		{
-			m_qmlEngine->loadFile(elem->getValue());
-			return ;
-		}
-	}
-	SLM_ERROR("Missing QML resource file.");
+    for (const auto& elem : qmlElement->getElements())
+    {
+        if (elem->getName() == ::fwServices::QmlAppConfigManager::File)
+        {
+            m_qmlEngine->loadFile(elem->getValue());
+            return;
+        }
+    }
+    SLM_ERROR("Missing QML resource file.");
 }
 
 // -----------------------------------------------------------
 
-void	fwServices::QmlAppConfigManager::createContext(::fwRuntime::ConfigurationElement::csptr const& qmlElement)
+void fwServices::QmlAppConfigManager::createContext(::fwRuntime::ConfigurationElement::csptr const& qmlElement)
 {
-	for (const auto& elem : qmlElement->getElements())
-	{
-		if (elem->getName() == ::fwServices::QmlAppConfigManager::Context)
-		{
-			for (const auto& classElem : elem->getElements())
-			{
-	            SLM_ASSERT("Missing attribute \"uid\".", classElem->hasAttribute("name"));
-   	            SLM_ASSERT("Missing attribute \"type\".", classElem->hasAttribute("type"));
-   	            std::string	uid = classElem->getAttributeValue("name");
-   	            std::string	cType = classElem->getAttributeValue("type");
+    for (const auto& elem : qmlElement->getElements())
+    {
+        if (elem->getName() == ::fwServices::QmlAppConfigManager::Context)
+        {
+            for (const auto& classElem : elem->getElements())
+            {
+                SLM_ASSERT("Missing attribute \"uid\".", classElem->hasAttribute("name"));
+                SLM_ASSERT("Missing attribute \"type\".", classElem->hasAttribute("type"));
+                std::string	uid   = classElem->getAttributeValue("name");
+                std::string	cType = classElem->getAttributeValue("type");
 
-   	            m_qmlEngine->addCtx(uid, cType);
-			}
-		}
-	}
+                m_qmlEngine->addCtx(uid, cType);
+            }
+        }
+    }
 }

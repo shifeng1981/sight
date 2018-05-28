@@ -28,10 +28,9 @@
 
 #include <fwServices/macros.hpp>
 #include <fwServices/op/Add.hpp>
+#include <fwServices/QtQmlType.hxx>
 #include <fwServices/registry/ServiceConfig.hpp>
 #include <fwServices/registry/ServiceFactory.hpp>
-
-#include <fwServices/QtQmlType.hxx>
 
 #include <boost/foreach.hpp>
 
@@ -82,31 +81,6 @@ void SQIOSelector::configuring()
                 selectionMode == "exclude" || selectionMode == "include" );
     m_servicesAreExcluded = ( selectionMode == "exclude" );
     SLM_DEBUG( "selection mode => " + selectionMode );
-
-    /*const auto selectionCfg = srvConfig.equal_range("addSelection");
-    for (auto itSelection = selectionCfg.first; itSelection != selectionCfg.second; ++itSelection)
-    {
-        const std::string service = itSelection->second.get<std::string>("<xmlattr>.service");
-        m_selectedServices.push_back(service);
-        SLM_DEBUG( "add selection => " + service );
-
-        const std::string configId = itSelection->second.get<std::string>("<xmlattr>.config", "");
-        if(!configId.empty())
-        {
-            m_serviceToConfig[service] = configId;
-            SLM_DEBUG( "add config '" + configId + "' for service '" + service + "'");
-        }
-    }
-
-    const auto configCfg = srvConfig.equal_range("config");
-    for (auto itCfg = configCfg.first; itCfg != configCfg.second; ++itCfg)
-    {
-        const std::string service  = itCfg->second.get<std::string>("<xmlattr>.service");
-        const std::string configId = itCfg->second.get<std::string>("<xmlattr>.id");
-
-        m_serviceToConfig[service] = configId;
-        SLM_DEBUG( "add config '" + configId + "' for service '" + service + "'");
-    }*/
 }
 
 //------------------------------------------------------------------------------

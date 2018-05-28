@@ -198,9 +198,9 @@ vtkRenderWindowInteractor* IQAdaptor::getInteractor()
 
 //------------------------------------------------------------------------------
 
-IQAdaptor *IQAdaptor::getAssociatedAdaptor(vtkProp* prop, int depth)
+IQAdaptor* IQAdaptor::getAssociatedAdaptor(vtkProp* prop, int depth)
 {
-    IQAdaptor *srv;
+    IQAdaptor* srv;
 
     if (prop)
     {
@@ -210,11 +210,11 @@ IQAdaptor *IQAdaptor::getAssociatedAdaptor(vtkProp* prop, int depth)
         }
         else
         {
-            IQAdaptor *res;
+            IQAdaptor* res;
             for( auto& service : m_serviceList)
             {
 
-                auto adaptor = service.value<::fwRenderVTK::IQAdaptor *>();
+                auto adaptor = service.value<::fwRenderVTK::IQAdaptor*>();
                 if(adaptor)
                 {
                     res = adaptor->getAssociatedAdaptor(prop, depth - 1 );
@@ -269,7 +269,7 @@ void IQAdaptor::getAllSubProps(vtkPropCollection* propc, int depth)
     {
         for( const auto& service : m_serviceList)
         {
-            auto adaptor = service.value<::fwRenderVTK::IQAdaptor *>();
+            auto adaptor = service.value<::fwRenderVTK::IQAdaptor*>();
             if(adaptor)
             {
                 adaptor->getAllSubProps( propc, depth - 1 );

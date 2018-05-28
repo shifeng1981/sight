@@ -1,11 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __FWDATATOOLS_HELPER_MEDICALIMAGEADAPTOR_HPP__
-#define __FWDATATOOLS_HELPER_MEDICALIMAGEADAPTOR_HPP__
+#pragma once
 
 #include "fwDataTools/config.hpp"
 #include "fwDataTools/helper/ImageGetter.hpp"
@@ -321,6 +320,3 @@ void MedicalImageAdaptor::worldToImageSliceIndex(const WORLD world, INT_INDEX* i
 } //namespace helper
 
 } //namespace fwDataTools
-
-#endif // __FWDATATOOLS_HELPER_MEDICALIMAGEADAPTOR_HPP__
-

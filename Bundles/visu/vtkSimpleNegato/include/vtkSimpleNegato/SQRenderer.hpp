@@ -1,24 +1,26 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VTKSIMPLENEGATO_SRENDERER_HPP__
 #define __VTKSIMPLENEGATO_SRENDERER_HPP__
 
 #include "vtkSimpleNegato/config.hpp"
 
-#include <fwRender/IRender.hpp>
-
-#include <fwRenderVTK/IVtkRenderWindowInteractorManager.hpp>
-#include <fwRenderVTK/FrameBufferItem.hpp>
-
-#include <fwServices/IQmlService.hpp>
-
 #include <fwData/Image.hpp>
 
 #include <fwGuiQt/container/QtContainer.hpp>
+
+#include <fwRender/IRender.hpp>
+
+#include <fwRenderVTK/FrameBufferItem.hpp>
+#include <fwRenderVTK/IVtkRenderWindowInteractorManager.hpp>
+
+#include <fwServices/IQmlService.hpp>
 #include <fwServices/QtObjectHolder.hpp>
 
 #include  <vtkImagePlaneWidget.h>
@@ -45,11 +47,10 @@ namespace vtkSimpleNegato
  */
 class VTKSIMPLENEGATO_CLASS_API SQRenderer : public ::fwServices::IQmlService
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image NOTIFY imageChanged)
-    Q_PROPERTY(fwRenderVTK::FrameBufferItem *target MEMBER m_target)
-
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image NOTIFY imageChanged)
+Q_PROPERTY(fwRenderVTK::FrameBufferItem* target MEMBER m_target)
 
 public:
     /// Constructor
@@ -104,9 +105,7 @@ protected:
     VTKSIMPLENEGATO_API virtual void destroying() override;
 
 Q_SIGNALS:
-    void    imageChanged(::fwServices::QtObjectHolder *);
-
-
+    void    imageChanged(::fwServices::QtObjectHolder*);
 
 private:
     /**
@@ -132,24 +131,24 @@ private:
     //::fwRenderVTK::IVtkRenderWindowInteractorManager::sptr m_interactorManager;
 
     /// @brief image wireframe outline.
-    vtkOutlineFilter *m_outline;
+    vtkOutlineFilter* m_outline;
 
     /// @brief vtk widget used in the negatoscope axial plane.
-    vtkImagePlaneWidget *m_negatoAxial;
+    vtkImagePlaneWidget* m_negatoAxial;
 
     /// @brief vtk widget used in the negatoscope sagittal plane.
-    vtkImagePlaneWidget *m_negatoSagittal;
+    vtkImagePlaneWidget* m_negatoSagittal;
 
     /// @brief vtk widget used in the negatoscope frontal plane.
-    vtkImagePlaneWidget *m_negatoFrontal;
+    vtkImagePlaneWidget* m_negatoFrontal;
 
     /// the m_bPipelineIsInit value is \b true if the pipeline is initialized.
     bool m_bPipelineIsInit;
 
 //    ::fwGuiQt::container::QtContainer::sptr m_container;
 
-    ::fwServices::QtObjectHolder *m_image;
-    fwRenderVTK::FrameBufferItem  *m_target;
+    ::fwServices::QtObjectHolder* m_image;
+    fwRenderVTK::FrameBufferItem* m_target;
 };
 
 }

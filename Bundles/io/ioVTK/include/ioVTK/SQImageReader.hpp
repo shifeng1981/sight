@@ -6,7 +6,6 @@
 
 #pragma once
 
-
 #include "ioVTK/config.hpp"  // Declaration of class and function export
 
 #include <fwData/Image.hpp>
@@ -16,7 +15,6 @@
 #include <fwServices/QtObjectHolder.hpp>
 
 #include <boost/filesystem/path.hpp> // Used to save the file system path of loaded image
-
 
 namespace fwJobs
 {
@@ -33,10 +31,9 @@ namespace ioVTK
  */
 class IOVTK_CLASS_API SQImageReader : public ::fwIO::IQmlReader
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image NOTIFY imageChanged)
-
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image NOTIFY imageChanged)
 
 public:
     IOVTK_API ~SQImageReader() noexcept
@@ -87,9 +84,10 @@ protected:
 Q_SIGNALS:
     void    imageChanged(::fwServices::QtObjectHolder*);
 
-
 public:
-    ::fwServices::QtObjectHolder   *object() const
+    //------------------------------------------------------------------------------
+
+    ::fwServices::QtObjectHolder* object() const
     {
         return m_image;
     }
@@ -113,7 +111,7 @@ private:
     /// Image path, location of image on filesystem.
     ::boost::filesystem::path m_fsImgPath;
     //SPTR(JobCreatedSignalType) m_sigJobCreated;
-    ::fwServices::QtObjectHolder *m_image;
+    ::fwServices::QtObjectHolder* m_image;
 };
 
 } // namespace ioVTK

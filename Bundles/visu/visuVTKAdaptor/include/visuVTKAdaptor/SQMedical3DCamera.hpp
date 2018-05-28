@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -45,7 +45,7 @@ namespace visuVTKAdaptor
  *    - \b resetAtStart(optional, default: no): if "yes", it updates the view when the adaptor is started.
  */
 class VISUVTKADAPTOR_CLASS_API SQMedical3DCamera :   public ::fwRenderVTK::IQAdaptor,
-                                                    public ::fwDataTools::helper::MedicalImageAdaptor
+                                                     public ::fwDataTools::helper::MedicalImageAdaptor
 {
 public:
 
@@ -78,4 +78,3 @@ private:
 };
 
 } //namespace visuVTKAdaptor
-

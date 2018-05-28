@@ -266,6 +266,8 @@ void SQNegatoOneSlice::configuring()
     m_actorOpacity = config.get<double>("actorOpacity", 1.);*/
 }
 
+//------------------------------------------------------------------------------
+
 void SQNegatoOneSlice::updateSliceIndex(int axial, int frontal, int sagittal)
 {
     for (auto& srv : this->getRegisteredServices())
@@ -278,7 +280,6 @@ void SQNegatoOneSlice::updateSliceIndex(int axial, int frontal, int sagittal)
         }
     }
 }
-
 
 //------------------------------------------------------------------------------
 

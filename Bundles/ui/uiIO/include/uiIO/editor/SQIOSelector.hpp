@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #pragma once
 
 #include "uiIO/config.hpp"
@@ -7,11 +13,10 @@
 
 #include <fwGui/editor/IDialogEditor.hpp>
 
-#include <fwServices/QtObjectHolder.hpp>
+#include <fwJobs/IJob.hpp>
 
 #include <fwServices/IQmlService.hpp>
-
-#include <fwJobs/IJob.hpp>
+#include <fwServices/QtObjectHolder.hpp>
 
 namespace uiIO
 {
@@ -71,17 +76,16 @@ namespace editor
 class UIIO_CLASS_API SQIOSelector : public ::fwServices::IQmlService
 {
 
-    Q_OBJECT
-    Q_PROPERTY(QString mode MEMBER m_qMode)
-    Q_PROPERTY(QString dataClassName MEMBER m_qDataClassname)
-    Q_PROPERTY(QString selectionMode MEMBER m_qSelectionMode)
-    Q_PROPERTY(fwServices::QtObjectHolder* inout MEMBER m_qInOut)
+Q_OBJECT
+Q_PROPERTY(QString mode MEMBER m_qMode)
+Q_PROPERTY(QString dataClassName MEMBER m_qDataClassname)
+Q_PROPERTY(QString selectionMode MEMBER m_qSelectionMode)
+Q_PROPERTY(fwServices::QtObjectHolder* inout MEMBER m_qInOut)
 
 public:
 
     typedef ::fwCom::Signal< void ( ::fwJobs::IJob::sptr ) > JobCreatedSignalType;
     typedef ::fwCom::Slot< void ( ::fwJobs::IJob::sptr ) > ForwardJobSlotType;
-
 
     /// IOMode enum definition
     typedef enum
@@ -171,7 +175,7 @@ private:
     QString m_qMode;
     QString m_qDataClassname;
     QString m_qSelectionMode;
-    ::fwServices::QtObjectHolder *m_qInOut;
+    ::fwServices::QtObjectHolder* m_qInOut;
     /**
      * }@
      */

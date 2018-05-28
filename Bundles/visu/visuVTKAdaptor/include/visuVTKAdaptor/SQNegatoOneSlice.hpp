@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -57,9 +57,9 @@ namespace visuVTKAdaptor
 class VISUVTKADAPTOR_CLASS_API SQNegatoOneSlice :   public ::fwRenderVTK::IQAdaptor,
                                                     public ::fwDataTools::helper::MedicalImageAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
 
 public:
 
@@ -126,7 +126,6 @@ protected:
 public:
     void updateSliceIndex(int axial, int frontal, int sagittal);
 
-
     /**
      * @name Slots
      * @{
@@ -142,19 +141,19 @@ private:
      * @}
      */
 
-    ::fwServices::QtObjectHolder  *m_image = nullptr;
+    ::fwServices::QtObjectHolder* m_image = nullptr;
 
     /// @brief image wireframe outline.
-    vtkOutlineFilter *m_outline;
+    vtkOutlineFilter* m_outline;
 
     /// @brief vtk widget used in the negatoscope axial plane.
-    vtkImagePlaneWidget *m_negatoAxial;
+    vtkImagePlaneWidget* m_negatoAxial;
 
     /// @brief vtk widget used in the negatoscope sagittal plane.
-    vtkImagePlaneWidget *m_negatoSagittal;
+    vtkImagePlaneWidget* m_negatoSagittal;
 
     /// @brief vtk widget used in the negatoscope frontal plane.
-    vtkImagePlaneWidget *m_negatoFrontal;
+    vtkImagePlaneWidget* m_negatoFrontal;
 
 };
 

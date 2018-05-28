@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -61,10 +61,10 @@ namespace visuVTKAdaptor
 class VISUVTKADAPTOR_CLASS_API SQImage : public ::fwRenderVTK::IQAdaptor,
                                          public ::fwDataTools::helper::MedicalImageAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
-    Q_PROPERTY(fwServices::QtObjectHolder *tf MEMBER m_tf)
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
+Q_PROPERTY(fwServices::QtObjectHolder* tf MEMBER m_tf)
 
 public:
 
@@ -131,12 +131,12 @@ private:
     double m_imageOpacity;
     bool m_allowAlphaInTF;
 
-    fwVtkWindowLevelLookupTable *m_lut;
-    vtkImageMapToColors *m_map2colors;
-    vtkImageData  *m_imageData;
+    fwVtkWindowLevelLookupTable* m_lut;
+    vtkImageMapToColors* m_map2colors;
+    vtkImageData* m_imageData;
 
-    ::fwServices::QtObjectHolder    *m_image = nullptr;
-    ::fwServices::QtObjectHolder    *m_tf = nullptr;
+    ::fwServices::QtObjectHolder* m_image = nullptr;
+    ::fwServices::QtObjectHolder* m_tf    = nullptr;
 };
 
 } //namespace visuVTKAdaptor

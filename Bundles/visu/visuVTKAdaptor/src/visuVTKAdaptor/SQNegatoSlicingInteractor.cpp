@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -115,7 +115,7 @@ public:
 
         OSLM_TRACE(
             "vtkEvent: MiddleButtonPressEvent: picking " << pickPoint[0] << ", " << pickPoint[1] << ", " <<
-            pickPoint[2]);
+                pickPoint[2]);
 
         if ( this->Pick(pickPoint, pickedPoint) )
         {
@@ -263,7 +263,7 @@ public:
 
     //------------------------------------------------------------------------------
 
-    void setAdaptor( SQNegatoSlicingInteractor *adaptor)
+    void setAdaptor( SQNegatoSlicingInteractor* adaptor)
     {
         m_adaptor = adaptor;
     }
@@ -276,7 +276,7 @@ public:
     }
 
 protected:
-    SQNegatoSlicingInteractor *m_adaptor;
+    SQNegatoSlicingInteractor* m_adaptor;
     vtkAbstractPropPicker* m_picker;
     vtkAbstractPropPicker* m_localPicker;
     vtkProp* m_pickedProp;
@@ -318,19 +318,19 @@ void SQNegatoSlicingInteractor::configuring()
 
     /*const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
 
-    const std::string orientation = config.get<std::string>("sliceIndex", "axial");
-    if(orientation == "axial" )
-    {
+       const std::string orientation = config.get<std::string>("sliceIndex", "axial");
+       if(orientation == "axial" )
+       {
         m_orientation = Z_AXIS;
-    }
-    else if(orientation == "frontal" )
-    {
+       }
+       else if(orientation == "frontal" )
+       {
         m_orientation = Y_AXIS;
-    }
-    else if(orientation == "sagittal" )
-    {
+       }
+       else if(orientation == "sagittal" )
+       {
         m_orientation = X_AXIS;
-    }*/
+       }*/
 }
 
 //-----------------------------------------------------------------------------
@@ -385,8 +385,8 @@ void SQNegatoSlicingInteractor::stopping()
 void SQNegatoSlicingInteractor::updateSliceIndex(int axial, int frontal, int sagittal)
 {
     /*m_axialIndex->value()    = axial;
-    m_frontalIndex->value()  = frontal;
-    m_sagittalIndex->value() = sagittal;*/
+       m_frontalIndex->value()  = frontal;
+       m_sagittalIndex->value() = sagittal;*/
 }
 
 //-----------------------------------------------------------------------------

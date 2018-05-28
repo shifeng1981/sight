@@ -1,3 +1,9 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #pragma once
 
 #include "fwServices/config.hpp"
@@ -7,10 +13,10 @@
 
 namespace fwServices
 {
-class   FWSERVICES_CLASS_API IQtQmlType
+class FWSERVICES_CLASS_API IQtQmlType
 {
 public:
-    using ClassList = std::vector<IQtQmlType *>;
+    using ClassList = std::vector<IQtQmlType*>;
 
     FWSERVICES_API IQtQmlType();
     FWSERVICES_API ~IQtQmlType();

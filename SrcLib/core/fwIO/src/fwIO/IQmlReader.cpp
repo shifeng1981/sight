@@ -17,7 +17,6 @@ namespace fwIO
 
 IQmlReader::IQmlReader() noexcept
 {
-    //QObject::connect(this, SIGNAL(filepathChanged(QString const&)), this, SLOT(configure()));
 }
 
 //-----------------------------------------------------------------------------
@@ -129,76 +128,16 @@ void IQmlReader::configuring()
     SLM_ASSERT("Generic configuring method is only available for io service that use paths.",
                !( this->getIOPathType() & ::fwIO::TYPE_NOT_DEFINED ) );
 
-    /*SLM_ASSERT("This reader does not manage folders and a folder path is given in the configuration",
-               ( this->getIOPathType() & ::fwIO::FOLDER ) || (config.count("folder") == 0) );*/
-
     SLM_ASSERT("This reader does not manage files and a file path is given in the configuration",
                ( this->getIOPathType() & ::fwIO::FILE || this->getIOPathType() & ::fwIO::FILES ) ||
                (m_filepath.count() == 0));
-
 
     if ( this->getIOPathType() & ::fwIO::FILE )
     {
         FW_RAISE_IF("This reader cannot manages FILE and FILES.", this->getIOPathType() & ::fwIO::FILES );
         FW_RAISE_IF("At least one file must be defined in configuration", m_filepath.count() == 0 );
-//        if (config.count("file") == 1)
-//        {
-//            const std::string file = config.get<std::string>("file");
-            this->setFile(::boost::filesystem::path(m_filepath.toStdString()));
-//        }
-/*        else if (config.count("resource") == 1)
-        {
-            const std::string resource = config.get<std::string>("resource");
-            const auto file            = ::fwRuntime::getResourceFilePath(resource);
-            this->setFile(file);
-        }*/
+        this->setFile(::boost::filesystem::path(m_filepath.toStdString()));
     }
-
-   /* if ( this->getIOPathType() & ::fwIO::FILES )
-    {
-        FW_RAISE_IF("This reader cannot manage FILE and FILES.", this->getIOPathType() & ::fwIO::FILE );
-
-        ::fwIO::LocationsType locations;
-
-        const auto filesCfg = config.equal_range("file");
-        for (auto fileCfg = filesCfg.first; fileCfg != filesCfg.second; ++fileCfg)
-        {
-            const std::string location = fileCfg->second.get_value<std::string>();
-            locations.push_back(::boost::filesystem::path(location));
-        }
-
-        const auto resourcesCfg = config.equal_range("resource");
-        for (auto resourceCfg = resourcesCfg.first; resourceCfg != resourcesCfg.second; ++resourceCfg)
-        {
-            const std::string resource = resourceCfg->second.get_value<std::string>();
-            const auto file            = ::fwRuntime::getResourceFilePath(resource);
-            locations.push_back(file);
-        }
-        this->setFiles(locations);
-    }
-
-    if ( this->getIOPathType() & ::fwIO::FOLDER )
-    {
-        FW_RAISE_IF("At least one folder must be defined in configuration", config.count("folder") > 1 );
-        if (config.count("folder") == 1)
-        {
-            const std::string folder = config.get<std::string>("folder");
-            this->setFolder(::boost::filesystem::path(folder));
-        }
-        else if (config.count("resource") == 1)
-        {
-            const std::string resource = config.get<std::string>("resource");
-            auto folder                = ::fwRuntime::getBundleResourceFilePath(resource);
-            if(folder.empty())
-            {
-                // If not found in a bundle, look into libraries
-                folder = ::fwRuntime::getLibraryResourceFilePath(resource);
-                SLM_ERROR_IF("Resource '" + resource + "' has not been found in any bundle or library", folder.empty());
-            }
-
-            this->setFolder(folder);
-        }
-    }*/
 }
 
 //-----------------------------------------------------------------------------

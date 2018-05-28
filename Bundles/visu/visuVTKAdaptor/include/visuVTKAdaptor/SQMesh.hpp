@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQMesh_HPP__
 #define __VISUVTKADAPTOR_SQMesh_HPP__
@@ -87,8 +89,8 @@ class VISUVTKADAPTOR_CLASS_API MeshVtkCommand;
  */
 class VISUVTKADAPTOR_CLASS_API SQMesh : public ::fwRenderVTK::IQAdaptor
 {
-    Q_OBJECT
-    Q_PROPERTY(fwServices::QtObjectHolder *mesh MEMBER m_mesh)
+Q_OBJECT
+Q_PROPERTY(fwServices::QtObjectHolder* mesh MEMBER m_mesh)
 
 public:
     VISUVTKADAPTOR_API SQMesh() noexcept;
@@ -255,11 +257,11 @@ protected:
     TextureAppliedSignalType::sptr m_sigTextureApplied;
 
 Q_SIGNALS:
-    void    textureApplied(QObject *material);
+    void    textureApplied(QObject* material);
 
 private:
 
-    ::fwServices::QtObjectHolder  *m_mesh = nullptr;
+    ::fwServices::QtObjectHolder* m_mesh = nullptr;
 };
 
 } //namespace visuVTKAdaptor

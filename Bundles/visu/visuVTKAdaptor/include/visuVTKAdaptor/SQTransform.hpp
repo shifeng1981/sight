@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQTransform_HPP__
 #define __VISUVTKADAPTOR_SQTransform_HPP__
@@ -43,9 +45,9 @@ namespace visuVTKAdaptor
  */
 class VISUVTKADAPTOR_CLASS_API SQTransform : public ::fwRenderVTK::IQAdaptor
 {
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder   *tm3d MEMBER m_tm3d)
+Q_PROPERTY(fwServices::QtObjectHolder* tm3d MEMBER m_tm3d)
 
 public:
 
@@ -94,7 +96,7 @@ protected:
     /// Parent vtkTransform (optional)
     vtkSmartPointer<vtkTransform> m_parentTransform;
 
-    ::fwServices::QtObjectHolder    *m_tm3d = nullptr;
+    ::fwServices::QtObjectHolder* m_tm3d = nullptr;
 };
 
 } //namespace visuVTKAdaptor

@@ -41,7 +41,6 @@ static ::fwServices::QtQmlType<QmlSnapshotEditor>   registar("com.fw4spl.uiVisuQ
 
 //------------------------------------------------------------------------------
 
-
 QmlSnapshotEditor::QmlSnapshotEditor() noexcept
 {
 }

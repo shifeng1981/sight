@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -81,17 +81,16 @@ void SQMeshNormals::configuring()
 {
     this->configureParams();
 
+    /* const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
 
-   /* const ConfigType config = this->getConfigTree().get_child("config.<xmlattr>");
+       if(config.count("normal") )
+       {
+         const std::string normal = config.get<std::string>("normal");
+         SLM_ASSERT("Wrong normal representation '" + normal + "' (required POINT, CELL or NONE)",
+                    m_normalRepresentationConversion.find(normal) != m_normalRepresentationConversion.end());
 
-    if(config.count("normal") )
-    {
-        const std::string normal = config.get<std::string>("normal");
-        SLM_ASSERT("Wrong normal representation '" + normal + "' (required POINT, CELL or NONE)",
-                   m_normalRepresentationConversion.find(normal) != m_normalRepresentationConversion.end());
-
-        m_normalRepresentation = m_normalRepresentationConversion[normal];
-    }*/
+         m_normalRepresentation = m_normalRepresentationConversion[normal];
+       }*/
 }
 
 //------------------------------------------------------------------------------

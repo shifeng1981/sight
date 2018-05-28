@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2016.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -15,34 +15,30 @@
 
 #include <fwDataTools/fieldHelper/MedicalImageHelpers.hpp>
 
+#include <fwGuiQt/container/QtContainer.hpp>
+#include <fwGuiQt/QtQmlHelper.hpp>
+
 #include <fwServices/macros.hpp>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwVtkIO/vtk.hpp>
 
-#include <fwGuiQt/QtQmlHelper.hpp>
-#include <fwGuiQt/container/QtContainer.hpp>
-#include <fwServices/QtQmlType.hxx>
-
+#include <vtkActor.h>
+#include <vtkCamera.h>
 #include <vtkCellPicker.h>
 #include <vtkCommand.h>
+#include <vtkConeSource.h>
+#include <vtkGenericDataObjectReader.h>
+#include <vtkGenericOpenGLRenderWindow.h>
+#include <vtkImageActor.h>
 #include <vtkImageData.h>
 #include <vtkLookupTable.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkProperty.h>
+#include <vtkRenderer.h>
+#include <vtkRendererCollection.h>
 #include <vtkRenderWindow.h>
 #include <vtkSmartPointer.h>
-#include <vtkGenericOpenGLRenderWindow.h>
-#include <vtkActor.h>
-#include <vtkConeSource.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkGenericOpenGLRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkSmartPointer.h>
-#include <vtkRendererCollection.h>
-#include <vtkCamera.h>
-#include <vtkProperty.h>
-#include <vtkImageActor.h>
-#include <vtkGenericDataObjectReader.h>
 
 //-----------------------------------------------------------------------------
 
@@ -128,7 +124,8 @@ void SQRenderer::refresh()
 {
     SLM_ASSERT("Image not set", m_image->getObject());
     SLM_ASSERT("target not set", m_target);
-    bool imageIsValid = ::fwDataTools::fieldHelper::MedicalImageHelpers::checkImageValidity( std::dynamic_pointer_cast<::fwData::Image>(m_image->getObject()) );
+    bool imageIsValid = ::fwDataTools::fieldHelper::MedicalImageHelpers::checkImageValidity( std::dynamic_pointer_cast<::fwData::Image>(
+                                                                                                 m_image->getObject()) );
     if(imageIsValid )
     {
         if(!m_bPipelineIsInit)
@@ -167,13 +164,13 @@ void SQRenderer::initVTKPipeline()
     m_outline = vtkOutlineFilter::New();
     m_outline->SetInputData(vtkImg);
 
-    vtkPolyDataMapper *outlineMapper = vtkPolyDataMapper::New();
+    vtkPolyDataMapper* outlineMapper = vtkPolyDataMapper::New();
     outlineMapper->SetInputConnection(m_outline->GetOutputPort());
 
-    vtkActor *outlineActor = vtkActor::New();
+    vtkActor* outlineActor = vtkActor::New();
     outlineActor->SetMapper( outlineMapper);
 
-    vtkCellPicker *picker = vtkCellPicker::New();
+    vtkCellPicker* picker = vtkCellPicker::New();
     picker->SetTolerance(0.005);
 
     //assign default props to the ipw's texture plane actor
@@ -181,7 +178,7 @@ void SQRenderer::initVTKPipeline()
     m_negatoSagittal->SetInteractor( m_target->getRenderWindow()->GetInteractor() );
     m_negatoSagittal->SetKeyPressActivationValue('x');
     m_negatoSagittal->SetPicker(picker);
-    m_negatoSagittal->GetPlaneProperty()->SetColor(1,0,0);
+    m_negatoSagittal->GetPlaneProperty()->SetColor(1, 0, 0);
     m_negatoSagittal->TextureInterpolateOn();
     m_negatoSagittal->SetInputData(vtkImg);
     m_negatoSagittal->SetPlaneOrientationToXAxes();
@@ -193,7 +190,7 @@ void SQRenderer::initVTKPipeline()
     m_negatoFrontal->SetInteractor( m_target->getRenderWindow()->GetInteractor() );
     m_negatoFrontal->SetKeyPressActivationValue('y');
     m_negatoFrontal->SetPicker(picker);
-    m_negatoFrontal->GetPlaneProperty()->SetColor(0,1,0);
+    m_negatoFrontal->GetPlaneProperty()->SetColor(0, 1, 0);
     m_negatoFrontal->TextureInterpolateOn();
     m_negatoFrontal->SetInputData(vtkImg);
     m_negatoFrontal->SetPlaneOrientationToYAxes();
@@ -206,7 +203,7 @@ void SQRenderer::initVTKPipeline()
     m_negatoAxial->SetInteractor( m_target->getRenderWindow()->GetInteractor() );
     m_negatoAxial->SetKeyPressActivationValue('z');
     m_negatoAxial->SetPicker(picker);
-    m_negatoAxial->GetPlaneProperty()->SetColor(0,0,1);
+    m_negatoAxial->GetPlaneProperty()->SetColor(0, 0, 1);
     m_negatoAxial->TextureInterpolateOn();
     m_negatoAxial->SetInputData(vtkImg);
     m_negatoAxial->SetPlaneOrientationToZAxes();
@@ -227,13 +224,13 @@ void SQRenderer::initVTKPipeline()
 
 //-----------------------------------------------------------------------------
 
-void    SQRenderer::reconfiguring()
+void SQRenderer::reconfiguring()
 {
 }
 
 //-----------------------------------------------------------------------------
 
-void    SQRenderer::destroying()
+void SQRenderer::destroying()
 {
 }
 

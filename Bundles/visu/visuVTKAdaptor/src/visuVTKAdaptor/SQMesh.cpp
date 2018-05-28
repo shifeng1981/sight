@@ -8,8 +8,8 @@
 
 #include "visuVTKAdaptor/SQMaterial.hpp"
 #include "visuVTKAdaptor/SQMeshNormals.hpp"
-#include "visuVTKAdaptor/STexture.hpp"
 #include "visuVTKAdaptor/SQTransform.hpp"
+#include "visuVTKAdaptor/STexture.hpp"
 
 #include <fwCom/Signal.hxx>
 #include <fwCom/Slot.hpp>
@@ -161,7 +161,7 @@ public:
     //------------------------------------------------------------------------------
 
     static PlaneCollectionAdaptorStarter* New(
-        ::visuVTKAdaptor::SQMesh *service,
+        ::visuVTKAdaptor::SQMesh* service,
         vtkPlaneCollection* src,
         double factor = 1. )
     {
@@ -169,7 +169,7 @@ public:
     }
 
     //--------------------------------------------------------------------------
-    PlaneCollectionAdaptorStarter( ::visuVTKAdaptor::SQMesh *service,
+    PlaneCollectionAdaptorStarter( ::visuVTKAdaptor::SQMesh* service,
                                    vtkPlaneCollection* src,
                                    double factor) :
         m_service(service),
@@ -315,7 +315,7 @@ public:
 
 protected:
 
-    ::visuVTKAdaptor::SQMesh *m_service;
+    ::visuVTKAdaptor::SQMesh* m_service;
 
     vtkPlaneCollection* m_planeCollectionSrc;
     ::fwData::Mesh::sptr m_mesh;
@@ -395,12 +395,11 @@ void SQMesh::configuring()
 {
     this->configureParams();
 
-    const std::string color = get<QString>(m_configMap, "color", "#ffffffff").toStdString();
+    const std::string color          = get<QString>(m_configMap, "color", "#ffffffff").toStdString();
     const std::string unclippedColor = get<QString>(m_configMap, "unclippedcolor", "#aaaaff44").toStdString();
 
     m_material->diffuse()->setRGBA(color);
     m_unclippedPartMaterial->diffuse()->setRGBA(unclippedColor);
-
 
     const std::string autoresetcamera = get<QString>(m_configMap, "autoresetcamera", "yes").toStdString();
     SLM_ASSERT("'autoresetcamera' must be 'yes' or 'no'", autoresetcamera == "yes" || autoresetcamera == "no");
@@ -520,7 +519,8 @@ void SQMesh::createTransformService()
         // create the srv configuration for objects auto-connection
         auto transformService = this->registerService< ::visuVTKAdaptor::SQTransform>( "::visuVTKAdaptor::STransform");
         m_transformService = transformService;
-        transformService->setProperty(SQTransform::s_TM3D_INOUT, QVariant::fromValue(new ::fwServices::QtObjectHolder(fieldTransform)));
+        transformService->setProperty(SQTransform::s_TM3D_INOUT,
+                                      QVariant::fromValue(new ::fwServices::QtObjectHolder(fieldTransform)));
 
         transformService->setRenderService( this->getRenderService() );
         transformService->setRendererId( this->getRendererId() );
@@ -831,7 +831,7 @@ void SQMesh::createServicesStarterCommand()
 {
     if(!m_servicesStarterCallback)
     {
-        m_servicesStarterCallback         = PlaneCollectionAdaptorStarter::New( this, m_clippingPlanes, -1. );
+        m_servicesStarterCallback = PlaneCollectionAdaptorStarter::New( this, m_clippingPlanes, -1. );
     }
 }
 

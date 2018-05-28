@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -33,7 +33,8 @@
 namespace visuVTKAdaptor
 {
 
-static  ::fwServices::QtQmlRegistar<SQNegatoWindowingInteractor>    registar("::visuVTKAdaptor::SNegatoWindowingInteractor");
+static ::fwServices::QtQmlRegistar<SQNegatoWindowingInteractor>    registar(
+    "::visuVTKAdaptor::SNegatoWindowingInteractor");
 
 static const ::fwServices::IService::KeyType s_IMAGE_INOUT = "image";
 static const ::fwServices::IService::KeyType s_TF_INOUT    = "tf";
@@ -138,7 +139,7 @@ public:
 
     //------------------------------------------------------------------------------
 
-    void setAdaptor(SQNegatoWindowingInteractor *adaptor)
+    void setAdaptor(SQNegatoWindowingInteractor* adaptor)
     {
         m_adaptor = adaptor;
     }
@@ -151,7 +152,7 @@ public:
     }
 
 protected:
-    SQNegatoWindowingInteractor *m_adaptor;
+    SQNegatoWindowingInteractor* m_adaptor;
     vtkAbstractPropPicker* m_picker;
 
     int m_x;

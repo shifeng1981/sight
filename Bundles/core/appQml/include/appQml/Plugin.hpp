@@ -1,18 +1,17 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2015-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2015-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __APPQML_PLUGIN_HPP__
-#define __APPQML_PLUGIN_HPP__
+#pragma once
 
 #include "appQml/config.hpp"
 
 #include <fwRuntime/Plugin.hpp>
 
-#include <fwServices/QmlAppConfigManager.hpp>
 #include <fwServices/IQmlEngine.hpp>
+#include <fwServices/QmlAppConfigManager.hpp>
 
 namespace appQml
 {
@@ -47,5 +46,3 @@ private:
 };
 
 } // namespace appQml
-
-#endif // __APPQML_PLUGIN_HPP__

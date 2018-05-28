@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQNegatoSlicingInteractor_HPP__
 #define __VISUVTKADAPTOR_SQNegatoSlicingInteractor_HPP__
@@ -50,15 +52,14 @@ namespace visuVTKAdaptor
  *    - \b sliceIndex (optional, axial/frontal/sagittal, default=axial): orientation of the negato
  */
 class VISUVTKADAPTOR_CLASS_API SQNegatoSlicingInteractor :   public ::fwRenderVTK::IQAdaptor,
-                                                            public ::fwDataTools::helper::MedicalImageAdaptor
+                                                             public ::fwDataTools::helper::MedicalImageAdaptor
 {
 
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
 
 public:
-
 
     VISUVTKADAPTOR_API SQNegatoSlicingInteractor() noexcept;
 
@@ -134,7 +135,7 @@ private:
      * @}
      */
 
-    ::fwServices::QtObjectHolder *m_image = nullptr;
+    ::fwServices::QtObjectHolder* m_image = nullptr;
 };
 
 } //namespace visuVTKAdaptor

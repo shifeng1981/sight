@@ -13,9 +13,9 @@
 
 #include <fwGui/editor/IEditor.hpp>
 
-#include <fwTools/Failed.hpp>
-
 #include <fwServices/IQmlService.hpp>
+
+#include <fwTools/Failed.hpp>
 
 #include <QObject>
 #include <QPointer>
@@ -79,7 +79,6 @@ protected Q_SLOTS:
 
 private:
     std::string requestFileName();
-
 
 Q_SIGNALS:
     void    snapped(QString const& filepath);

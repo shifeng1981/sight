@@ -1,33 +1,34 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQNegatoMPR_HPP__
 #define __VISUVTKADAPTOR_SQNegatoMPR_HPP__
 
 #include "visuVTKAdaptor/config.hpp"
 
-#include <fwCom/helper/SigSlotConnection.hpp>
 #include <fwCom/HasSignals.hpp>
 #include <fwCom/HasSlots.hpp>
+#include <fwCom/helper/SigSlotConnection.hpp>
 #include <fwCom/Slot.hpp>
 #include <fwCom/Slots.hpp>
 
 #include <fwDataTools/helper/MedicalImageAdaptor.hpp>
 
-#include <fwRenderVTK/IQAdaptor.hpp>
 #include <fwRenderVTK/IAdaptor.hpp>
+#include <fwRenderVTK/IQAdaptor.hpp>
 
 #include <fwServices/QtObjectHolder.hpp>
-
-#include <vtkOutlineFilter.h>
-#include <vtkImagePlaneWidget.h>
 
 #include <boost/logic/tribool.hpp>
 
 #include <QVariantMap>
+#include <vtkImagePlaneWidget.h>
+#include <vtkOutlineFilter.h>
 
 namespace visuVTKAdaptor
 {
@@ -76,9 +77,8 @@ class SliceCursor;
 class VISUVTKADAPTOR_CLASS_API SQNegatoMPR : public ::fwRenderVTK::IQAdaptor,
                                              public ::fwDataTools::helper::MedicalImageAdaptor
 {
-    Q_OBJECT
-    Q_PROPERTY(fwServices::QtObjectHolder *image MEMBER m_image)
-
+Q_OBJECT
+Q_PROPERTY(fwServices::QtObjectHolder* image MEMBER m_image)
 
 public:
     VISUVTKADAPTOR_API SQNegatoMPR() noexcept;
@@ -190,21 +190,21 @@ private:
     /**
      * @{
      */
-    ::fwServices::QtObjectHolder  *m_image;
+    ::fwServices::QtObjectHolder* m_image;
     /**
      * }@
      */
     /// @brief image wireframe outline.
-    vtkOutlineFilter *m_outline;
+    vtkOutlineFilter* m_outline;
 
     /// @brief vtk widget used in the negatoscope axial plane.
-    vtkImagePlaneWidget *m_negatoAxial;
+    vtkImagePlaneWidget* m_negatoAxial;
 
     /// @brief vtk widget used in the negatoscope sagittal plane.
-    vtkImagePlaneWidget *m_negatoSagittal;
+    vtkImagePlaneWidget* m_negatoSagittal;
 
     /// @brief vtk widget used in the negatoscope frontal plane.
-    vtkImagePlaneWidget *m_negatoFrontal;
+    vtkImagePlaneWidget* m_negatoFrontal;
 
 };
 

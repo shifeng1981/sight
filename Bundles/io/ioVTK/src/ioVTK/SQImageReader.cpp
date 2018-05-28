@@ -29,9 +29,8 @@
 #include <fwJobs/Job.hpp>
 
 #include <fwServices/macros.hpp>
-#include <fwServices/registry/ActiveWorkers.hpp>
-
 #include <fwServices/QtQmlType.hxx>
+#include <fwServices/registry/ActiveWorkers.hpp>
 
 #include <fwVtkIO/BitmapImageReader.hpp>
 #include <fwVtkIO/ImageReader.hpp>

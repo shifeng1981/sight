@@ -25,14 +25,13 @@
 #include <fwServices/helper/Config.hpp>
 #include <fwServices/macros.hpp>
 #include <fwServices/op/Add.hpp>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwThread/Timer.hpp>
 
 #include <fwTools/fwID.hpp>
 
 #include <fwVtkIO/vtk.hpp>
-
-#include <fwServices/QtQmlType.hxx>
 
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
@@ -177,7 +176,6 @@ void SQRender::configureVtkObject( const ConfigType& vtkObjectConf )
 vtkTransform* SQRender::createVtkTransform( const ConfigType& vtkObjectConf )
 {
     vtkTransform* newMat = vtkTransform::New();
-
 
 /*    auto vtkTransform = get<QVariant>(vtkObjectConf, "vtkTransform");
 
@@ -498,17 +496,23 @@ void SQRender::setOffScreenRenderSize(unsigned int _width, unsigned int _height)
     }*/
 }
 
+//------------------------------------------------------------------------------
+
 QVariantMap const& SQRender::scene() const
 {
     return m_sceneConf;
 }
 
-void    SQRender::setScene(QVariantMap const& scene)
+//------------------------------------------------------------------------------
+
+void SQRender::setScene(QVariantMap const& scene)
 {
     m_sceneConf = scene;
 }
 
-FrameBufferItem *SQRender::getTarget() const
+//------------------------------------------------------------------------------
+
+FrameBufferItem* SQRender::getTarget() const
 {
     return m_target;
 }

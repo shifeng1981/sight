@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -32,7 +32,6 @@ namespace visuVTKAdaptor
 
 static const ::fwServices::QtQmlRegistar<SQTexture> registar("::visuVTKAdaptor::STexture");
 static const ::fwServices::QtQmlType<SQTexture> registarType("com.fw4spl.vtk.adaptors", 1, 0, "STexture");
-
 
 const ::fwCom::Slots::SlotKeyType SQTexture::s_APPLY_TEXTURE_SLOT = "applyTexture";
 
@@ -91,9 +90,9 @@ void SQTexture::stopping()
 
 //------------------------------------------------------------------------------
 
-void    SQTexture::applyTexture(QObject *material)
+void SQTexture::applyTexture(QObject* material)
 {
-    auto objectHolder = qobject_cast<::fwServices::QtObjectHolder *>(material);
+    auto objectHolder = qobject_cast<::fwServices::QtObjectHolder*>(material);
 
     SLM_ASSERT("Unknown type passed as signal parameter", objectHolder);
     this->applyTexture(std::dynamic_pointer_cast<::fwData::Material>(objectHolder->getObject()));
@@ -164,12 +163,12 @@ void SQTexture::applyTexture( SPTR(::fwData::Material)_material )
     }
     _material->setDiffuseTextureWrapping(wrapping);
 
- /*   ::fwData::Object::ModifiedSignalType::sptr sig;
-    sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
-    {
-        ::fwCom::Connection::Blocker block(sig->getConnection(m_slotUpdate));
-        sig->asyncEmit();
-    }*/
+    /*   ::fwData::Object::ModifiedSignalType::sptr sig;
+       sig = _material->signal< ::fwData::Object::ModifiedSignalType >(::fwData::Object::s_MODIFIED_SIG);
+       {
+           ::fwCom::Connection::Blocker block(sig->getConnection(m_slotUpdate));
+           sig->asyncEmit();
+       }*/
 }
 
 //------------------------------------------------------------------------------

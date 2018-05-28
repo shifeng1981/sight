@@ -1,8 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2009-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2009-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
+
+#pragma once
 
 #ifndef __VISUVTKADAPTOR_SQTexture_HPP__
 #define __VISUVTKADAPTOR_SQTexture_HPP__
@@ -59,9 +61,9 @@ namespace visuVTKAdaptor
 class VISUVTKADAPTOR_CLASS_API SQTexture : public ::fwRenderVTK::IQAdaptor
 {
 
-    Q_OBJECT
+Q_OBJECT
 
-    Q_PROPERTY(fwServices::QtObjectHolder *texture MEMBER m_texture)
+Q_PROPERTY(fwServices::QtObjectHolder* texture MEMBER m_texture)
 
 public:
 
@@ -79,7 +81,7 @@ public:
     VISUVTKADAPTOR_API virtual ~SQTexture() noexcept;
 
 public Q_SLOTS:
-    void    applyTexture(QObject *);
+    void    applyTexture(QObject*);
 
 protected:
 
@@ -87,7 +89,6 @@ protected:
     VISUVTKADAPTOR_API void starting() override;
     VISUVTKADAPTOR_API void updating() override;
     VISUVTKADAPTOR_API void stopping() override;
-
 
     /// Slot called when a texture must be applied on a material.
     void applyTexture( SPTR(::fwData::Material) _material);
@@ -104,7 +105,7 @@ protected:
     /// enable or not the lighting (default true)
     bool m_lighting;
 
-    ::fwServices::QtObjectHolder    *m_texture = nullptr;
+    ::fwServices::QtObjectHolder* m_texture = nullptr;
 };
 
 } //namespace visuVTKAdaptor

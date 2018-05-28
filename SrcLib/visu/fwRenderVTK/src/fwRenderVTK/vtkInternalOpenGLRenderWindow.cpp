@@ -1,8 +1,16 @@
+/* ***** BEGIN LICENSE BLOCK *****
+ * FW4SPL - Copyright (C) IRCAD, 2018-2018.
+ * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
+ * published by the Free Software Foundation.
+ * ****** END LICENSE BLOCK ****** */
+
 #include "fwRenderVTK/vtkInternalOpenGLRenderWindow.hpp"
+
 #include "fwRenderVTK/FrameBufferItem.hpp"
 
-#include <chrono>
 #include <QQuickWindow>
+
+#include <chrono>
 
 namespace fwRenderVTK
 {
@@ -15,10 +23,12 @@ vtkInternalOpenGLRenderWindow::vtkInternalOpenGLRenderWindow() :
 
 vtkInternalOpenGLRenderWindow::~vtkInternalOpenGLRenderWindow()
 {
-     this->OffScreenRendering = 0;
+    this->OffScreenRendering = 0;
 }
 
-void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::OpenGLInitState()
 {
     this->MakeCurrent();
     initializeOpenGLFunctions();
@@ -27,18 +37,24 @@ void    vtkInternalOpenGLRenderWindow::OpenGLInitState()
 
 }
 
-void    vtkInternalOpenGLRenderWindow::OpenGLEndState()
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::OpenGLEndState()
 {
 }
 
-void    vtkInternalOpenGLRenderWindow::internalRender()
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::internalRender()
 {
     Superclass::Render();
     this->m_qtParentRenderer->getItem()->window()->resetOpenGLState();
     this->glDrawBuffer(GL_BACK);
 }
 
-void    vtkInternalOpenGLRenderWindow::Render()
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::Render()
 {
     if (this->m_qtParentRenderer)
     {
@@ -46,17 +62,23 @@ void    vtkInternalOpenGLRenderWindow::Render()
     }
 }
 
-void    vtkInternalOpenGLRenderWindow::setRenderer(FrameBufferRenderer *renderer)
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::setRenderer(FrameBufferRenderer* renderer)
 {
     this->m_qtParentRenderer = renderer;
 }
 
-FrameBufferRenderer    *vtkInternalOpenGLRenderWindow::getRenderer() const
+//------------------------------------------------------------------------------
+
+FrameBufferRenderer* vtkInternalOpenGLRenderWindow::getRenderer() const
 {
     return m_qtParentRenderer;
 }
 
-void    vtkInternalOpenGLRenderWindow::setFrameBufferObject(QOpenGLFramebufferObject *fbo)
+//------------------------------------------------------------------------------
+
+void vtkInternalOpenGLRenderWindow::setFrameBufferObject(QOpenGLFramebufferObject* fbo)
 {
     this->SetFrontBuffer(GL_COLOR_ATTACHMENT0);
     this->SetFrontRightBuffer(GL_COLOR_ATTACHMENT0);
@@ -76,7 +98,9 @@ void    vtkInternalOpenGLRenderWindow::setFrameBufferObject(QOpenGLFramebufferOb
     this->Modified();
 }
 
-vtkInternalOpenGLRenderWindow   *vtkInternalOpenGLRenderWindow::New()
+//------------------------------------------------------------------------------
+
+vtkInternalOpenGLRenderWindow* vtkInternalOpenGLRenderWindow::New()
 {
     return new vtkInternalOpenGLRenderWindow;
 }
