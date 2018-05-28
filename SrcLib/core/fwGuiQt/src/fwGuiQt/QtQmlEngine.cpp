@@ -58,6 +58,7 @@ QtQmlEngine&	QtQmlEngine::getEngine()
 
 void QtQmlEngine::loadFile(std::string const& scriptFile)
 {
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     m_scriptFile = scriptFile;
     m_component  = std::unique_ptr<QQmlComponent>(new QQmlComponent(this));
     ::fwServices::IQtQmlType::registarAllClasses();
