@@ -83,7 +83,6 @@ SQNegatoMPR::~SQNegatoMPR() noexcept
 
 void SQNegatoMPR::starting()
 {
-    std::cout << "Starting" << std::endl;
     this->initialize();
     this->updating();
 }

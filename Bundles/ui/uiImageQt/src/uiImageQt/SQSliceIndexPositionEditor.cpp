@@ -92,7 +92,6 @@ void SQSliceIndexPositionEditor::updating()
     {
         this->updateImageInfos(image);
         this->updateSliceIndexFromImg();
-
     }
 }
 
@@ -125,8 +124,8 @@ void SQSliceIndexPositionEditor::updateSliceIndexFromImg()
         {
             max = static_cast<int>(image->getSize()[m_orientation]-1);
         }
-        m_slider->setProperty("minimumValue", 0);
-        m_slider->setProperty("maximumValue", max);
+        m_slider->setProperty("from", 0);
+        m_slider->setProperty("to", max);
         m_slider->setProperty("value", index);
     }
 }

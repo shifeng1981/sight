@@ -127,7 +127,6 @@ void QtQmlEngine::runServices()
 {
     auto srvList = QtQmlHelper::getRootObject()->findChildren<::fwServices::IQmlService*>();
 
-    std::cout << "SrvList = " << srvList.size() << std::endl;
     for (auto& srv : srvList)
     {
         if (srv->isAutoStart())

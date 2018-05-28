@@ -39,8 +39,6 @@ public:
 
     void    registar() const
     {
-        std::cout << "Registar : " << m_packageName.c_str() << " " << m_versionMajor << " " << m_versionMinor << " " <<
-            m_objectName << std::endl;
         qmlRegisterType<Type>(m_packageName.c_str(), m_versionMajor, m_versionMinor, m_objectName.c_str());
     }
 

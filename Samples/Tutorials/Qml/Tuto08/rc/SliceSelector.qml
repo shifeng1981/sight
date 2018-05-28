@@ -1,7 +1,6 @@
-import QtQuick 2.0
-import QtQuick.Controls 1.4
+import QtQuick 2.7
 import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.0
+import QtQuick.Controls 2.3
 import QtQuick.Controls.Material 2.0
 
 import com.fw4spl 1.0
@@ -17,6 +16,7 @@ Item {
         backend.image = image
         backend.configure();
         backend.start();
+        backend.update();
     }
 
     SSliceIndexPositionEditor {
@@ -26,7 +26,6 @@ Item {
 
         onUpdatedSliceIndex: {
             root.updatedSliceIndex(axial, sagittal, frontal)
-
         }
     }
 
@@ -35,7 +34,9 @@ Item {
 
         Rectangle {
             Layout.fillHeight: true
-            Layout.preferredWidth: 75
+            Layout.preferredWidth: 100
+            color: "transparent"
+
 
             ComboBox {
                 id: sliceType
@@ -61,23 +62,28 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
 
+            color: "transparent"
+
             Slider {
                 id: slider
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                maximumValue: 250
-                minimumValue: 0
+                to: 99
+                from: 0
 
-                onMinimumValueChanged: {
-                    value = minimumValue
+                onFromChanged: {
+                    value = 0;
+                    onValueChanged(value);
                 }
 
-                onMaximumValueChanged: {
-                    value = minimumValue
+                onToChanged: {
+                    value = from
+                    onValueChanged(value);
                 }
+
                 onValueChanged: {
-                     textField.text = parseInt(value, 10) + " / " + maximumValue
+                    textField.text = parseInt(value, 10) + " / " + to
                     backend.sliderChanged(value)
                 }
             }
@@ -86,14 +92,18 @@ Item {
             Layout.fillHeight: true
             Layout.preferredWidth: 75
 
+            color: "transparent"
+
             Text {
                 id: textField
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 horizontalAlignment: Text.AlignHCenter
-                text: "0 / 99"
+                text: "? / ?"
                 enabled: false
+                color: Material.color(Material.Green)
+                font.bold: true
             }
         }
 

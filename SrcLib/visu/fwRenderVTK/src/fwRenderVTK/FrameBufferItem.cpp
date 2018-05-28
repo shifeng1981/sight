@@ -144,7 +144,6 @@ vtkInternalOpenGLRenderWindow* FrameBufferItem::getRenderWindow() const
 
 QQuickFramebufferObject::Renderer* FrameBufferItem::createRenderer() const
 {
-    std::cout << "CREATE AND CONNECT RENDERER" << std::endl;
     auto renderer =
         new FrameBufferRenderer(static_cast<vtkInternalOpenGLRenderWindow*>(m_win), const_cast<FrameBufferItem*>(this));
     connect(renderer, SIGNAL(ready()), this, SIGNAL(ready()));
@@ -163,7 +162,6 @@ vtkSmartPointer<vtkRenderer>    FrameBufferItem::getRenderer() const
 
 void FrameBufferItem::initialize()
 {
-    std::cout << "Initialize" << std::endl;
     m_win->SetSize(width(), height());
     m_interactor->SetSize(m_win->GetSize());
     m_win->OpenGLInit();

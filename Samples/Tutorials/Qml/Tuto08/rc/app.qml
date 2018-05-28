@@ -16,7 +16,7 @@ ApplicationWindow {
 
 
     Material.theme: Material.Dark
-    Material.accent: Material.color(Material.Purple)
+    Material.accent: Material.color(Material.Green)
     visible: true
 
     Button {
@@ -58,13 +58,11 @@ ApplicationWindow {
         dataClassName: "::fwData::Image"
         selectionMode: "exclude"
         onDone: {
-            console.log("IMAGE READED");
             imageAdaptor.image = inout
             imageAdaptor.configure()
             imageAdaptor.start()
             imageAdaptor.update()
             genericRenderer.update()
-            console.log("Generic render is updated")
             sliceSelector.image = inout
             sliceSelector.enabled = true
         }
@@ -193,7 +191,6 @@ ApplicationWindow {
                 anchors.fill: parent
 
                 onReady: {
-                    console.log("READY");
                     genericRenderer.configure()
                     genericRenderer.start()
                     textureAdaptor.configure()
@@ -210,7 +207,9 @@ ApplicationWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                Layout.preferredWidth: 125
+                Layout.preferredWidth: 150
+
+                color: "transparent"
                 ComboBox {
                     id: sliderIndexEditor
                     anchors.left: parent.left
@@ -228,7 +227,9 @@ ApplicationWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                Layout.preferredWidth: 50
+                Layout.preferredWidth: 75
+
+                color: "transparent"
                 Button {
                     checkable: true
                     checked: false
@@ -236,11 +237,9 @@ ApplicationWindow {
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
 
-                    icon.source: "sliceShow.png"
+                    text: "Scan"
                     onCheckedChanged: {
                         sliceSelector.enabled = !checked && imageAdaptor.image
-                        icon.source = (checked ? "sliceHide.png" : "sliceShow.png")
-
                     }
                 }
             }
@@ -263,14 +262,17 @@ ApplicationWindow {
 
             Rectangle {
                 Layout.fillHeight: true
-                Layout.preferredWidth: 30
+                Layout.preferredWidth: 70
+                color: "transparent"
 
                 Button {
                     text: "Snap"
                     anchors.fill: parent
+                    anchors.margins: 4
                     onClicked: {
                         snapshotEditor.onSnapButton()
                     }
+                    font.capitalization: Font.Capitalize
                 }
             }
         }
