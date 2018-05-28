@@ -215,6 +215,8 @@ ApplicationWindow {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
+                    anchors.leftMargin: 4
+
 
                     model: ["One slice", "Three slice"]
 
@@ -236,6 +238,7 @@ ApplicationWindow {
                     anchors.left: parent.left
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
+                    font.capitalization: Font.Capitalize
 
                     text: "Scan"
                     onCheckedChanged: {
@@ -268,7 +271,7 @@ ApplicationWindow {
                 Button {
                     text: "Snap"
                     anchors.fill: parent
-                    anchors.margins: 4
+                    anchors.rightMargin: 4
                     onClicked: {
                         snapshotEditor.onSnapButton()
                     }

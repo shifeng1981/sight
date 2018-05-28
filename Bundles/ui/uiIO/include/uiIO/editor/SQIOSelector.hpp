@@ -80,7 +80,7 @@ Q_OBJECT
 Q_PROPERTY(QString mode MEMBER m_qMode)
 Q_PROPERTY(QString dataClassName MEMBER m_qDataClassname)
 Q_PROPERTY(QString selectionMode MEMBER m_qSelectionMode)
-Q_PROPERTY(fwServices::QtObjectHolder* inout MEMBER m_qInOut)
+Q_PROPERTY(fwServices::QtObjectHolder* inout MEMBER m_qInOut NOTIFY inoutChanged)
 
 public:
 
@@ -147,6 +147,13 @@ Q_SIGNALS:
      * This signal is used to error handling qml-side.
      */
     void    failure(QString const& failureMessage);
+
+    /**
+     * @brief inoutChanged
+     * @param inout
+     * This signal is triggered when inout has changed.
+     */
+    void    inoutChanged(::fwServices::QtObjectHolder *inout);
 
 private:
 
