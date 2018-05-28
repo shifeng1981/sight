@@ -27,6 +27,10 @@ Item {
         onUpdatedSliceIndex: {
             root.updatedSliceIndex(axial, sagittal, frontal)
         }
+
+        onUpdatedSliceType: {
+            root.updatedSliceType(from, to);
+        }
     }
 
     RowLayout {
