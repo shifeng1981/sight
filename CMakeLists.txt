@@ -26,7 +26,7 @@ if(MSVC)
         variable_watch(CMAKE_BACKWARDS_COMPATIBILITY pch_msvc_hook)
     endif()
 endif(MSVC)
-
+ 
 set(BUILD_SHARED_LIBS ON)
 
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel")
@@ -114,18 +114,18 @@ if(ADDITIONAL_PROJECTS)
     endforeach()
 endif()
 
-if(ANDROID)
-    set(BUNDLE_LIB_PREFIX "/data/data/com.fw4spl.${PROJECTS_TO_INSTALL}/Bundles")
-    set(BUNDLE_RC_PREFIX "/data/data/com.fw4spl.${PROJECTS_TO_INSTALL}/Bundles")
-else()
+#if(ANDROID)
+#    set(BUNDLE_LIB_PREFIX "/data/data/com.fw4spl.${PROJECTS_TO_INSTALL}/Bundles")
+#    set(BUNDLE_RC_PREFIX "/data/data/com.fw4spl.${PROJECTS_TO_INSTALL}/Bundles")
+#else()
     if(WIN32)
         set(BUNDLE_LIB_PREFIX "${CMAKE_INSTALL_BINDIR}" CACHE PATH "Relative path where the bundles libraries are installed.")
     else()
+	message("BUNDLE INSTALL = " ${CMAKE_INSTALL_LIBDIR})
         set(BUNDLE_LIB_PREFIX "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Relative path where the bundles libraries are installed.")
     endif()
-
     set(BUNDLE_RC_PREFIX "${CMAKE_INSTALL_DATADIR}" CACHE PATH "Relative path where the bundles resources are installed.")
-endif()
+#endif()
 
 mark_as_advanced(BUNDLE_LIB_PREFIX)
 mark_as_advanced(BUNDLE_RC_PREFIX)

@@ -36,4 +36,44 @@
 
     #endif
 
+#ifdef ANDROID
+
+#ifndef ANDROID_MISSINGS_FUNCTIONS
+# define ANDROID_MISSINGS_FUNCTIONS
+# include <string>
+# include <sstream>
+# include <cstdlib>
+
+namespace std
+{
+	template<typename T>
+	static inline std::string	to_string(T value)
+	{
+		stringstream	ss;
+
+		ss << value;
+		return ss.str();
+	}
+
+	static inline unsigned long int	stoul(std::string const& str)
+	{
+		return strtoul(str.c_str(), nullptr, 0);
+	}
+
+	static inline int	stoi(std::string const& str)
+	{
+		return atoi(str.c_str());
+	}
+
+	static inline double	stod(std::string const& str)
+	{
+		return strtod(str.c_str(), nullptr);
+	}
+}
+
+#endif
+
+
+#endif
+
 #endif // __@PROJECT_NAME_UPCASE@_CONFIG_HPP__
