@@ -27,12 +27,14 @@ namespace visuVTKAdaptor
  * - \b snap(std::string filePath)    : This slot snaps onto the filesystem at a specified filepath.
  * - \b snapToImage()                 : This slot snaps into the configured image.
  *
- * @section XML XML configuration
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQSnapshot" autoConnect="yes">
-       <out key="image" uid="..." />
-       <config renderer="default" />
-   </service>
+ * @section QML QML configuration
+ * @code{.qml}
+   SSnapshot {
+       image: ...
+       config: ({
+            renderer: "default"
+       })
+   }
    @endcode
  *
  * @subsection Outpu Output

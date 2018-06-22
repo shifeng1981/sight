@@ -38,11 +38,10 @@ namespace visuVTKAdaptor
  *
  * @section XML XML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQMeshNormals"  autoConnect="yes">
-       <in key="mesh" uid="..." />
-       <config renderer="..." transform="..." />
-   </service>
+ * @code{.qml}
+   SMeshNormals {
+        // configuration not handled yet
+   }
    @endcode
  * @subsection Input Input
  * - \b mesh [::fwData::Mesh]: mesh to display the normals.

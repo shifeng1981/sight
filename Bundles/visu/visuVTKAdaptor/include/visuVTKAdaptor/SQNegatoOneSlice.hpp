@@ -29,15 +29,23 @@ namespace visuVTKAdaptor
  * - \b updateSliceType(int from, int to): update image slice type
  * - \b updateImage(bool isShown): show/hide slice
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQNegatoOneSlice" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <inout key="tf" uid="..." optional="yes" />
-       <config renderer="default" picker="negatodefault" sliceIndex="axial"
-               transform="trf" tfalpha="yes" interpolation="off" vtkimagesource="imgSource" actorOpacity="1.0" />
-   </service>
+ * @code{.qml}
+   SNegatoOneSlice {
+        image: ...
+        config: ({
+            renderer: "default"
+            picker: "..."
+            sliceIndex: "..."
+            transform: "..."
+            tfalpha: "..."
+            interpolation: "..."
+            vtkimagesource: "..."
+            actorOpacity: "1.0"
+        })
+
+   }
    @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

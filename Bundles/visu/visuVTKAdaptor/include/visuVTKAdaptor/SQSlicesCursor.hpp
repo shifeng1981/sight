@@ -36,13 +36,18 @@ namespace visuVTKAdaptor
  * - \b showFullCross() : show full cross
  * - \b showNormalCross() : show normal cross (use m_scale to "normal" size)
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQSlicesCursor" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <config renderer="default" picker="negatodefault" transform="trf" scale="0.5" />
-   </service>
+ * @code{.qml}
+   SSlicesCursor {
+        image: ...
+        config: ({
+            renderer: "default"
+            picker: "..."
+            transform: "..."
+            scale: "..."
+        })
+   }
    @endcode
  *
  * @subsection In-Out In-Out

@@ -33,14 +33,18 @@ namespace visuVTKAdaptor
  * - \b updateSliceIndex(int axial, int frontal, int sagittal): update image slice index
  * - \b updateSliceType(int from, int to): update image slice type
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SNegatoMPR" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <inout key="tfSelection" uid="..." />
-       <config renderer="default" picker="negatodefault" sliceIndex="axial" />
-   </service>
+ * @code{.qml}
+   SNegatoMPR {
+       image: ...
+
+       config: ({
+            renderer: "default"
+            picker: "..."
+            sliceIndex: "..."
+       })
+   }
    @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

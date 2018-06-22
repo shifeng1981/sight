@@ -40,13 +40,17 @@ namespace visuVTKAdaptor
  * @section Slots Slots
  * - \b applyTexture(SPTR(::fwData::Material)): update image slice type
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-    <service type="::visuVTKAdaptor::SQTexture" autoConnect="yes">
-       <inout key="texture" uid="..." />
-       <config texture="texture" filtering="linear" wrapping="repeat" />
-   </service>
+ * @code{.qml}
+    STexture {
+        texture: ...
+        config: ({
+            texture: "texture",
+            filtering: "linear",
+            wrapping="repeat"
+        })
+    }
    @endcode
  *
  *  * @subsection In-Out In-Out

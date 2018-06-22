@@ -45,14 +45,18 @@ class SliceCursor;
  * - \b setCrossScale(double scale): set the slice cross scale. Forward the information to SliceCursor sub-adaptor.
  * - \b changeImageSource(std::string _value, std::string _key): set the VTK source image. The key must be "ImageSource"
  *
- * @section XML XML Configuration
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQNegatoMPR" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <inout key="tf" uid="..." optional="yes" />
-       <config renderer="default" picker="negatodefault" mode="2d" slices="1" sliceIndex="axial"
-               transform="trf" tfalpha="yes" interpolation="off" vtkimagesource="imgSource" actorOpacity="1.0" />
-   </service>
+ * @section QML QML Configuration
+ * @code{.qml}
+   SNegatoMPR {
+      image: ...
+      config: ({
+        renderer: "default"
+        picker: "..."
+        mode: "..."
+        slices: 1
+        sliceIndex: "..."
+      })
+   }
    @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

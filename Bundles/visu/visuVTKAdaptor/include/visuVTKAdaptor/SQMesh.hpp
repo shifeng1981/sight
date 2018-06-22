@@ -63,13 +63,18 @@ class VISUVTKADAPTOR_CLASS_API MeshVtkCommand;
  * - \b updateMatrixField(::fwData::Object::FieldsContainerType) : updates the matrix service if the
  *      'TransformMatrix' field changed
 
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQMesh"  autoConnect="yes">
-       <in key="mesh" uid="..." />
-       <config renderer="default" transform="..." picker="" texture="TextureAdaptor" />
-   </service>
+ * @code{.qml}
+   SMesh {
+       mesh: ...
+       config: ({
+            renderer: "...",
+            transform: "..."
+            picker: "...",
+            texture: "..."
+       })
+   }
    @endcode
  * @subsection Input Input
  * - \b mesh [::fwData::Mesh]: mesh to display.

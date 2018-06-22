@@ -14,6 +14,7 @@
 #include <fwData/Mesh.hpp>
 
 #include <fwServices/macros.hpp>
+#include <fwServices/QtQmlType.hxx>
 
 #include <fwVtkIO/helper/Mesh.hpp>
 
@@ -30,6 +31,8 @@
 
 namespace visuVTKAdaptor
 {
+
+static ::fwServices::QtQmlType<SQMeshNormals>   registar("com.fw4spl.vtk.adaptors", 1, 0, "SMeshNormals");
 
 const ::fwServices::IService::KeyType SQMeshNormals::s_MESH_INPUT = "mesh";
 

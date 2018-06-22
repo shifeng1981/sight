@@ -33,13 +33,17 @@ namespace visuVTKAdaptor
  * @section Slots Slots
  * - \b updateSliceIndex(int axial, int frontal, int sagittal) : update image slice index
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQProbeCursor" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <config renderer="default" picker="negatodefault" transform="trf" />
-   </service>
+ * @code{.qml}
+   SQProbeCursor {
+       image: ...
+       config: ({
+            renderer: "default",
+            picker: "..."
+            transform: "..."
+       })
+   }
    @endcode
  * * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

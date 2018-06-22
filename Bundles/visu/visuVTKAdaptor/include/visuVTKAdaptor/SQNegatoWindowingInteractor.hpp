@@ -22,14 +22,15 @@ namespace visuVTKAdaptor
 /**
  * @brief Manage windowing interaction for image
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-   <service type="::visuVTKAdaptor::SQNegatoWindowingInteractor" autoConnect="yes">
-       <inout key="image" uid="..." />
-       <inout key="tf" uid="..." optional="yes" />
-       <config picker="negatodefault" />
-   </service>
+ * @code{.qml}
+   SNegatoWindowingInteractor {
+        image: ...
+        config: ({
+            picker: "..."
+        })
+   }
    @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image to display.

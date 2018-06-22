@@ -26,13 +26,17 @@ namespace visuVTKAdaptor
 /**
  * @brief Adaptor binding a TransformationMatrix3D to a vtkTransform.
  *
- * @section XML XML Configuration
+ * @section QML QML Configuration
  *
- * @code{.xml}
-    <service type="::visuVTKAdaptor::SQTransform" autoConnect="yes">
-        <inout key="tm3d" uid="..." />
-        <config transform="transform" autoRender="true" parent="parentTransform" />
-    </service>
+ * @code{.qml}
+    STransform {
+        tm3d: ...
+        config: ({
+            transform: ...
+            autoRender: "true"
+            parent: "parentTransform"
+        })
+    }
    @endcode
  * @subsection In-Out In-Out
  * - \b tm3d [::fwData::TransformationMatrix3D]: f4s transform matrix.
