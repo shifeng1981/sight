@@ -73,7 +73,8 @@ void DicomSeries::cachedDeepCopy(const ::fwData::Object::csptr& _source, DeepCop
 
         if( !bufferSrc->isEmpty() )
         {
-            ::fwMemory::BufferObject::sptr bufferDest = ::fwMemory::BufferObject::New();
+            auto bufferDest = std::shared_ptr< ::fwMemory::BufferObject>(new ::fwMemory::BufferObject,
+                                                                         &DicomSeries::customBufferObjectDeleter);
             ::fwMemory::BufferObject::Lock lockerDest(bufferDest);
 
             bufferDest->allocate(bufferSrc->getSize());
@@ -91,7 +92,8 @@ void DicomSeries::cachedDeepCopy(const ::fwData::Object::csptr& _source, DeepCop
 
 void DicomSeries::addDicomPath(std::size_t instanceIndex, const ::boost::filesystem::path& path)
 {
-    ::fwMemory::BufferObject::sptr buffer = ::fwMemory::BufferObject::New();
+    auto buffer = std::shared_ptr< ::fwMemory::BufferObject>(new ::fwMemory::BufferObject,
+                                                             &DicomSeries::customBufferObjectDeleter);
     const size_t buffSize = ::boost::filesystem::file_size(path);
     buffer->setIStreamFactory( std::make_shared< ::fwMemory::stream::in::Raw >(path),
                                buffSize, path, ::fwMemory::RAW);
@@ -132,6 +134,20 @@ void DicomSeries::addComputedTagValue(const std::string& tagName, const std::str
 bool DicomSeries::hasComputedValues(const std::string& tagName) const
 {
     return m_computedTagValues.find(tagName) != m_computedTagValues.end();
+}
+
+//------------------------------------------------------------------------------
+
+void DicomSeries::customBufferObjectDeleter(::fwMemory::BufferObject* bo)
+{
+    if(bo)
+    {
+        if(bo->getBufferPointer() != nullptr && bo->getSize() != 0)
+        {
+            bo->destroy();
+            delete bo;
+        }
+    }
 }
 
 } // namespace fwMedData

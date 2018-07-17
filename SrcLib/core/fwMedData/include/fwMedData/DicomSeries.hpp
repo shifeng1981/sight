@@ -173,6 +173,11 @@ public:
 
 protected:
 
+    /**
+     * @brief Custom deleter for buffer objects allocated by this class.
+     */
+    static void customBufferObjectDeleter(::fwMemory::BufferObject* bo);
+
     /// Number of instances in the series (0020,1209)
     size_t m_numberOfInstances;
 
