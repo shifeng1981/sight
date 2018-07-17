@@ -65,7 +65,7 @@ std::streamsize ImageLazySource::read(char* s, std::streamsize n)
         }
 
         // Change frame
-        delete m_frame;
+        delete[] m_frame;
         ++m_currentFrame;
         ++m_currentDicom;
         m_currentPosition = 0;
@@ -103,7 +103,7 @@ std::streamsize ImageLazySource::read(char* s, std::streamsize n)
            m_currentPosition == m_frameSize)
         {
             SLM_TRACE("Reading process over.");
-            delete m_frame;
+            delete[] m_frame;
         }
     }
 

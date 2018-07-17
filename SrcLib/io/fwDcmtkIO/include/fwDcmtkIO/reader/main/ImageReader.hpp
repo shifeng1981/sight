@@ -250,7 +250,7 @@ protected:
                 rescaleIntercept);
         }
 
-        delete tempoBuffer;
+        delete[] tempoBuffer;
     }
 
     /**
