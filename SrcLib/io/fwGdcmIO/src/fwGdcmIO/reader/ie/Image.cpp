@@ -360,7 +360,8 @@ void Image::readImagePixelModule()
     // Set image buffer
     ::fwData::Array::sptr array = m_object->getDataArray();
     ::fwDataTools::helper::Array helper(array);
-    helper.setBuffer(imageBuffer, true, m_object->getType(), m_object->getSize(), m_object->getNumberOfComponents());
+    helper.setBuffer(imageBuffer, true, m_object->getType(), m_object->getSize(),
+                     m_object->getNumberOfComponents(), ::fwMemory::BufferNewPolicy::New());
 
 }
 
