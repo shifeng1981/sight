@@ -575,23 +575,16 @@ char* Image::correctImageOrientation(char* buffer,
     const fwVec3d imageOrientationW = ::fwMath::cross(imageOrientationU, imageOrientationV);
 
     // Create orientation matrix
-    Image::MatrixType matrix(4, 4);
+    Image::MatrixType matrix(3, 3);
     matrix(0, 0) = imageOrientationU[0];
     matrix(1, 0) = imageOrientationU[1];
     matrix(2, 0) = imageOrientationU[2];
-    matrix(3, 0) = 0;
     matrix(0, 1) = imageOrientationV[0];
     matrix(1, 1) = imageOrientationV[1];
     matrix(2, 1) = imageOrientationV[2];
-    matrix(3, 1) = 0;
     matrix(0, 2) = imageOrientationW[0];
     matrix(1, 2) = imageOrientationW[1];
     matrix(2, 2) = imageOrientationW[2];
-    matrix(3, 2) = 0;
-    matrix(0, 3) = 0;
-    matrix(1, 3) = 0;
-    matrix(2, 3) = 0;
-    matrix(3, 3) = 1;
 
     // Compute inverse matrix in order to rotate the buffer
     Image::MatrixType inverseMatrix  = this->computeInverseMatrix(matrix);
@@ -601,7 +594,7 @@ char* Image::correctImageOrientation(char* buffer,
     if(!::boost::numeric::ublas::detail::expression_type_check(inverseMatrix, identityMatrix))
     {
         // Compute new image size
-        VectorType sizeVector(4);
+        VectorType sizeVector(3);
         sizeVector(0) = dimensions.at(0);
         sizeVector(1) = dimensions.at(1);
         sizeVector(2) = dimensions.at(2);
@@ -629,7 +622,7 @@ char* Image::correctImageOrientation(char* buffer,
                 for(x = 0; x < newSizeX; ++x)
                 {
                     // Create new position
-                    VectorType newPosition(4);
+                    VectorType newPosition(3);
                     newPosition(0) = x;
                     newPosition(1) = y;
                     newPosition(2) = z;
@@ -665,7 +658,7 @@ char* Image::correctImageOrientation(char* buffer,
 
         // Update image spacing
         ::fwData::Image::SpacingType spacing = m_object->getSpacing();
-        VectorType spacingVector(4);
+        VectorType spacingVector(3);
         spacingVector(0) = spacing[0];
         spacingVector(1) = spacing[1];
         spacingVector(2) = spacing[2];
@@ -678,7 +671,7 @@ char* Image::correctImageOrientation(char* buffer,
 
         // Update image origin
         ::fwData::Image::OriginType origin = m_object->getOrigin();
-        VectorType originVector(4);
+        VectorType originVector(3);
         originVector(0) = origin[0];
         originVector(1) = origin[1];
         originVector(2) = origin[2];
