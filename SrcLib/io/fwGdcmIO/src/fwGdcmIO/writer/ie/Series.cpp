@@ -97,6 +97,7 @@ void Series::writeGeneralSeriesModule()
         }
         ::fwGdcmIO::helper::DicomDataWriter::setTagValues< ::gdcm::String< >, 0x0008, 0x1050 >(physicians, count,
                                                                                                dataset);
+        delete[] physicians;
     }
 
     // Laterality - Type 2C - FIXME: Fake Value - Should be absent for the abdomen or chest
