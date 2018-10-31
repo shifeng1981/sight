@@ -143,6 +143,11 @@ void SFrameGrabber::startCamera()
             this->readVideo(file);
         }
     }
+    else if(camera->getCameraSource() == ::arData::Camera::DEVICE)
+    {
+        const std::string id = camera->getCameraID();
+        this->readDevice(id);
+    }
     else
     {
         ::fwGui::dialog::MessageDialog::showMessageDialog(
@@ -237,6 +242,36 @@ void SFrameGrabber::readVideo(const ::boost::filesystem::path& file)
         ::fwGui::dialog::MessageDialog::showMessageDialog(
             "Grabber",
             "This file cannot be opened: " + file.string() + ".");
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void SFrameGrabber::readDevice(std::string _device)
+{
+    ::arData::FrameTL::sptr frameTL = this->getInOut< ::arData::FrameTL >(s_FRAMETL);
+
+    ::fwCore::mt::ScopedLock lock(m_mutex);
+
+    m_videoCapture.open(_device);
+
+    if (m_videoCapture.isOpened())
+    {
+        m_timer = m_worker->createTimer();
+
+        size_t fps = static_cast<size_t>(m_videoCapture.get(::cv::CAP_PROP_FPS));
+
+        ::fwThread::Timer::TimeDurationType duration = std::chrono::milliseconds(1000 / fps);
+
+        m_timer->setFunction(std::bind(&SFrameGrabber::grabVideo, this));
+        m_timer->setDuration(duration);
+        m_timer->start();
+    }
+    else
+    {
+        ::fwGui::dialog::MessageDialog::showMessageDialog(
+            "Grabber",
+            "This file cannot be opened: " + _device + ".");
     }
 }
 
