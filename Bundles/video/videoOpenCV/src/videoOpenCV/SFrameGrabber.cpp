@@ -146,7 +146,8 @@ void SFrameGrabber::startCamera()
     else if(camera->getCameraSource() == ::arData::Camera::DEVICE)
     {
         const std::string id = camera->getCameraID();
-        this->readDevice(id);
+        const int index      = camera->getIndex();
+        this->readDevice(id, index);
     }
     else
     {
@@ -247,13 +248,28 @@ void SFrameGrabber::readVideo(const ::boost::filesystem::path& file)
 
 // -----------------------------------------------------------------------------
 
-void SFrameGrabber::readDevice(std::string _device)
+void SFrameGrabber::readDevice(std::string _device, int _index)
 {
     ::arData::FrameTL::sptr frameTL = this->getInOut< ::arData::FrameTL >(s_FRAMETL);
 
     ::fwCore::mt::ScopedLock lock(m_mutex);
 
+#ifdef __linux__
+    // On linux the V4L backend can read from device id (/dev/video...)
     m_videoCapture.open(_device);
+#else
+    //On other platforms (at least on MacOS, we should use the index given by Qt)
+    if(_index >= 0 )
+    {
+        m_videoCapture.open(_index);
+    }
+    else
+    {
+        ::fwGui::dialog::MessageDialog::showMessageDialog(
+            "Grabber",
+            "This device cannot be opened: " + _device + " at index: " + std::to_string(_index));
+    }
+#endif
 
     if (m_videoCapture.isOpened())
     {
@@ -271,7 +287,7 @@ void SFrameGrabber::readDevice(std::string _device)
     {
         ::fwGui::dialog::MessageDialog::showMessageDialog(
             "Grabber",
-            "This file cannot be opened: " + _device + ".");
+            "This device cannot be opened: " + _device + ".");
     }
 }
 

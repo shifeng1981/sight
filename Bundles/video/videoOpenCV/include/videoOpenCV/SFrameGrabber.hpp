@@ -40,7 +40,7 @@ namespace videoOpenCV
  * @note You can load images in a folder like img_<timestamp>.<ext> (ex. img_642752427.jpg). The service uses
  * the timestamp to order the frames and to push them in the timeline.
  *
- * \b Tags: FILE, DEVICE
+ * \b Tags: FILE,DEVICE
  *
  * @section Signals Signals
  * - \b positionModified(std::int64_t) : Emitted when the position in the video is modified during playing.
@@ -94,7 +94,7 @@ class VIDEOOPENCV_CLASS_API SFrameGrabber : public ::arServices::IGrabber
 
 public:
 
-    fwCoreServiceClassDefinitionsMacro( (SFrameGrabber)(::arServices::IGrabber) );
+    fwCoreServiceClassDefinitionsMacro( (SFrameGrabber)(::arServices::IGrabber) )
 
     /// Constructor. Do nothing.
     VIDEOOPENCV_API SFrameGrabber() noexcept;
@@ -149,7 +149,7 @@ private:
     void readVideo(const ::boost::filesystem::path& file);
 
     /// Initializes the usb device reader, start the timer.
-    void readDevice(std::string _device);
+    void readDevice(std::string _device, int index = -1);
 
     /// Initializes the image reader, start the timer.
     void readImages(const ::boost::filesystem::path& folder, const std::string& extension);
