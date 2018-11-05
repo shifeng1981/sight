@@ -6,7 +6,11 @@
 
 #include "videoOrbbec/SScanBase.hpp"
 
+#include <arData/CameraSeries.hpp>
+
 #include <fwGui/dialog/MessageDialog.hpp>
+
+#include <fwTools/Os.hpp>
 
 #include <fwVideoQt/helper/formats.hpp>
 #include <fwVideoQt/Registry.hpp>
@@ -15,6 +19,8 @@
 #include <QCameraInfo>
 
 #include <cmath>
+#include <regex>
+#include <string>
 
 namespace videoOrbbec
 {
@@ -94,10 +100,42 @@ void SScanBase::setPosition(int64_t position)
 
 void SScanBase::detectCameraOpenni()
 {
+
+    auto cameraInput = this->getInput< ::fwData::Object >(s_CAMERA_INPUT);
+    auto camera      = ::arData::Camera::dynamicConstCast(cameraInput);
+
+    std::string camId;
+    int index = -1;
+
+    if(camera)
+    {
+        camId = camera->getCameraID();
+    }
+    else
+    {
+        auto cameraSeries = ::arData::CameraSeries::dynamicConstCast(cameraInput);
+        if(cameraSeries)
+        {
+            size_t numCamerasInSeries = cameraSeries->getNumberOfCameras();
+            SLM_ASSERT("Camera Series is empty", numCamerasInSeries);
+
+            // Assume same source on all cameras
+            camId = cameraSeries->getCamera(0)->getCameraID();
+            index = cameraSeries->getCamera(0)->getIndex();
+        }
+    }
+
+    // Convert camID from Qt (/dev/video#) to an usb device number.
+    //Note: For compatibilities issues, call this from an other OS than Linux leads to
+    // usbDevises[0] = std::pair[-1; "ERROR"]
+    auto usbDevices = ::fwTools::os::getDeviceFromVirtualDevice(camId);
+
     ::openni::Array< ::openni::DeviceInfo> devices;
     ::openni::OpenNI::enumerateDevices(&devices);
     OpenniDevicePtr device = std::unique_ptr< ::openni::Device >(new ::openni::Device());
     std::string astraDeviceUri;
+
+    bool foundAstra = false;
 
     for(int i = 0; i != devices.getSize(); ++i)
     {
@@ -105,14 +143,53 @@ void SScanBase::detectCameraOpenni()
         if(!(std::strcmp("Orbbec", dev.getVendor()) || std::strcmp("Astra", dev.getName())
              || dev.getUsbVendorId() != 11205))
         {
+
             astraDeviceUri = dev.getUri();
-            break;
+
+            // if we found the correspondence between /dev/video# uri and the device id (Can only be true on linux)
+            if(usbDevices[0].first != -1)
+            {
+                for(auto it : usbDevices)
+                {
+                    std::string astraNum = astraDeviceUri.substr(astraDeviceUri.rfind("/") + 1 );
+
+                    if(it.first == std::stoi((astraNum)))
+                    {
+                        // ok we found the corresponding astra, stop the loop
+
+                        SLM_DEBUG("OpenNI URI: " + astraDeviceUri);
+                        SLM_DEBUG("Qt Uri: " + camId);
+                        OSLM_DEBUG("Matching found: " + it.second + " devnum: "<<it.first);
+
+                        foundAstra = true;
+                        // break the inner loop.
+                        break;
+                    }
+                }
+            }
+
+            if(foundAstra)
+            {
+                // ok found astra break the main loop
+                break;
+            }
+            else
+            {
+                //Default case: assume that astra are organized in the same order than Qt
+                if(index == i && index >= 0)
+                {
+                    foundAstra = true;
+                    break;
+                }
+                // Last case last astra found is used...
+            }
         }
     }
 
     FW_RAISE_IF("Astra Pro OpenNI device not detected.", astraDeviceUri.size() == 0);
     FW_RAISE_IF("Cannot open OpenNI device: " << ::openni::OpenNI::getExtendedError(),
                 device->open(astraDeviceUri.c_str()) != ::openni::STATUS_OK);
+
     m_oniDevice.swap(device);
     m_oniDevice->setImageRegistrationMode(
         ::openni::ImageRegistrationMode::IMAGE_REGISTRATION_OFF);
@@ -122,6 +199,8 @@ void SScanBase::detectCameraOpenni()
 
 ::arData::Camera::sptr SScanBase::detectCameraQt()
 {
+
+    //FIXME: useless if using ::arData::Camera.
     // Workaround https://bugreports.qt.io/browse/QTBUG-59320
     QCamera* cam = new QCamera;
     delete cam;
