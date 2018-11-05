@@ -1,5 +1,5 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2014-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2014-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
@@ -36,7 +36,8 @@ Camera::Camera( ::fwData::Object::Key key ) :
     m_maxFrameRate(30.f),
     m_pixelFormat(INVALID),
     m_cameraSource(UNKNOWN),
-    m_scale(1.)
+    m_scale(1.),
+    m_index(-1)
 {
     m_intrinsic.fill(0.);
     m_distortionCoefficient.fill(0.);
@@ -144,6 +145,7 @@ void Camera::shallowCopy( const ::fwData::Object::csptr& _source )
     m_streamUrl             = other->m_streamUrl;
     m_cameraSource          = other->m_cameraSource;
     m_scale                 = other->m_scale;
+    m_index                 = other->m_index;
 }
 
 //------------------------------------------------------------------------------
@@ -179,6 +181,7 @@ void Camera::cachedDeepCopy(const Object::csptr& source, DeepCopyCacheType& cach
     m_streamUrl    = other->m_streamUrl;
     m_cameraSource = other->m_cameraSource;
     m_scale        = other->m_scale;
+    m_index        = other->m_index;
 }
 
 // -------------------------------------------------------------------------
@@ -195,4 +198,3 @@ void Camera::setDistortionCoefficient(double k1, double k2, double p1, double p2
 // -------------------------------------------------------------------------
 
 } // namespace arData
-

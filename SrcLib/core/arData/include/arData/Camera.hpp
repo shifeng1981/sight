@@ -1,11 +1,10 @@
 /* ***** BEGIN LICENSE BLOCK *****
- * FW4SPL - Copyright (C) IRCAD, 2014-2017.
+ * FW4SPL - Copyright (C) IRCAD, 2014-2018.
  * Distributed under the terms of the GNU Lesser General Public License (LGPL) as
  * published by the Free Software Foundation.
  * ****** END LICENSE BLOCK ****** */
 
-#ifndef __ARDATA_CAMERA_HPP__
-#define __ARDATA_CAMERA_HPP__
+#pragma once
 
 #include "arData/config.hpp"
 
@@ -331,6 +330,10 @@ public:
 
     double getScale() const;
 
+    void setIndex(int _index);
+
+    int getIndex() const;
+
 protected:
 
     //! Width video resolution
@@ -371,6 +374,10 @@ protected:
 
     //! Used for depth sensor: scale of the depth values (default: 1.)
     double m_scale;
+
+    //! Index of the camera in the device list (Only used on DEVICE mode on OSX & Windows). Default value: -1
+    //! The value comes from ::videoQt::editor::CameraDeviceDlg, it is computer and os specific.
+    int m_index;
 };
 
 //-----------------------------------------------------------------------------
@@ -389,6 +396,16 @@ inline double Camera::getScale() const
 
 //-----------------------------------------------------------------------------
 
-} // namespace arData
+inline void Camera::setIndex(int _index)
+{
+    m_index = _index;
+}
 
-#endif // __ARDATA_CAMERA_HPP__
+//-----------------------------------------------------------------------------
+
+inline int Camera::getIndex() const
+{
+    return m_index;
+}
+
+} // namespace arData
