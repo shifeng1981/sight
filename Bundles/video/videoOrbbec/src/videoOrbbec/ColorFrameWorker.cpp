@@ -62,9 +62,11 @@ void ColorFrameWorker::presentFrame(QVideoFrame const& frame)
                frameBufSize = frameWidth * frameHeight;
     FW_RAISE_IF("Timeline buffer has wrong size",
                 m_colorTL->getWidth() != frameWidth || m_colorTL->getHeight() != frameHeight);
-    const auto timestamp = ::fwCore::HiResClock::getTimeInMilliSec();
-    auto buffer          = m_colorTL->createBuffer(timestamp);
-    auto dstBuffer       = reinterpret_cast<uint32_t*>(buffer->addElement(0));
+    auto timestamp = std::chrono::duration_cast< std::chrono::milliseconds >
+                         (std::chrono::system_clock::now().time_since_epoch()).count();
+
+    auto buffer    = m_colorTL->createBuffer(timestamp);
+    auto dstBuffer = reinterpret_cast<uint32_t*>(buffer->addElement(0));
 
     // The input feed is mirrored (relative to the depth stream) by default so we need to correct that
     // Map the video frame for reading
@@ -94,6 +96,7 @@ void ColorFrameWorker::presentFrame(QVideoFrame const& frame)
     m_colorTL->pushObject(buffer);
     m_colorTL->signal< ::arData::TimeLine::ObjectPushedSignalType>(::arData::TimeLine::s_OBJECT_PUSHED_SIG)
     ->asyncEmit(timestamp);
+
     m_parent.signal< ::arServices::IGrabber::FramePresentedSignalType>(::arServices::IGrabber::s_FRAME_PRESENTED_SIG)
     ->asyncEmit();
 }
