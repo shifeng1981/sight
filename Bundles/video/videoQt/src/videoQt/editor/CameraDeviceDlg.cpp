@@ -53,9 +53,11 @@ CameraDeviceDlg::CameraDeviceDlg() :
     const QList<QCameraInfo> devices = QCameraInfo::availableCameras();
     std::map<std::string, std::vector<QCameraInfo> > nameToUID;
     // First run: collect all detected device names and UIDs
+    unsigned int i = 0;
     for(const QCameraInfo& camInfo : devices)
     {
-        const auto camName = camInfo.description().toStdString();
+        // append i to description to keep the order
+        const auto camName = std::to_string(i) + ". " +camInfo.description().toStdString();
         if(nameToUID.count(camName))
         {
             auto& uids = nameToUID.at(camName);
@@ -65,6 +67,7 @@ CameraDeviceDlg::CameraDeviceDlg() :
         {
             nameToUID[camName] = std::vector<QCameraInfo>(1, camInfo);
         }
+        ++i;
     }
     // Second run: disambiguate if several cameras with the same name were detected.
     for(auto& p : nameToUID)
@@ -164,6 +167,7 @@ bool CameraDeviceDlg::getSelectedCamera(::arData::Camera::sptr& camera)
         camera->setCameraSource(::arData::Camera::DEVICE);
         camera->setCameraID(camInfo.deviceName().toStdString());
         camera->setDescription(camInfo.description().toStdString());
+        camera->setIndex(index);
         return true;
     }
     return false;
@@ -250,6 +254,7 @@ void CameraDeviceDlg::onSelectDevice(int index)
             QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(stream.str()));
             item->setData(Qt::UserRole, QVariant::fromValue(settings));
             m_camSettings->addItem(item);
+
         }
 
 #endif //linux
