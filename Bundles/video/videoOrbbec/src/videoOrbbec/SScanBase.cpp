@@ -101,52 +101,66 @@ void SScanBase::setPosition(int64_t position)
 void SScanBase::detectCameraOpenni()
 {
 
+    // Get Camera data
     auto cameraInput = this->getInput< ::fwData::Object >(s_CAMERA_INPUT);
     auto camera      = ::arData::Camera::dynamicConstCast(cameraInput);
 
     std::string camId;
+    std::string desc;
     int index = -1;
 
+    // Check if Camera or CameraSeries
     if(camera)
     {
         camId = camera->getCameraID();
+        desc  = camera->getDescription();
     }
     else
     {
         auto cameraSeries = ::arData::CameraSeries::dynamicConstCast(cameraInput);
         if(cameraSeries)
         {
-            size_t numCamerasInSeries = cameraSeries->getNumberOfCameras();
-            SLM_ASSERT("Camera Series is empty", numCamerasInSeries);
-
             // Assume same source on all cameras
             camId = cameraSeries->getCamera(0)->getCameraID();
-            index = cameraSeries->getCamera(0)->getIndex();
+            desc  = camera->getDescription();
         }
     }
 
-    // Convert camID from Qt (/dev/video#) to an usb device number.
-    //Note: For compatibilities issues, call this from an other OS than Linux leads to
-    // usbDevises[0] = std::pair[-1; "ERROR"]
+    // Linux: convert camID from Qt (/dev/video#) to an usb device number.
+    // Note: For compatibilities issues, call this from an other OS than Linux leads to
+    // usbDevices[0] = std::pair[-1; "ERROR"]
     auto usbDevices = ::fwTools::os::getDeviceFromVirtualDevice(camId);
+
+    // On other platforms (but can also works on Linux):
+    // Here we cannot use directly the index, because openNI will give us only Depth Cameras,
+    // since index is assigned on all RGB Camera connected it may be wrong.
+    // When multiple Astra are connected we append #Number at the end of description.
+    // (see ::videoQt::editor::CameraDeviceDlg)
+
+    // No '#' or '#1' leads to index '0', '#2' leads to index '1', ...
+    const size_t pos = desc.rfind("#");
+    index = pos != std::string::npos ? std::atoi(desc.substr(pos + 1).c_str()) -1 : 0;
 
     ::openni::Array< ::openni::DeviceInfo> devices;
     ::openni::OpenNI::enumerateDevices(&devices);
+
     OpenniDevicePtr device = std::unique_ptr< ::openni::Device >(new ::openni::Device());
     std::string astraDeviceUri;
 
     bool foundAstra = false;
 
-    for(int i = 0; i != devices.getSize(); ++i)
+    for(int i = 0; i < devices.getSize(); ++i)
     {
         auto const& dev = devices[i];
+
         if(!(std::strcmp("Orbbec", dev.getVendor()) || std::strcmp("Astra", dev.getName())
              || dev.getUsbVendorId() != 11205))
         {
 
             astraDeviceUri = dev.getUri();
 
-            // if we found the correspondence between /dev/video# uri and the device id (Can only be true on linux)
+            //Methode 1: Check if we find correspondence between /dev/video# uri and the device id
+            // Works only on linux
             if(usbDevices[0].first != -1)
             {
                 for(auto it : usbDevices)
@@ -175,13 +189,13 @@ void SScanBase::detectCameraOpenni()
             }
             else
             {
-                //Default case: assume that astra are organized in the same order than Qt
+                //Method 2: Find the astra num corresponding to the selecting one.
                 if(index == i && index >= 0)
                 {
                     foundAstra = true;
                     break;
                 }
-                // Last case last astra found is used...
+                // If nothing was found last astra found is used...
             }
         }
     }
@@ -199,8 +213,7 @@ void SScanBase::detectCameraOpenni()
 
 ::arData::Camera::sptr SScanBase::detectCameraQt()
 {
-
-    //FIXME: useless if using ::arData::Camera.
+    // FIXME: useless if using ::arData::Camera.
     // Workaround https://bugreports.qt.io/browse/QTBUG-59320
     QCamera* cam = new QCamera;
     delete cam;

@@ -21,8 +21,8 @@
 #include <QVBoxLayout>
 
 #include <algorithm>
-#include <map>
 #include <sstream>
+#include <unordered_map>
 
 Q_DECLARE_METATYPE(QCameraInfo)
 
@@ -44,20 +44,26 @@ CameraDeviceDlg::CameraDeviceDlg() :
 
     QLabel* deviceLabel = new QLabel("Camera device: ");
     m_devicesComboBox = new QComboBox();
-    m_camSettings     = new QListWidget();
+    // We should insert item on top of the other,
+    // since we iterate over an unordered_map (first one pushed becomes last element)
+    m_devicesComboBox->setInsertPolicy( QComboBox::InsertAtTop);
+
+    m_camSettings = new QListWidget();
 
     selectorLayout->addWidget(deviceLabel);
     selectorLayout->addWidget(m_devicesComboBox);
 
-    // Add cameras
+    // Detect available devices.
     const QList<QCameraInfo> devices = QCameraInfo::availableCameras();
-    std::map<std::string, std::vector<QCameraInfo> > nameToUID;
+    // Using unordered_map to avoid alphabetical sorting of map.
+    std::unordered_map<std::string, std::vector<QCameraInfo> > nameToUID;
     // First run: collect all detected device names and UIDs
-    unsigned int i = 0;
     for(const QCameraInfo& camInfo : devices)
     {
-        // append i to description to keep the order
-        const auto camName = std::to_string(i) + ". " +camInfo.description().toStdString();
+        //MacOs appends random number when cameras has same names, remove it to do it ourself.
+        const std::string qtCamName = camInfo.description().toStdString();
+        const std::string camName   = qtCamName.substr(0, qtCamName.rfind("#") - 1);
+
         if(nameToUID.count(camName))
         {
             auto& uids = nameToUID.at(camName);
@@ -67,8 +73,8 @@ CameraDeviceDlg::CameraDeviceDlg() :
         {
             nameToUID[camName] = std::vector<QCameraInfo>(1, camInfo);
         }
-        ++i;
     }
+
     // Second run: disambiguate if several cameras with the same name were detected.
     for(auto& p : nameToUID)
     {
@@ -76,8 +82,9 @@ CameraDeviceDlg::CameraDeviceDlg() :
         auto& devicesInfo      = p.second;
         if(devicesInfo.size() == 1)
         {
-            // Camera is unique
-            m_devicesComboBox->addItem(devicesInfo[0].description(), QVariant::fromValue(devicesInfo[0]));
+            // Camera is unique insert
+            // insert on top
+            m_devicesComboBox->insertItem(0, devicesInfo[0].description(), QVariant::fromValue(devicesInfo[0]));
         }
         else
         {
@@ -91,12 +98,15 @@ CameraDeviceDlg::CameraDeviceDlg() :
             for(const auto& deviceInfo: devicesInfo)
             {
                 const std::string uniqueName = deviceName + " #" + std::to_string(n);
-                m_devicesComboBox->addItem(QString(uniqueName.c_str()), QVariant::fromValue(deviceInfo));
+                //insert on top
+                m_devicesComboBox->insertItem(0, QString(uniqueName.c_str()), QVariant::fromValue(deviceInfo));
                 ++n;
             }
         }
     }
 
+    //pre-select the first device.
+    m_devicesComboBox->setCurrentIndex(0);
     buttonLayout->addWidget(validateButton);
     buttonLayout->addWidget(cancelButton);
 
@@ -166,7 +176,9 @@ bool CameraDeviceDlg::getSelectedCamera(::arData::Camera::sptr& camera)
 #endif
         camera->setCameraSource(::arData::Camera::DEVICE);
         camera->setCameraID(camInfo.deviceName().toStdString());
-        camera->setDescription(camInfo.description().toStdString());
+        //Use our description.
+        camera->setDescription(m_devicesComboBox->currentText().toStdString());
+        // Set the index given by Qt (specific to the computer).
         camera->setIndex(index);
         return true;
     }
