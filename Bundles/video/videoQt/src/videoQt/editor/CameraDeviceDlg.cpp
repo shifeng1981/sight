@@ -44,11 +44,7 @@ CameraDeviceDlg::CameraDeviceDlg() :
 
     QLabel* deviceLabel = new QLabel("Camera device: ");
     m_devicesComboBox = new QComboBox();
-    // We should insert item on top of the other,
-    // since we iterate over an unordered_map (first one pushed becomes last element)
-    m_devicesComboBox->setInsertPolicy( QComboBox::InsertAtTop);
-
-    m_camSettings = new QListWidget();
+    m_camSettings     = new QListWidget();
 
     selectorLayout->addWidget(deviceLabel);
     selectorLayout->addWidget(m_devicesComboBox);
@@ -56,53 +52,40 @@ CameraDeviceDlg::CameraDeviceDlg() :
     // Detect available devices.
     const QList<QCameraInfo> devices = QCameraInfo::availableCameras();
     // Using unordered_map to avoid alphabetical sorting of map.
-    std::unordered_map<std::string, std::vector<QCameraInfo> > nameToUID;
+    std::map<std::string, QCameraInfo > nameToUID;
+    std::vector< std::string> nameList;
+
+    //We should keep the same order than given by Qt, and uniquely identify cameras with the same name.
+
     // First run: collect all detected device names and UIDs
+    size_t index = 0;
     for(const QCameraInfo& camInfo : devices)
     {
         //MacOs appends random number when cameras has same names, remove it to do it ourself.
         const std::string qtCamName = camInfo.description().toStdString();
         const std::string camName   = qtCamName.substr(0, qtCamName.rfind("#") - 1);
 
-        if(nameToUID.count(camName))
+        nameList.push_back(camName);
+
+        // check if the name already exists
+        auto multipleName      = std::count(nameList.begin(), nameList.end(), camName);
+        std::string uniqueName = camName;
+        if(  multipleName > 0)
         {
-            auto& uids = nameToUID.at(camName);
-            uids.push_back(camInfo);
+            uniqueName = camName + " #" + std::to_string(multipleName);
         }
-        else
-        {
-            nameToUID[camName] = std::vector<QCameraInfo>(1, camInfo);
-        }
+
+        // prefix by index to keep the order in the map
+        nameToUID[std::to_string(index) + ". " + uniqueName] = camInfo;
+
+        ++index;
     }
 
-    // Second run: disambiguate if several cameras with the same name were detected.
     for(auto& p : nameToUID)
     {
         const auto& deviceName = p.first;
-        auto& devicesInfo      = p.second;
-        if(devicesInfo.size() == 1)
-        {
-            // Camera is unique insert
-            // insert on top
-            m_devicesComboBox->insertItem(0, devicesInfo[0].description(), QVariant::fromValue(devicesInfo[0]));
-        }
-        else
-        {
-            // Several identical cameras detected, disambiguate
-            unsigned int n = 1;
-            std::sort(devicesInfo.begin(), devicesInfo.end(),
-                      [] (QCameraInfo const& c1, QCameraInfo const& c2)
-                    {
-                        return c1.deviceName().toStdString() < c2.deviceName().toStdString();
-                    });
-            for(const auto& deviceInfo: devicesInfo)
-            {
-                const std::string uniqueName = deviceName + " #" + std::to_string(n);
-                //insert on top
-                m_devicesComboBox->insertItem(0, QString(uniqueName.c_str()), QVariant::fromValue(deviceInfo));
-                ++n;
-            }
-        }
+        auto& deviceInfo       = p.second;
+        m_devicesComboBox->addItem( QString(deviceName.c_str()), QVariant::fromValue(deviceInfo));
     }
 
     //pre-select the first device.
@@ -180,6 +163,7 @@ bool CameraDeviceDlg::getSelectedCamera(::arData::Camera::sptr& camera)
         camera->setDescription(m_devicesComboBox->currentText().toStdString());
         // Set the index given by Qt (specific to the computer).
         camera->setIndex(index);
+
         return true;
     }
     return false;
