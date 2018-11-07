@@ -51,7 +51,7 @@ CameraDeviceDlg::CameraDeviceDlg() :
 
     // Detect available devices.
     const QList<QCameraInfo> devices = QCameraInfo::availableCameras();
-    // Using unordered_map to avoid alphabetical sorting of map.
+
     std::map<std::string, QCameraInfo > nameToUID;
     std::vector< std::string> nameList;
 
@@ -65,22 +65,21 @@ CameraDeviceDlg::CameraDeviceDlg() :
         const std::string qtCamName = camInfo.description().toStdString();
         const std::string camName   = qtCamName.substr(0, qtCamName.rfind("#") - 1);
 
-        nameList.push_back(camName);
-
         // check if the name already exists
-        auto multipleName      = std::count(nameList.begin(), nameList.end(), camName);
-        std::string uniqueName = camName;
+        const auto multipleName = std::count(nameList.begin(), nameList.end(), camName);
+        std::string uniqueName  = camName;
         if(  multipleName > 0)
         {
-            uniqueName = camName + " #" + std::to_string(multipleName);
+            uniqueName = camName + " #" + std::to_string(multipleName+1);
         }
-
+        nameList.push_back(camName);
         // prefix by index to keep the order in the map
         nameToUID[std::to_string(index) + ". " + uniqueName] = camInfo;
 
         ++index;
     }
 
+    //Second Run: Add generated unique name into the comboBox.
     for(auto& p : nameToUID)
     {
         const auto& deviceName = p.first;
@@ -88,8 +87,6 @@ CameraDeviceDlg::CameraDeviceDlg() :
         m_devicesComboBox->addItem( QString(deviceName.c_str()), QVariant::fromValue(deviceInfo));
     }
 
-    //pre-select the first device.
-    m_devicesComboBox->setCurrentIndex(0);
     buttonLayout->addWidget(validateButton);
     buttonLayout->addWidget(cancelButton);
 
@@ -161,9 +158,6 @@ bool CameraDeviceDlg::getSelectedCamera(::arData::Camera::sptr& camera)
         camera->setCameraID(camInfo.deviceName().toStdString());
         //Use our description.
         camera->setDescription(m_devicesComboBox->currentText().toStdString());
-        // Set the index given by Qt (specific to the computer).
-        camera->setIndex(index);
-
         return true;
     }
     return false;
@@ -208,7 +202,7 @@ void CameraDeviceDlg::onSelectDevice(int index)
                 //Create QCameraViewfinderSettings from the informations of the QCameraImageCapture
                 QCameraViewfinderSettings settings;
                 //TODO : Can we get the maximum frameRate from an other way ?
-                settings.setMaximumFrameRate(30.0f);
+                settings.setMaximumFrameRate(30.0);
                 settings.setResolution(supportedSize);
                 //FIXME : Setting the pixel format generate an error (gstreamer) (see getSelectedCamera method)
                 settings.setPixelFormat(pixFormat);
