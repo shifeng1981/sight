@@ -151,12 +151,14 @@ void SScanBase::detectCameraOpenni()
         deviceVec[i] = devices[i];
     }
 
-    // Sort according to nurmeric & alphabetical order.(assume that this will give us the same order as Qt).
+// Sort according to nurmeric & alphabetical order.(assume that this will give us the same order as Qt).
+// Except on Windows.
+#ifndef WIN32
     std::sort(deviceVec.begin(), deviceVec.end(), []( ::openni::DeviceInfo _a, ::openni::DeviceInfo _b)
         {
             return std::string(_a.getUri()) < std::string(_b.getUri());
         });
-
+#endif
     bool foundAstra = false;
     int astraNum    = 0;
 
