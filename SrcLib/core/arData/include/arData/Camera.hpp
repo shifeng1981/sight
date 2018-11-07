@@ -17,6 +17,7 @@
 #include <boost/filesystem/path.hpp>
 
 #include <array>
+#include <string>
 #include <utility>
 
 fwCampAutoDeclareDataMacro((arData)(Camera), ARDATA_API);
@@ -326,12 +327,23 @@ public:
         m_streamUrl = streamUrl;
     }
 
+    /**
+     * @brief setScale set the scale factor of the camera
+     * Used for RGBD cameras, where depth sensor and RGB sensor are up to a scale factor.
+     * @param scale double (default 1.0)
+     */
     void setScale(double scale);
-
+    /**
+     * @brief getScale get the scale factor of the camera (see: setScale)
+     * @return the scale factor in double.
+     */
     double getScale() const;
 
-    void setIndex(int _index);
-
+    /**
+     * @brief getIndex returns index of the device as Qt give us in ::videoQt::editor::CameraDeviceDlg.
+     * The index is the first character of m_description. (ex: "1. Microsoft HD Camera")
+     * @return an integer of the index, -1 if unvalid (if SourceType isn't DECVICE)
+     */
     int getIndex() const;
 
 protected:
@@ -374,10 +386,6 @@ protected:
 
     //! Used for depth sensor: scale of the depth values (default: 1.)
     double m_scale;
-
-    //! Index of the camera in the device list (Only used on DEVICE mode on OSX & Windows). Default value: -1
-    //! The value comes from ::videoQt::editor::CameraDeviceDlg, it is computer and os specific.
-    int m_index;
 };
 
 //-----------------------------------------------------------------------------
@@ -396,16 +404,26 @@ inline double Camera::getScale() const
 
 //-----------------------------------------------------------------------------
 
-inline void Camera::setIndex(int _index)
+inline int Camera::getIndex() const
 {
-    m_index = _index;
+    int index = -1;
+    if(m_cameraSource == SourceType::DEVICE)
+    {
+        try
+        {
+            // Limited to [0-9] range
+            index = std::stoi(&m_description.at(0));
+        }
+        catch (std::exception& _e)
+        {
+            SLM_ERROR("Cannot get index of: " + m_description + " " + _e.what());
+        }
+    }
+
+    return index;
+
 }
 
 //-----------------------------------------------------------------------------
-
-inline int Camera::getIndex() const
-{
-    return m_index;
-}
 
 } // namespace arData
