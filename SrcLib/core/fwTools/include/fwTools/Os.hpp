@@ -56,18 +56,6 @@ FWTOOLS_API std::string  getUserDataDir(
     bool createDirectory = false
     );
 
-/**
- * @brief getDeviceFromVirtualDevice returns the real path of a usb video device (Only Linux for now).
- * @param _virtualDeviceUri: the virtual device uri (/dev/video# on linux, ...)
- * @return std::vector< std::pair< int, std::string> >: vector of pair of device number (int) & system path (string)
- *  of given virtual device uri.
- * The vector is usualy of size 1, but if associated usb device is found  (such as depth sensor on a RGBD camera)
- * the vector can be larger.
- * vector[0] = usb device number and system path corresponding to given virtual device URI.
- * vector[1-N] = all related usb device number and its system path.
- */
-FWTOOLS_API std::vector< std::pair< int, std::string > > getDeviceFromVirtualDevice(std::string _virtualDeviceUri);
-
 } // namespace os
 
 } // namespace fwTools

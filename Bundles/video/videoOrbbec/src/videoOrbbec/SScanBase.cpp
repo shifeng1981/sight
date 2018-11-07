@@ -126,12 +126,6 @@ void SScanBase::detectCameraOpenni()
         }
     }
 
-    // Linux: convert camID from Qt (/dev/video#) to an usb device number.
-    // Note: For compatibilities issues, call this from an other OS than Linux leads to
-    // usbDevices[0] = std::pair[-1; "ERROR"]
-    auto usbDevices = ::fwTools::os::getDeviceFromVirtualDevice(camId);
-
-    // On other platforms (but can also works on Linux):
     // Here we cannot use directly the index, because openNI will give us only Depth Cameras,
     // since index is assigned on all RGB Camera connected it may be wrong.
     // When multiple Astra are connected we append #Number at the end of description.
@@ -147,56 +141,41 @@ void SScanBase::detectCameraOpenni()
     OpenniDevicePtr device = std::unique_ptr< ::openni::Device >(new ::openni::Device());
     std::string astraDeviceUri;
 
-    bool foundAstra = false;
+    // We need to sort OpenNI devices according to their URI first.
+    // Since OpenNI Array doesn't contain iterator we need to copy values to std container.
 
-    for(int i = 0; i < devices.getSize(); ++i)
+    std::vector< ::openni::DeviceInfo > deviceVec;
+    deviceVec.resize( static_cast<size_t>(devices.getSize()));
+    for(std::uint8_t i = 0; i < devices.getSize(); ++i)
     {
-        auto const& dev = devices[i];
+        deviceVec[i] = devices[i];
+    }
 
+    // Sort according to nurmeric & alphabetical order.(assume that this will give us the same order as Qt).
+    std::sort(deviceVec.begin(), deviceVec.end(), []( ::openni::DeviceInfo _a, ::openni::DeviceInfo _b)
+        {
+            return std::string(_a.getUri()) < std::string(_b.getUri());
+        });
+
+    bool foundAstra = false;
+    int astraNum    = 0;
+
+    for(auto const& dev: deviceVec)
+    {
         if(!(std::strcmp("Orbbec", dev.getVendor()) || std::strcmp("Astra", dev.getName())
              || dev.getUsbVendorId() != 11205))
         {
 
             astraDeviceUri = dev.getUri();
 
-            //Methode 1: Check if we find correspondence between /dev/video# uri and the device id
-            // Works only on linux
-            if(usbDevices[0].first != -1)
+            if(index >= 0 && index == astraNum)
             {
-                for(auto it : usbDevices)
-                {
-                    std::string astraNum = astraDeviceUri.substr(astraDeviceUri.rfind("/") + 1 );
-
-                    if(it.first == std::stoi((astraNum)))
-                    {
-                        // ok we found the corresponding astra, stop the loop
-
-                        SLM_DEBUG("OpenNI URI: " + astraDeviceUri);
-                        SLM_DEBUG("Qt Uri: " + camId);
-                        OSLM_DEBUG("Matching found: " + it.second + " devnum: "<<it.first);
-
-                        foundAstra = true;
-                        // break the inner loop.
-                        break;
-                    }
-                }
-            }
-
-            if(foundAstra)
-            {
-                // ok found astra break the main loop
+                //found the good astra
+                foundAstra = true;
                 break;
             }
-            else
-            {
-                //Method 2: Find the astra num corresponding to the selecting one.
-                if(index == i && index >= 0)
-                {
-                    foundAstra = true;
-                    break;
-                }
-                // If nothing was found last astra found is used...
-            }
+
+            ++astraNum;
         }
     }
 
