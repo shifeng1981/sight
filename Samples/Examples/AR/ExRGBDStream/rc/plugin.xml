@@ -256,7 +256,7 @@
             </service>
 
             <!-- Manages Sense camera configuration -->
-            <service uid="grabber" type="::videoTools::SGrabberProxy">
+            <service uid="grabber" type="::videoTools::SGrabberProxy" worker="grabber">
                 <in key="camera" uid="RGBDCameraSeries" />
                 <inout key="depthTL" uid="frameTLDepth" />
                 <inout key="frameTL" uid="frameTLVideo" />

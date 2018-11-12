@@ -17,13 +17,9 @@
 #include <opencv2/opencv.hpp>
 
 #include <OpenNI.h>
-#include <QObject>
-#include <QThread>
 
 namespace videoOrbbec
 {
-
-class ColorFrameWorker;
 
 /**
  * @brief   Orbbec Astra Pro camera
@@ -59,10 +55,9 @@ class ColorFrameWorker;
  * @subsection Configuration Configuration
  * \see SScanBase
  */
-class VIDEOORBBEC_CLASS_API SScan : public QObject,
-                                    public SScanBase
+class VIDEOORBBEC_CLASS_API SScan : public SScanBase
 {
-Q_OBJECT
+
 public:
     fwCoreServiceClassDefinitionsMacro((SScan)(::arServices::IRGBDGrabber))
 

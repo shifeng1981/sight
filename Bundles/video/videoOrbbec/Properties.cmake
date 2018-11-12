@@ -6,10 +6,11 @@ set( DEPENDENCIES
         arServices
         fwData
         fwServices
-        fwVideoQt
+        fwGui
     )
 set( REQUIREMENTS )
 set( CONAN_DEPS
-    qt/5.11.1@sight/stable
-    openni/2.2.0-rev-958951f@sight/stable
+     openni/2.2.0-rev-958951f@sight/stable
+     opencv/3.4.3@sight/stable
+     boost/1.67.0@sight/stable
 )

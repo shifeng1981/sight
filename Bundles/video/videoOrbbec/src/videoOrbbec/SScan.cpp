@@ -6,22 +6,13 @@
 
 #include "videoOrbbec/SScan.hpp"
 
-#include "videoOrbbec/ColorFrameWorker.hpp"
-
 #include <fwCom/Signal.hxx>
 #include <fwCom/Slots.hxx>
-
-#include <fwData/Composite.hpp>
 
 #include <fwGui/dialog/MessageDialog.hpp>
 
 #include <fwServices/macros.hpp>
 #include <fwServices/registry/ActiveWorkers.hpp>
-
-#include <fwVideoQt/helper/formats.hpp>
-#include <fwVideoQt/Registry.hpp>
-
-#include <QCameraInfo>
 
 #include <memory>
 #include <thread>
@@ -32,7 +23,6 @@ namespace videoOrbbec
 //------------------------------------------------------------------------------
 
 SScan::SScan() noexcept :
-    QObject(),
     SScanBase(),
     m_depthTL(),
     m_colorTL(),
@@ -67,12 +57,6 @@ void SScan::starting()
 
 void SScan::startCamera()
 {
-    if(this->getWorker() != ::fwServices::registry::ActiveWorkers::getDefaultWorker())
-    {
-        const auto errMsg = "Astra grabbers currently don't support being run on a worker other than the main thread.";
-        errorPopup(errMsg);
-        FW_RAISE(errMsg);
-    }
     try
     {
         this->stopCamera();
