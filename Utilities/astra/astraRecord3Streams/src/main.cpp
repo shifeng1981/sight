@@ -132,6 +132,7 @@ int main(int argc, char** argv)
             }
         }
 
+        ::cv::VideoCapture rgbGrabber;
         VideoStream* streams[] = {&depth, &infrared};
 
         depth.setMirroringEnabled(false);
@@ -140,28 +141,37 @@ int main(int argc, char** argv)
 
         int imageCount = 0;
 
+        VideoFrameRef d, ir;
+
+        bool hasDepth = false,  hasIR = false;
+
         while (true)
         {
             int readyStream = -1;
-            rc = OpenNI::waitForAnyStream(streams, 2, &readyStream);
-            if (rc != STATUS_OK)
+            rc = OpenNI::waitForAnyStream(streams, 2, &readyStream, 100);
+
+            if(rc == STATUS_TIME_OUT)
+            {
+                readyStream = -1;
+
+            }
+            else if (rc != STATUS_OK)
             {
                 std::cerr<<OpenNI::getExtendedError()<<std::endl;
                 break;
             }
 
-            VideoFrameRef d, ir;
             int key;
 
             if(readyStream == 0)
             {
                 depth.readFrame(&d);
-
                 const auto depthPixels = reinterpret_cast<const uint16_t*>(d.getData());
 
                 dIm.create(d.getHeight(), d.getWidth(), CV_16UC1);
                 memcpy( dIm.data, depthPixels, static_cast<size_t>(d.getDataSize()) );
                 ::cv::imshow("Depth", dIm * 10);
+                hasDepth = true;
                 depth.stop();
 
             }
@@ -172,28 +182,32 @@ int main(int argc, char** argv)
 
                 irIm.create(ir.getHeight(), ir.getWidth(), CV_8UC3);
                 memcpy( irIm.data, infraredPixels, static_cast<size_t>(ir.getDataSize()) );
-
                 ::cv::imshow("IR", irIm);
+                hasIR = true;
                 infrared.stop();
             }
 
-            //Since we cannot access infrared and rgb streams at same time
-            ::cv::VideoCapture rgbGrabber;
-            rgbGrabber.open(dev);
-            rgbGrabber.set(CV_CAP_PROP_FRAME_WIDTH, 640);
-            rgbGrabber.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
-
-            const bool isGrabbed = rgbGrabber.grab();
-            if(isGrabbed)
+            // Since we cannot access infrared and rgb streams at same time
+            if(hasDepth && hasIR)
             {
-                rgbGrabber.retrieve(rgbIm);
+                rgbGrabber.open(dev);
+                rgbGrabber.set(CV_CAP_PROP_FRAME_WIDTH, 640);
+                rgbGrabber.set(CV_CAP_PROP_FRAME_HEIGHT, 480);
 
-                ::cv::imshow("RGB", rgbIm);
+                const bool isGrabbed = rgbGrabber.grab();
+
+                if(isGrabbed)
+                {
+                    rgbGrabber.retrieve(rgbIm);
+
+                    ::cv::imshow("RGB", rgbIm);
+                }
+                rgbGrabber.release();
+                hasDepth = hasIR = false;
+
+                infrared.start();
+                depth.start();
             }
-            rgbGrabber.release();
-
-            infrared.start();
-            depth.start();
 
             key = ::cv::waitKey(10);
 
@@ -223,9 +237,7 @@ int main(int argc, char** argv)
                 std::cout<<". done! "<<std::endl;
 
                 imageCount++;
-
             }
-
         }
 
         std::cout<<"shutdown..."<<std::endl;
