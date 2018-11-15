@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 
     std::string folder;
     int dev = 0;
+    Device device;
     try
     {
         po::options_description options("astraRecorder Usage");
@@ -75,15 +76,17 @@ int main(int argc, char** argv)
         if (rc != STATUS_OK)
         {
             std::cerr<<"Initialize failed" << OpenNI::getExtendedError() <<std::endl;
-            return 1;
+            OpenNI::shutdown();
+            return EXIT_FAILURE;
         }
 
-        Device device;
         rc = device.open(ANY_DEVICE);
 
         if (rc != STATUS_OK)
         {
             std::cerr<<"Couldn't open device"<< OpenNI::getExtendedError()<<std::endl;
+            device.close();
+            OpenNI::shutdown();
             return EXIT_FAILURE;
         }
 
@@ -152,8 +155,10 @@ int main(int argc, char** argv)
 
             if(rc == STATUS_TIME_OUT)
             {
+                // if timeout grab color directly.
+                hasDepth    = true;
+                hasIR       = true;
                 readyStream = -1;
-
             }
             else if (rc != STATUS_OK)
             {
@@ -187,7 +192,8 @@ int main(int argc, char** argv)
                 infrared.stop();
             }
 
-            // Since we cannot access infrared and rgb streams at same time
+            // Since we cannot access infrared and rgb streams at same time, we should open & close the color grabber
+            // each time. This is very slow.
             if(hasDepth && hasIR)
             {
                 rgbGrabber.open(dev);
@@ -202,14 +208,16 @@ int main(int argc, char** argv)
 
                     ::cv::imshow("RGB", rgbIm);
                 }
+                // release the color grabber, this allows IR with OpenNI.
                 rgbGrabber.release();
                 hasDepth = hasIR = false;
 
+                //(re-)start OpenNI streams.
                 infrared.start();
                 depth.start();
             }
 
-            key = ::cv::waitKey(10);
+            key = ::cv::waitKey(5);
 
             if(key == 27 || key == 'q')
             {
@@ -246,6 +254,7 @@ int main(int argc, char** argv)
         infrared.stop();
         depth.destroy();
         infrared.destroy();
+
         device.close();
         OpenNI::shutdown();
 
@@ -253,11 +262,15 @@ int main(int argc, char** argv)
     catch(std::exception& e)
     {
         std::cerr << "Error: " << e.what() << std::endl;
+        device.close();
+        OpenNI::shutdown();
         return EXIT_FAILURE;
     }
     catch(...)
     {
         std::cerr << "Unknown error" << std::endl;
+        device.close();
+        OpenNI::shutdown();
         return EXIT_FAILURE;
     }
 
