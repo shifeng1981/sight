@@ -194,6 +194,7 @@
                 <adaptor uid="pointListAdp" />
                 <adaptor uid="landmarksAdp" />
                 <adaptor uid="renderStatsAdp" />
+                <adaptor uid="multiDistances" />
             </scene>
         </service>
 
@@ -238,6 +239,11 @@
             <in key="pointList" uid="pointList" />
             <config layer="default" autoresetcamera="no" color="#ff0000" radius="1" fixedSize="true" queryFlags="1"/>
         </service>
+
+
+<service uid="multiDistances" type="::visuOgreAdaptor::SImageMultiDistances" autoConnect="yes">
+    <inout key="image" uid="${imageUID}" />
+</service>
 
         <service uid="landmarksAdp" type="::visuOgreAdaptor::SLandmarks" autoConnect="yes">
             <in key="landmarks" uid="${landmarks}" />
@@ -347,6 +353,7 @@
         <start uid="pointListAdp" />
         <start uid="landmarksAdp" />
         <start uid="renderStatsAdp" />
+        <start uid="multiDistances" />
 
         <update uid="volumeRenderingEditorAct" />
 

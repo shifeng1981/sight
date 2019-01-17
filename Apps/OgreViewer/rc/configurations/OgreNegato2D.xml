@@ -21,11 +21,28 @@
                     <view proportion="1" />
                     <view proportion="0" />
                 </layout>
+                <toolBar/>
             </gui>
             <registry>
                 <parent wid="${WID_PARENT}" />
+                <toolBar sid="toolBar" start="yes" />
                 <view sid="genericSceneSrv" start="yes" />
                 <view sid="2DNegatoSlicerSrv" start="yes" />
+            </registry>
+        </service>
+
+        <service uid="toolBar" type="::gui::aspect::SDefaultToolBar">
+            <gui>
+                <layout>
+                    <menuItem name="Add distance" icon="media-0.1/icons/distance.png" />
+                    <menuItem name="Remove distance" icon="media-0.1/icons/RemoveDistance.png" />
+                    <menuItem name="Hide distance" icon="media-0.1/icons/HideDistance.png" style="check" />
+                </layout>
+            </gui>
+            <registry>
+                <menuItem sid="ActionAddDistance" start="yes" />
+                <menuItem sid="ActionRemoveDistance" start="yes" />
+                <menuItem sid="ActionHideDistance" start="yes" />
             </registry>
         </service>
 
@@ -49,6 +66,20 @@
             <inout key="tf" uid="${volumeTF}" optional="yes" />
             <config layer="default" />
         </service>
+
+<service uid="ActionAddDistance" type="::uiMeasurement::action::AddDistance">
+    <inout key="image" uid="${imageUID}" />
+</service>
+
+<service uid="ActionRemoveDistance" type="::uiMeasurement::action::RemoveDistance" >
+    <inout key="image" uid="${imageUID}" />
+</service>
+
+<service uid="ActionHideDistance" type="::uiMeasurement::action::ShowDistance" autoConnect="yes" >
+    <inout key="image" uid="${imageUID}" />
+</service>
+
+        <!-- End Generic Scene ***************************************** -->
 
         <!-- ************************************* Services ************************************ -->
 
