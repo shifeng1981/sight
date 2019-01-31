@@ -24,10 +24,12 @@
 
 #include "visuOgreAdaptor/config.hpp"
 
-#include <fwCom/Slot.hpp>
-#include <fwCom/Slots.hpp>
+#include <fwData/PointList.hpp>
+#include <fwData/Vector.hpp>
 
 #include <fwRenderOgre/IAdaptor.hpp>
+#include <fwRenderOgre/ITransformable.hpp>
+#include <fwRenderOgre/Text.hpp>
 
 class ogreCommand;
 
@@ -45,12 +47,14 @@ namespace visuOgreAdaptor
  *
  * @code{.xml}
 
-   @endcode
+ * @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image containing the distance field.
  * @subsection Configuration Configuration
+ *<config layer="default" />
  **/
-class SImageMultiDistances : public ::fwRenderOgre::IAdaptor
+class SImageMultiDistances : public ::fwRenderOgre::IAdaptor,
+                             ::fwRenderOgre::ITransformable
 {
 public:
 
@@ -68,10 +72,69 @@ protected:
     VISUOGREADAPTOR_API void starting() override;
     VISUOGREADAPTOR_API void updating() override;
     VISUOGREADAPTOR_API void stopping() override;
-    bool m_needSubservicesDelection;
+    /**
+     * @brief Returns proposals to connect service slots to associated object signals,
+     * this method is used for obj/srv auto connection
+     *
+     * Connect Image::s_DISTANCE_ADDED_SIG to this::s_UPDATE_SLOT
+     * Connect Image::s_DISTANCE_REMOVED_SIG to this::s_REMOVE_DISTANCE_SLOT
+     * Connect Image::s_DISTANCE_DISPLAYED_SIG to this::s_UPDATE_SLOT
+     */
+    VISUOGREADAPTOR_API virtual KeyConnectionsMap getAutoConnections() const override;
+
 private:
-    void removeDistance();
+    void displayDistance(::fwData::PointList::sptr pl);
+
+    void removeDistance(::fwData::PointList::csptr plToRemove);
 
     void createDistance();
+
+    /// Get the distance between two vectors
+    Ogre::Real getDistance( Ogre::Vector3 a, Ogre::Vector3 b );
+
+    void removeAllDistance();
+
+    /// Attach a node in the scene graph
+    void attachNode(::Ogre::ManualObject* _node);
+
+    /// Used to create label
+    void createLabel(::fwData::Point::csptr);
+
+    /// Used to destroy label
+    void destroyLabel(int id);
+
+    void affMillimeter(::fwData::Point::csptr, Ogre::Real);
+
+    ::fwData::Point::cwptr m_point1;
+
+    ::fwData::Point::cwptr m_point2;
+
+    ::Ogre::SceneManager* m_sceneMgr;
+
+    ::Ogre::SceneNode* m_rootSceneNode;
+
+    /// Scene node where point of our manual objects are attached
+    ::Ogre::SceneNode* m_pointNode { nullptr };
+
+    /// Scene node where point of our manual objects are attached
+    ::Ogre::SceneNode* m_pointNode2 { nullptr };
+
+    /// Used to store label of each point
+    std::vector< ::fwRenderOgre::Text*> m_labels;
+
+    /// Used to store millimeter value for each line
+    std::vector< ::fwRenderOgre::Text*> m_millimeterValue;
+
+    /// Used to store labels points nodes
+    std::vector< ::Ogre::SceneNode*> m_labelNodes;
+
+    /// Used to store labels points nodes
+    std::vector< ::Ogre::SceneNode*> m_millimeterNodes;
+
+    /// Copy of distanceField in case that the signal remove the lign from the image before the visual
+    ::fwData::Vector::sptr m_distanceField;
+
+    /// Number of visual line
+    int _id = 0;
 };
 }

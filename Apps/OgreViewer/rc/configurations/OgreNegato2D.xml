@@ -54,6 +54,7 @@
                 <layer id="default" depth="1" />
                 <adaptor uid="defaultInteractorAdp" />
                 <adaptor uid="2DNegatoAdp" />
+                <adaptor uid="multiDistances" />
             </scene>
         </service>
 
@@ -67,6 +68,11 @@
             <config layer="default" />
         </service>
 
+<service uid="multiDistances" type="::visuOgreAdaptor::SImageMultiDistances" autoConnect="yes">
+    <inout key="image" uid="${imageUID}" />
+    <config layer="default" />
+</service>
+
 <service uid="ActionAddDistance" type="::uiMeasurement::action::AddDistance">
     <inout key="image" uid="${imageUID}" />
 </service>
@@ -79,7 +85,7 @@
     <inout key="image" uid="${imageUID}" />
 </service>
 
-        <!-- End Generic Scene ***************************************** -->
+<!-- End Generic Scene ***************************************** -->
 
         <!-- ************************************* Services ************************************ -->
 
@@ -94,5 +100,6 @@
         <start uid="defaultInteractorAdp" />
         <start uid="2DNegatoAdp" />
 
+        <start uid="multiDistances" />
     </config>
 </extension>

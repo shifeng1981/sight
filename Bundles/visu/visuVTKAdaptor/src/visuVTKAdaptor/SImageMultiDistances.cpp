@@ -381,19 +381,15 @@ void SImageMultiDistances::updating()
 
 void SImageMultiDistances::removeDistance(::fwData::PointList::csptr plToRemove )
 {
+    std::cout << "je remove distance" << std::endl;
     ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     SLM_ASSERT("Missing image", image);
 
-    this->unregisterServices();
+    //  this->unregisterServices();
 
     ::fwData::Vector::sptr distanceField;
     distanceField = image->getField< ::fwData::Vector >( ::fwDataTools::fieldHelper::Image::m_imageDistancesId);
-
-    ::fwData::Vector::IteratorType iter = std::find(distanceField->begin(), distanceField->end(), plToRemove);
-    if(iter != distanceField->end())
-    {
-        distanceField->getContainer().erase(iter);
-    }
+    std::cout << distanceField.get()->size() << std::endl;
 
     this->updating();
 }
