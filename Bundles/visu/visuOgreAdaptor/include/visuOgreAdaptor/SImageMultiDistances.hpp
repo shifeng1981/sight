@@ -29,6 +29,7 @@
 
 #include <fwRenderOgre/IAdaptor.hpp>
 #include <fwRenderOgre/ITransformable.hpp>
+#include <fwRenderOgre/interactor/IInteractor.hpp>
 #include <fwRenderOgre/Text.hpp>
 
 class ogreCommand;
@@ -54,7 +55,8 @@ namespace visuOgreAdaptor
  *<config layer="default" />
  **/
 class SImageMultiDistances : public ::fwRenderOgre::IAdaptor,
-                             ::fwRenderOgre::ITransformable
+        public ::fwRenderOgre::ITransformable,
+        public ::fwRenderOgre::interactor::IInteractor
 {
 public:
 
@@ -64,9 +66,36 @@ public:
 
     VISUOGREADAPTOR_API ~SImageMultiDistances() noexcept;
 
+    VISUOGREADAPTOR_API virtual void show(bool showDistances = true);
+
     //VISUOGREADAPTOR_API void setNeedSubservicesDeletion(bool _needSubservicesDeletion);
 
-    VISUOGREADAPTOR_API virtual void show(bool showDistances = true);
+    /// Behaviour on a MouseMoveEvent
+    VISUOGREADAPTOR_API virtual void mouseMoveEvent(MouseButton, int, int, int, int) override;
+
+    /// Behaviour on a WheelEvent
+    VISUOGREADAPTOR_API virtual void wheelEvent(int, int, int) override;
+
+    /// Called when the window is resized
+    VISUOGREADAPTOR_API virtual void resizeEvent(int, int) override;
+
+    /// Called when a key is pressed
+    VISUOGREADAPTOR_API virtual void keyPressEvent(int) override;
+
+    /// Called when a key is release
+    VISUOGREADAPTOR_API virtual void keyReleaseEvent(int) override;
+
+    /// Called when a mouse button is released.
+    VISUOGREADAPTOR_API virtual void buttonReleaseEvent(MouseButton, int, int) override;
+
+    /// Called when a mouse button is pressed.
+    VISUOGREADAPTOR_API virtual void buttonPressEvent(MouseButton, int, int) override;
+
+    /// Called when the focus is win
+    VISUOGREADAPTOR_API virtual void focusInEvent() override;
+
+    /// Called when the focus is lost
+    VISUOGREADAPTOR_API virtual void focusOutEvent() override;
 protected:
     VISUOGREADAPTOR_API void configuring() override;
     VISUOGREADAPTOR_API void starting() override;
@@ -83,6 +112,7 @@ protected:
     VISUOGREADAPTOR_API virtual KeyConnectionsMap getAutoConnections() const override;
 
 private:
+
     void displayDistance(::fwData::PointList::sptr pl);
 
     void removeDistance(::fwData::PointList::csptr plToRemove);
@@ -93,9 +123,6 @@ private:
     Ogre::Real getDistance( Ogre::Vector3 a, Ogre::Vector3 b );
 
     void removeAllDistance();
-
-    /// Attach a node in the scene graph
-    void attachNode(::Ogre::ManualObject* _node);
 
     /// Used to create label
     void createLabel(::fwData::Point::csptr);
@@ -136,5 +163,28 @@ private:
 
     /// Number of visual line
     int _id = 0;
+
+    /// Position of the point I should move
+    int _moveID = 0;
+
+    /// Begin or End point from the poinlist
+    int _isBeginMove {0};
+
+    /// Is the user currently displacing a point.
+    bool m_isMovingPoint {false};
+
+    /// Defines whether interaction is possible or not.
+    bool m_activeInteraction { false };
+
+    bool checkMove(double ps1[3], double ps2[3], const ::Ogre::Vector3 worldspaceClikedPoint);
+
+    bool matchPointToRemove(int toFind, int searchBigger);
+
+    double _ps1[3];
+
+    double _ps2[3];
+
+    /// Hide one line, the lineID is the position of the line that you wanna hide
+    void hideLine(int lineID);
 };
 }
