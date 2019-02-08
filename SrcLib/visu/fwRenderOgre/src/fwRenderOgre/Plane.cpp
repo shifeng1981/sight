@@ -1,7 +1,7 @@
 /************************************************************************
  *
- * Copyright (C) 2014-2018 IRCAD France
- * Copyright (C) 2014-2018 IHU Strasbourg
+ * Copyright (C) 2014-2019 IRCAD France
+ * Copyright (C) 2014-2019 IHU Strasbourg
  *
  * This file is part of Sight.
  *
@@ -255,6 +255,8 @@ void Plane::initialize2DPlane()
     ::Ogre::Entity* planeEntity = m_sceneManager->createEntity(m_entityName, m_slicePlane);
     planeEntity->setMaterial(m_texMaterial);
     m_planeSceneNode->attachObject(planeEntity);
+
+    this->initializePosition();
 }
 
 //-----------------------------------------------------------------------------
@@ -277,6 +279,10 @@ void Plane::initializePosition()
                 m_planeSceneNode->translate(m_width / 2, m_height / 2, 0);
                 break;
         }
+    }
+    else
+    {
+        m_planeSceneNode->translate(m_width/2, m_height/2, 0);
     }
 }
 

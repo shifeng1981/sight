@@ -1,7 +1,7 @@
 /************************************************************************
  *
- * Copyright (C) 2014-2018 IRCAD France
- * Copyright (C) 2014-2018 IHU Strasbourg
+ * Copyright (C) 2014-2019 IRCAD France
+ * Copyright (C) 2014-2019 IHU Strasbourg
  *
  * This file is part of Sight.
  *
@@ -364,6 +364,7 @@ void SNegato2D::updateCameraWindowBounds()
         cam->setOrthoWindowHeight(m_plane->getHeight());
     }
     cam->setAspectRatio( renderWindowRatio );
+    cam->setPosition(::Ogre::Vector3(m_plane->getHeight()/2, m_plane->getWidth()/2, 0));
 
     this->requestRender();
 }
