@@ -76,16 +76,7 @@ void AddDistance::updating()
     std::copy( image->getOrigin().begin(),  image->getOrigin().begin() +3, pt1->getCoord().begin() );
 
     ::fwData::Point::sptr pt2 = ::fwData::Point::New();
-    std::copy( image->getSize().begin(),  image->getSize().begin() +3, pt2->getCoord().begin() );
-
-    std::transform( pt2->getCoord().begin(), pt2->getCoord().end(),
-                    image->getSpacing().begin(),
-                    pt2->getCoord().begin(),
-                    std::multiplies<double>() );
-    std::transform( pt2->getCoord().begin(), pt2->getCoord().end(),
-                    image->getOrigin().begin(),
-                    pt2->getCoord().begin(),
-                    std::plus<double>() );
+    std::copy( image->getOrigin().begin(),  image->getOrigin().begin() +3, pt2->getCoord().begin() );
 
     ::fwData::PointList::sptr pl = ::fwData::PointList::New();
 

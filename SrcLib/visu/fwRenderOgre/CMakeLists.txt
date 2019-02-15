@@ -14,6 +14,7 @@ find_package(OpenGL QUIET REQUIRED)
 
 # Treat warnings as errors
 if ( CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+    target_compile_options(${FWPROJECT_NAME} PRIVATE "-Werror")
 endif ()
 
 # This is a hack to copy plugins inside the build directory

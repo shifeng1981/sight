@@ -207,6 +207,7 @@ void SImageMultiDistances::configuring()
 void SImageMultiDistances::starting()
 {
     this->initialize();
+
     m_rightButtonCommand = vtkDistanceDeleteCallBack::New(this);
     this->getInteractor()->AddObserver( "RightButtonPressEvent", m_rightButtonCommand, 1 );
     this->getInteractor()->AddObserver( "RightButtonReleaseEvent", m_rightButtonCommand, 1 );
@@ -381,15 +382,19 @@ void SImageMultiDistances::updating()
 
 void SImageMultiDistances::removeDistance(::fwData::PointList::csptr plToRemove )
 {
-    std::cout << "je remove distance" << std::endl;
     ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     SLM_ASSERT("Missing image", image);
 
-    //  this->unregisterServices();
+    this->unregisterServices();
 
     ::fwData::Vector::sptr distanceField;
     distanceField = image->getField< ::fwData::Vector >( ::fwDataTools::fieldHelper::Image::m_imageDistancesId);
-    std::cout << distanceField.get()->size() << std::endl;
+
+    ::fwData::Vector::IteratorType iter = std::find(distanceField->begin(), distanceField->end(), plToRemove);
+    if(iter != distanceField->end())
+    {
+        distanceField->getContainer().erase(iter);
+    }
 
     this->updating();
 }

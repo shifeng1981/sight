@@ -23,13 +23,14 @@
 #pragma once
 
 #include "visuOgreAdaptor/config.hpp"
+#include "visuOgreAdaptor/SLine.hpp"
 
 #include <fwData/PointList.hpp>
 #include <fwData/Vector.hpp>
 
 #include <fwRenderOgre/IAdaptor.hpp>
-#include <fwRenderOgre/ITransformable.hpp>
 #include <fwRenderOgre/interactor/IInteractor.hpp>
+#include <fwRenderOgre/ITransformable.hpp>
 #include <fwRenderOgre/Text.hpp>
 
 class ogreCommand;
@@ -41,34 +42,35 @@ namespace visuOgreAdaptor
  * @brief Adaptor to display distance on an image
  *
  * @section Slots Slots
- * - \b createDistance() : creates a new distance attached to this adaptor
- * - \b removeDistance(::fwData::PointList::sptr) : remove the distance
+ * - \b s_REMOVE_DISTANCE_SLOT: Detection when a point is removed from an image
  *
  * @section XML XML Configuration
  *
  * @code{.xml}
-
- * @endcode
+        <service uid="multiDistancesAdp" type="::visuOgreAdaptor::SImageMultiDistances" autoConnect="yes">
+            <inout key="image" uid="${image}" />
+            <config layer="default" />
+        </service>
+   @endcode
  * @subsection In-Out In-Out
  * - \b image [::fwData::Image]: image containing the distance field.
  * @subsection Configuration Configuration
- *<config layer="default" />
- **/
+ * - \b layer(mandatory) : defines distance's layer.
+ */
+
 class SImageMultiDistances : public ::fwRenderOgre::IAdaptor,
-        public ::fwRenderOgre::ITransformable,
-        public ::fwRenderOgre::interactor::IInteractor
+                             public ::fwRenderOgre::ITransformable,
+                             public ::fwRenderOgre::interactor::IInteractor
 {
 public:
 
     fwCoreServiceClassDefinitionsMacro( (SImageMultiDistances)(::fwRenderOgre::IAdaptor) )
 
+    /// Constructor
     VISUOGREADAPTOR_API SImageMultiDistances() noexcept;
 
+    /// Destructor
     VISUOGREADAPTOR_API ~SImageMultiDistances() noexcept;
-
-    VISUOGREADAPTOR_API virtual void show(bool showDistances = true);
-
-    //VISUOGREADAPTOR_API void setNeedSubservicesDeletion(bool _needSubservicesDeletion);
 
     /// Behaviour on a MouseMoveEvent
     VISUOGREADAPTOR_API virtual void mouseMoveEvent(MouseButton, int, int, int, int) override;
@@ -78,7 +80,6 @@ public:
 
     /// Called when the window is resized
     VISUOGREADAPTOR_API virtual void resizeEvent(int, int) override;
-
     /// Called when a key is pressed
     VISUOGREADAPTOR_API virtual void keyPressEvent(int) override;
 
@@ -96,10 +97,19 @@ public:
 
     /// Called when the focus is lost
     VISUOGREADAPTOR_API virtual void focusOutEvent() override;
+
 protected:
+
+    /// Configure the adaptor
     VISUOGREADAPTOR_API void configuring() override;
+
+    /// Initialize sceneManager, rootSceneNode, layer and update the service
     VISUOGREADAPTOR_API void starting() override;
+
+    /// Update distance displaying
     VISUOGREADAPTOR_API void updating() override;
+
+    /// Stop the service
     VISUOGREADAPTOR_API void stopping() override;
     /**
      * @brief Returns proposals to connect service slots to associated object signals,
@@ -113,78 +123,93 @@ protected:
 
 private:
 
-    void displayDistance(::fwData::PointList::sptr pl);
+    /// Display line of a given pointlist
+    void displayDistance(const ::fwData::PointList::sptr pl);
 
+    /// Remove the distance from a given pointlist and update the service
     void removeDistance(::fwData::PointList::csptr plToRemove);
 
-    void createDistance();
+    /// Remove the distance from a given pointlist
+    void removeDistanceVisual();
 
-    /// Get the distance between two vectors
-    Ogre::Real getDistance( Ogre::Vector3 a, Ogre::Vector3 b );
+    /// Create ID label of a given point
+    void createIdLabel(::fwData::Point::csptr);
 
-    void removeAllDistance();
+    /// Destroy label corresponding on a specific id
+    void destroyLabel(size_t id);
 
-    /// Used to create label
-    void createLabel(::fwData::Point::csptr);
+    /// Create millimeter length label of a specific point. The second argument corresponds to the distance
+    void createMillimeterLabel(::fwData::Point::csptr, const Ogre::Real);
 
-    /// Used to destroy label
-    void destroyLabel(int id);
+    /// Hide the moving line corresponding to an specific ID
+    void hideMovingLine(size_t lineID);
 
-    void affMillimeter(::fwData::Point::csptr, Ogre::Real);
+    /// Create a new line. First argument corresponds of the material adaptor. Second argument corresponds to the coord
+    /// of the first point
+    /// Last argument corresponds to the coord of the second point
+    void createLine(const ::visuOgreAdaptor::SMaterial::sptr materialAdp, float ps1[3],
+                    float ps2[3]) const;
 
-    ::fwData::Point::cwptr m_point1;
+    /// Check if the mouse click on an existing point. First argument corresponds on the coord of the first point.
+    /// Second argument corresponds on the coord of the second point. Last argument corresponds on the coord of the
+    /// mouse
+    bool clickPoint(float ps1[3], float ps2[3], const ::Ogre::Vector3 worldspaceClikedPoint);
 
-    ::fwData::Point::cwptr m_point2;
+    /// Create a new sphere manual object. First argument corresponds of the material adaptor.
+    /// Second argument corresponds on the name of the node
+    ::Ogre::ManualObject* createSphere(const ::visuOgreAdaptor::SMaterial::sptr materialAdp,
+                                       const std::string name) const;
 
-    ::Ogre::SceneManager* m_sceneMgr;
+    /// Set and return the material adaptor
+    ::visuOgreAdaptor::SMaterial::sptr setMaterialAdp();
 
-    ::Ogre::SceneNode* m_rootSceneNode;
+    /// Scene manager of the scene
+    ::Ogre::SceneManager* m_sceneMgr { nullptr };
 
-    /// Scene node where point of our manual objects are attached
-    ::Ogre::SceneNode* m_pointNode { nullptr };
+    /// Root manager of the scene
+    ::Ogre::SceneNode* m_rootSceneNode { nullptr };
 
-    /// Scene node where point of our manual objects are attached
-    ::Ogre::SceneNode* m_pointNode2 { nullptr };
+    /// Scene node where point 1 is attached
+    ::Ogre::SceneNode* m_point1Node { nullptr };
+
+    /// Scene node where point 2 is attached
+    ::Ogre::SceneNode* m_point2Node { nullptr };
 
     /// Used to store label of each point
-    std::vector< ::fwRenderOgre::Text*> m_labels;
+    std::vector< ::fwRenderOgre::Text*> m_labels { nullptr };
 
-    /// Used to store millimeter value for each line
-    std::vector< ::fwRenderOgre::Text*> m_millimeterValue;
+    /// Used to store the millimeter value for each line
+    std::vector< ::fwRenderOgre::Text*> m_millimeterValue { nullptr };
 
-    /// Used to store labels points nodes
-    std::vector< ::Ogre::SceneNode*> m_labelNodes;
+    /// Used to store the id value labels points nodes
+    std::vector< ::Ogre::SceneNode*> m_labelNodes { nullptr };
 
-    /// Used to store labels points nodes
-    std::vector< ::Ogre::SceneNode*> m_millimeterNodes;
+    /// Used to store the length value labels points nodes
+    std::vector< ::Ogre::SceneNode*> m_millimeterNodes { nullptr };
 
-    /// Copy of distanceField in case that the signal remove the lign from the image before the visual
-    ::fwData::Vector::sptr m_distanceField;
+    /// Copy of distanceField in case that the signal removed the lign of the image before updating the visual
+    ::fwData::Vector::sptr m_distanceField { nullptr };
 
-    /// Number of visual line
-    int _id = 0;
+    /// Number of existing line
+    size_t m_distanceNb { 0 };
 
-    /// Position of the point I should move
-    int _moveID = 0;
+    /// Id of the point which will move
+    size_t m_moveID  { 0 };
 
-    /// Begin or End point from the poinlist
-    int _isBeginMove {0};
+    /// Position (begin/back) of the point which will move
+    size_t m_isBeginMove { 0 };
 
-    /// Is the user currently displacing a point.
+    /// User is moving a point
     bool m_isMovingPoint {false};
 
     /// Defines whether interaction is possible or not.
     bool m_activeInteraction { false };
 
-    bool checkMove(double ps1[3], double ps2[3], const ::Ogre::Vector3 worldspaceClikedPoint);
+    /// Position of the first point
+    float m_ps1[3] { 0, 0, 0 };
 
-    bool matchPointToRemove(int toFind, int searchBigger);
+    /// Position of the second point
+    float m_ps2[3] { 0, 0, 0 };
 
-    double _ps1[3];
-
-    double _ps2[3];
-
-    /// Hide one line, the lineID is the position of the line that you wanna hide
-    void hideLine(int lineID);
 };
 }
