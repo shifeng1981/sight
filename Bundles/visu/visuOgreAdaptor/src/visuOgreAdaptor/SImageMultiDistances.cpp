@@ -295,30 +295,21 @@ void SImageMultiDistances::hideMovingLine(size_t lineID)
 {
     ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     SLM_ASSERT("Missing image", image);
-    ::fwData::Vector::sptr distanceField = image->getField< ::fwData::Vector >(
-        ::fwDataTools::fieldHelper::Image::m_imageDistancesId);
 
-    if (!distanceField)
+    for (size_t id = 0; id < m_distanceNb; ++id)
     {
-        distanceField = m_distanceField;
-    }
-    if( distanceField )
-    {
-        for (size_t id = 0; id < m_distanceNb; ++id)
+        if (m_sceneMgr->hasManualObject(this->getID() + "_line" + std::to_string(id)) && lineID == id)
         {
-            if (m_sceneMgr->hasManualObject(this->getID() + "_line" + std::to_string(id)) && lineID == id)
-            {
-                ::Ogre::ManualObject* line =
-                    m_sceneMgr->getManualObject(this->getID() + "_line" + std::to_string(id));
-                ::Ogre::ManualObject* sphere = m_sceneMgr->getManualObject(
-                    this->getID() + "_sphere" + "1" + std::to_string(id));
-                ::Ogre::ManualObject* sphere2 = m_sceneMgr->getManualObject(
-                    this->getID() + "_sphere" + "2" +std::to_string(id));
-                this->destroyLabel(id);
-                m_sceneMgr->destroyManualObject(sphere);
-                m_sceneMgr->destroyManualObject(sphere2);
-                m_sceneMgr->destroyManualObject(line);
-            }
+            ::Ogre::ManualObject* line =
+                m_sceneMgr->getManualObject(this->getID() + "_line" + std::to_string(id));
+            ::Ogre::ManualObject* sphere = m_sceneMgr->getManualObject(
+                this->getID() + "_sphere" + "1" + std::to_string(id));
+            ::Ogre::ManualObject* sphere2 = m_sceneMgr->getManualObject(
+                this->getID() + "_sphere" + "2" +std::to_string(id));
+            this->destroyLabel(id);
+            m_sceneMgr->destroyManualObject(sphere);
+            m_sceneMgr->destroyManualObject(sphere2);
+            m_sceneMgr->destroyManualObject(line);
         }
     }
 }
@@ -327,16 +318,7 @@ void SImageMultiDistances::hideMovingLine(size_t lineID)
 
 void SImageMultiDistances::removeDistanceVisual()
 {
-    ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
-    SLM_ASSERT("Missing image", image);
-    ::fwData::Vector::sptr distanceField = image->getField< ::fwData::Vector >(
-        ::fwDataTools::fieldHelper::Image::m_imageDistancesId);
-
-    if (!distanceField)
-    {
-        distanceField = m_distanceField;
-    }
-    if( distanceField )
+    if( m_distanceField )
     {
         for (size_t id = 0; id < m_distanceNb; ++id)
         {
@@ -485,17 +467,17 @@ void SImageMultiDistances::buttonReleaseEvent(MouseButton button, int x, int y)
 
 //------------------------------------------------------------------------------
 
-bool SImageMultiDistances::clickPoint(float ps1[3], float ps2[3],
+bool SImageMultiDistances::clickPoint(double ps1[3], double ps2[3],
                                       const ::Ogre::Vector3 worldspaceClikedPoint)
 {
-    if (std::abs(ps1[0] - worldspaceClikedPoint.x) <= 2 &&
-        std::abs(ps1[1] - worldspaceClikedPoint.y) <= 2)
+    if (std::abs(static_cast<float>(ps1[0]) - worldspaceClikedPoint.x) <= 2 &&
+        std::abs(static_cast<float>(ps1[1]) - worldspaceClikedPoint.y) <= 2)
     {
         m_isBeginMove = 0;
         return true;
     }
-    else if (std::abs(ps2[0] - worldspaceClikedPoint.x) <= 2 &&
-             std::abs(ps2[1] - worldspaceClikedPoint.y) <= 2)
+    else if (std::abs(static_cast<float>(ps2[0]) - worldspaceClikedPoint.x) <= 2 &&
+             std::abs(static_cast<float>(ps2[1]) - worldspaceClikedPoint.y) <= 2)
     {
         m_isBeginMove = 1;
         return true;
@@ -532,20 +514,20 @@ void SImageMultiDistances::buttonPressEvent(MouseButton button, int x, int y)
         ::fwData::Point::csptr p1         = pointFront.lock();
         ::fwData::Point::csptr p2         = pointBack.lock();
 
-        float ps1[3];
-        float ps2[3];
+        double ps1[3];
+        double ps2[3];
         std::copy(p1->getCoord().begin(), (p1)->getCoord().end(), ps1 );
         std::copy(p2->getCoord().begin(), (p2)->getCoord().end(), ps2 );
 
         /// Convert value for taking into account the origin and the spacing of the image
         ps1[0] =
-            static_cast<float>((static_cast<double>(ps1[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+            (ps1[0] - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01;
         ps1[1] =
-            static_cast<float>((static_cast<double>(ps1[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
+            (ps1[1] - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01;
         ps2[0] =
-            static_cast<float>((static_cast<double>(ps2[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+            (ps2[0] - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01;
         ps2[1] =
-            static_cast<float>((static_cast<double>(ps2[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
+            (ps2[1] - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01;
 
         if (this->clickPoint(ps1, ps2, worldspaceClikedPoint) == true)
         {

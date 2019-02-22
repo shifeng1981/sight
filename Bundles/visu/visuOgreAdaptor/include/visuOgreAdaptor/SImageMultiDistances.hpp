@@ -153,7 +153,7 @@ private:
     /// Check if the mouse click on an existing point. First argument corresponds on the coord of the first point.
     /// Second argument corresponds on the coord of the second point. Last argument corresponds on the coord of the
     /// mouse
-    bool clickPoint(float ps1[3], float ps2[3], const ::Ogre::Vector3 worldspaceClikedPoint);
+    bool clickPoint(double ps1[3], double ps2[3], const ::Ogre::Vector3 worldspaceClikedPoint);
 
     /// Create a new sphere manual object. First argument corresponds of the material adaptor.
     /// Second argument corresponds on the name of the node
