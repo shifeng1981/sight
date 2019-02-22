@@ -127,9 +127,7 @@ Layer::sptr IAdaptor::getLayer() const
 
 ::Ogre::SceneManager* IAdaptor::getSceneManager()
 {
-    ::Ogre::SceneManager* sceneMgr = m_renderService.lock()->getSceneManager(m_layerID);
-    SLM_ASSERT("layerID is not instanced", sceneMgr);
-    return sceneMgr;
+    return m_renderService.lock()->getSceneManager(m_layerID);
 }
 
 //------------------------------------------------------------------------------

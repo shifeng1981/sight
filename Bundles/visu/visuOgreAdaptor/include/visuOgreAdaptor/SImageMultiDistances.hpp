@@ -133,13 +133,13 @@ private:
     void removeDistanceVisual();
 
     /// Create ID label of a given point
-    void createIdLabel(::fwData::Point::csptr);
+    void createIdLabel(float point[3]);
 
     /// Destroy label corresponding on a specific id
     void destroyLabel(size_t id);
 
     /// Create millimeter length label of a specific point. The second argument corresponds to the distance
-    void createMillimeterLabel(::fwData::Point::csptr, const Ogre::Real);
+    void createMillimeterLabel(float point[3], const Ogre::Real);
 
     /// Hide the moving line corresponding to an specific ID
     void hideMovingLine(size_t lineID);
@@ -190,7 +190,7 @@ private:
     /// Copy of distanceField in case that the signal removed the lign of the image before updating the visual
     ::fwData::Vector::sptr m_distanceField { nullptr };
 
-    /// Number of existing line
+    /// Number of existing lines
     size_t m_distanceNb { 0 };
 
     /// Id of the point which will move

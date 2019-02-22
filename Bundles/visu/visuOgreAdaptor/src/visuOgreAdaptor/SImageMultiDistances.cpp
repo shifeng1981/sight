@@ -123,7 +123,7 @@ void SImageMultiDistances::updating()
 
 //------------------------------------------------------------------------------
 
-void SImageMultiDistances::createMillimeterLabel(::fwData::Point::csptr point, const Ogre::Real distance)
+void SImageMultiDistances::createMillimeterLabel(float point[3], const Ogre::Real distance)
 {
     ::Ogre::OverlayContainer* textContainer = this->getRenderService()->getOverlayTextPanel();
     ::Ogre::FontPtr dejaVuSansFont          = ::fwRenderOgre::helper::Font::getFont("DejaVuSans.ttf", 32);
@@ -141,15 +141,13 @@ void SImageMultiDistances::createMillimeterLabel(::fwData::Point::csptr point, c
     m_millimeterNodes.push_back(m_rootSceneNode->createChildSceneNode(this->getID() + "_distance" +
                                                                       std::to_string(m_distanceNb)));
     m_millimeterNodes[m_distanceNb]->attachObject(m_millimeterValue[m_distanceNb]);
-    ::fwData::Point::PointCoordArrayType coord = point->getCoord();
-    m_millimeterNodes[m_distanceNb]->translate(static_cast<float>(coord[0]),
-                                               static_cast<float>(coord[1]),
-                                               0.01f);
+
+    m_millimeterNodes[m_distanceNb]->translate(point[0], point[1], 0.01f);
 }
 
 //------------------------------------------------------------------------------
 
-void SImageMultiDistances::createIdLabel(::fwData::Point::csptr point)
+void SImageMultiDistances::createIdLabel(float ps1[3])
 {
     ::Ogre::OverlayContainer* textContainer = this->getRenderService()->getOverlayTextPanel();
     ::Ogre::FontPtr dejaVuSansFont          = ::fwRenderOgre::helper::Font::getFont("DejaVuSans.ttf", 32);
@@ -164,10 +162,7 @@ void SImageMultiDistances::createIdLabel(::fwData::Point::csptr point)
 
     m_labelNodes.push_back(m_rootSceneNode->createChildSceneNode(this->getID() + "_id" + labelNumber));
     m_labelNodes[m_distanceNb]->attachObject(m_labels[m_distanceNb]);
-    ::fwData::Point::PointCoordArrayType coord = point->getCoord();
-    m_labelNodes[m_distanceNb]->translate(static_cast<float>(coord[0]),
-                                          static_cast<float>(coord[1]),
-                                          0.01f);
+    m_labelNodes[m_distanceNb]->translate(ps1[0], ps1[1], 0.01f);
 }
 
 //------------------------------------------------------------------------------
@@ -234,10 +229,22 @@ void SImageMultiDistances::displayDistance(const ::fwData::PointList::sptr pl)
         ::fwData::Point::csptr p1         = pointFront.lock();
         ::fwData::Point::csptr p2         = pointBack.lock();
 
+        ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
+
         float ps1[3];
         float ps2[3];
         std::copy(p1->getCoord().begin(), (p1)->getCoord().end(), ps1 );
         std::copy(p2->getCoord().begin(), (p2)->getCoord().end(), ps2 );
+
+        /// Convert value for taking into account the origin and the spacing of the image
+        ps1[0] =
+            static_cast<float>((static_cast<double>(ps1[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+        ps1[1] =
+            static_cast<float>((static_cast<double>(ps1[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
+        ps2[0] =
+            static_cast<float>((static_cast<double>(ps2[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+        ps2[1] =
+            static_cast<float>((static_cast<double>(ps2[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
 
         ::visuOgreAdaptor::SMaterial::sptr materialAdp = setMaterialAdp();
         this->createLine(materialAdp, ps1, ps2);
@@ -245,10 +252,10 @@ void SImageMultiDistances::displayDistance(const ::fwData::PointList::sptr pl)
         ::Ogre::ManualObject* sphere2 = createSphere(materialAdp, "_sphere2");
 
         /// Create the ID of the line and aff the value of the line (in millimeter)
-        this->createIdLabel(p1);
+        this->createIdLabel(ps1);
         Ogre::Vector3 a = Ogre::Vector3(static_cast<Ogre::Real>(ps1[0]), static_cast<Ogre::Real>(ps1[1]), 0);
         Ogre::Vector3 b = Ogre::Vector3(static_cast<Ogre::Real>(ps2[0]), static_cast<Ogre::Real>(ps2[1]), 0);
-        this->createMillimeterLabel(p2, a.distance(b));
+        this->createMillimeterLabel(ps2, a.distance(b));
 
         /// Attach the object on the different node
         m_point1Node =
@@ -440,17 +447,25 @@ void SImageMultiDistances::buttonReleaseEvent(MouseButton button, int x, int y)
         m_sceneMgr->destroyManualObject(line);
     }
 
+    ::fwData::Image::sptr image = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     /// Set the current cursor position to ogre position
     ::fwData::Mesh::PointValueType clickedPoint[3] {static_cast<float>(x), static_cast<float>(y), 0};
-    const ::Ogre::Vector3 worldspaceClikedPoint = ::fwRenderOgre::helper::Camera::convertPixelToViewSpace(
+    ::Ogre::Vector3 worldspaceClikedPoint = ::fwRenderOgre::helper::Camera::convertPixelToViewSpace(
         *(this->getLayer()->getDefaultCamera()), clickedPoint);
 
-    ::fwData::Image::sptr image          = this->getInOut< ::fwData::Image >(s_IMAGE_INOUT);
     ::fwData::Vector::sptr distanceField = image->getField< ::fwData::Vector >(
         ::fwDataTools::fieldHelper::Image::m_imageDistancesId);
     ::fwData::Vector::ContainerType& container = distanceField->getContainer();
 
     size_t id = 0;
+    /// Convert value for NOT taking into account the origin and the spacing of the image
+    worldspaceClikedPoint.x =
+        static_cast<float>((static_cast<double>(worldspaceClikedPoint.x) * image->getSpacing()[0]) +
+                           image->getOrigin()[0]);
+    worldspaceClikedPoint.y =
+        static_cast<float>((static_cast<double>(worldspaceClikedPoint.y) * image->getSpacing()[1]) +
+                           image->getOrigin()[1]);
+
     for(auto it = container.begin(); it != container.end(); ++it)
     {
         if (id == m_moveID)
@@ -521,6 +536,16 @@ void SImageMultiDistances::buttonPressEvent(MouseButton button, int x, int y)
         float ps2[3];
         std::copy(p1->getCoord().begin(), (p1)->getCoord().end(), ps1 );
         std::copy(p2->getCoord().begin(), (p2)->getCoord().end(), ps2 );
+
+        /// Convert value for taking into account the origin and the spacing of the image
+        ps1[0] =
+            static_cast<float>((static_cast<double>(ps1[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+        ps1[1] =
+            static_cast<float>((static_cast<double>(ps1[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
+        ps2[0] =
+            static_cast<float>((static_cast<double>(ps2[0]) - image->getOrigin()[0] ) / image->getSpacing()[0] +0.01);
+        ps2[1] =
+            static_cast<float>((static_cast<double>(ps2[1]) - image->getOrigin()[1] ) / image->getSpacing()[1] +0.01);
 
         if (this->clickPoint(ps1, ps2, worldspaceClikedPoint) == true)
         {
