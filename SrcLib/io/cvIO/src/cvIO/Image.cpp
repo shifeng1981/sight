@@ -57,8 +57,8 @@ static ::cv::Mat toCv(const ::fwData::Image::csptr& _image, bool _copy)
         // If we have a single row, we want to initialize the ::cv::Math with (1, N) since it takes (rows,cols)
         cvSize.push_back(1);
     }
-    // Reverse from (w,h,d) to (d,h,w) because OpenCV uses a row major format
-    std::reverse(cvSize.begin(), cvSize.end());
+    // Swap (w,h,d) to (h,w,d) because OpenCV uses a row major format
+    std::swap(cvSize[0], cvSize[1]);
 
     ::cv::Mat cvImage;
     if(_copy)
