@@ -113,6 +113,8 @@ void SCalibrationImagesWriter::updating()
         ::arData::CalibrationInfo::sptr calibInfo =
             this->getInOut< ::arData::CalibrationInfo >(::fwIO::s_DATA_KEY);
 
+        SLM_ASSERT("Missing calibration info input.", calibInfo);
+
         ::fwGui::Cursor cursor;
         cursor.setCursor(::fwGui::ICursor::BUSY);
 
@@ -128,18 +130,15 @@ void SCalibrationImagesWriter::updating()
 
             try
             {
+                ::cv::Mat outImg = img2D;
                 if (img2D.type() == CV_8UC3 || img2D.type() == CV_8UC4)
                 {
-                    // convert the read image from BGR to RGB
-                    ::cv::Mat imgRgb;
+                    // convert the image from BGR to RGB
                     const auto colConvType = img2D.type() == CV_8UC3 ? ::cv::COLOR_BGR2RGB : ::cv::COLOR_BGRA2RGBA;
-                    ::cv::cvtColor(img2D, imgRgb, colConvType);
-                    ::cv::imwrite(path.string(), imgRgb);
+                    ::cv::cvtColor(img2D, outImg, colConvType);
                 }
-                else
-                {
-                    ::cv::imwrite(path.string(), img2D);
-                }
+
+                ::cv::imwrite(path.string(), outImg);
             }
             catch(const ::cv::Exception& e)
             {
